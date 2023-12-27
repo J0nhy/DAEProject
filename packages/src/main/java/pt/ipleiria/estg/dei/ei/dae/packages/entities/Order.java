@@ -1,10 +1,11 @@
-package com.packages.entities;
+package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+
 
 @Entity
 @Table(name = "orders")

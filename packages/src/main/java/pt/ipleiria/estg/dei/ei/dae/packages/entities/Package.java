@@ -1,4 +1,4 @@
-package com.packages.entities;
+package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
