@@ -13,7 +13,7 @@ public class Value {
     private long id;
 
 
-    
+
     @NotNull
     private String sensorType;  // de Temperatura, Humidade, localização ou se ja foi aberto
   
