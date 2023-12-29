@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @NamedQuery(name = "getAllPackages", query = "select p from Package p order by p.packagingType")
 public class Package {
-
+    //comentario
     @Id
     private Long id; // package id
 
