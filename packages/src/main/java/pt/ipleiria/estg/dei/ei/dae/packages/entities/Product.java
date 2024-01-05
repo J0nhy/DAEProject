@@ -1,4 +1,4 @@
-package pt.ipleiria.estg.dei.ei.dae.packages.entities;
+package com.packages.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

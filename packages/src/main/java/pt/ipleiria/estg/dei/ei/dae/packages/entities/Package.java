@@ -1,4 +1,4 @@
-package pt.ipleiria.estg.dei.ei.dae.packages.entities;
+package com.packages.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @NamedQuery(name = "getAllPackages", query = "select p from Package p order by p.packagingType")
 public class Package {
-    //comentario
+
     @Id
     private Long id; // package id
 
@@ -28,16 +28,15 @@ public class Package {
 
     @NotNull
     @ManyToOne // uma encomenda pode ter várias embalagens
-    private Order orderRef; // referencia da encomenda 
+    private String orderRef; // referencia da encomenda 
 
-    
 
-    public Package(Long id, PackageType packageType, String packageMaterial, Product product, Order orderRef, List<Product> products) {
+    public Package(Long id, PackageType packageType, String packageMaterial, String orderRef) {
         this.id = id;
         this.packageType = packageType;
         this.packageMaterial = packageMaterial;
         this.orderRef = orderRef;
-        this.products = products;
+        this.products = new ArrayList<>();
         this.values =  new ArrayList<>();
     }
 
@@ -85,11 +84,11 @@ public class Package {
         this.values = values;
     }
 
-    public Order getOrderRef() {
+    public String getOrderRef() {
         return orderRef;
     }
 
-    public void setOrderRef(Order orderRef) {
+    public void setOrderRef(String orderRef) {
         this.orderRef = orderRef;
     }
 

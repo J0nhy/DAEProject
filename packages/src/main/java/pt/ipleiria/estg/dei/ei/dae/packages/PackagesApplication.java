@@ -1,4 +1,4 @@
-package pt.ipleiria.estg.dei.ei.dae.packages;
+package com.packages;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;

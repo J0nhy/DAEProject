@@ -1,4 +1,4 @@
-package pt.ipleiria.estg.dei.ei.dae.packages.entities;
+package com.packages.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -11,8 +11,6 @@ public class Value {
 
     @Id
     private long id;
-
-
 
     @NotNull
     private String sensorType;  // de Temperatura, Humidade, localização ou se ja foi aberto
