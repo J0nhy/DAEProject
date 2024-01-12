@@ -2,10 +2,11 @@ package pt.ipleiria.estg.dei.ei.dae.packages.dtos;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PackageDTO {
+public class PackageDTO implements Serializable{
     private Long id;
     private PackageType PackageType;
     private String packageMaterial;
@@ -51,18 +52,5 @@ public class PackageDTO {
 
     public void setOrderRef(String orderRef) {
         this.orderRef = orderRef;
-    }
-
-    public static PackageDTO from(Package package_) {
-        return new PackageDTO(
-                package_.getId(),
-                package_.getPackageType(),
-                package_.getPackageMaterial(),
-                package_.getOrderRef()
-        );
-    }
-
-    public static List<PackageDTO> from(List<Package> packages) {
-        return packages.stream().map(PackageDTO::from).collect(Collectors.toList());
     }
 }

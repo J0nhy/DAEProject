@@ -3,12 +3,13 @@ package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@NamedQuery(name = "getAllPackages", query = "select p from Package p order by p.packagingType")
-public class Package {
+@NamedQuery(name = "getAllPackages", query = "select p from Package p order by p.packageType")
+public class Package implements Serializable {
 
     @Id
     private Long id; // package id
@@ -20,15 +21,14 @@ public class Package {
     private String packageMaterial; // material of the package
 
     @OneToMany
-    private List<Value> values; // values watched by sensors
+    private List<Sensor> values; // values watched by sensors
 
     @NotNull
     @OneToMany
     private List<Product> products; // products inside the package
 
     @NotNull
-    @ManyToOne // uma encomenda pode ter várias embalagens
-    private String orderRef; // referencia da encomenda 
+    private String orderRef; // referencia da encomenda
 
 
     public Package(Long id, PackageType packageType, String packageMaterial, String orderRef) {
@@ -60,7 +60,7 @@ public class Package {
         return products;
     }
 
-    public List<Value> getValues() {
+    public List<Sensor> getValues() {
         return values;
     }
 
@@ -80,7 +80,7 @@ public class Package {
         this.products = products;
     }
 
-    public void setValues(List<Value> values) {
+    public void setValues(List<Sensor> values) {
         this.values = values;
     }
 
@@ -111,11 +111,11 @@ public class Package {
         this.products.remove(product);
     }
 
-    public void removeValue(Value value) {
+    public void removeValue(Sensor value) {
         this.values.remove(value);
     }
 
-    public void addValue(Value value) {
+    public void addValue(Sensor value) {
         this.values.add(value);
     }
     

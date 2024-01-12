@@ -2,7 +2,7 @@ package pt.ipleiria.estg.dei.ei.dae.packages.ejbs;
 
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Value;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
@@ -18,7 +18,7 @@ public class PackageBean {
     private EntityManager entityManager;
 
     @EJB
-    private ValueBean valueBean;
+    private SensorBean valueBean;
 
     public void create(Long id, PackageType packageType, String packageMaterial, String orderRef) {
 
@@ -50,9 +50,9 @@ public class PackageBean {
 
     public void addValueToPackage(Long packageId, Long valueId) throws Exception {
         Package package_ = find(packageId);
-        ValueBean valueBean = new ValueBean();
+        SensorBean valueBean = new SensorBean();
 
-        Value value = valueBean.find(valueId);
+        Sensor value = valueBean.find(valueId);
 
         if (value == null) {
             throw new Exception("Sensor '" + valueId + "' not found");
@@ -64,9 +64,9 @@ public class PackageBean {
 
     public void removeValueFromPackage(Long packageId, Long valueId) throws Exception {
         Package package_ = find(packageId);
-        ValueBean valueBean = new ValueBean();
+        SensorBean valueBean = new SensorBean();
 
-        Value value = valueBean.find(valueId);
+        Sensor value = valueBean.find(valueId);
 
         if (value == null) {
             throw new Exception("Sensor '" + valueId + "' not found");

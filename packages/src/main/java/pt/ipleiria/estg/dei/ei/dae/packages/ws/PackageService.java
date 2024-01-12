@@ -13,6 +13,9 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.packages.dtos.PackageDTO;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
+import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.PackageBean;
+import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.SensorBean;
 
 @Path("/packages")
 @Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
@@ -28,17 +31,25 @@ public class PackageService {
     @Context
     private SecurityContext securityContext;
 
-    @GET
-    @Path("/")
-    public List<PackageDTO> getAllProducts() {
-        // Get the user's role from the security context
-        String userRole = getUserRole();
-
-        // Getting the appropriate list of packages based on the role
-        List<Package> packages = packageBean.getAllPackagesByRole(userRole);
-        return PackageDTO.from(packages);
+    private PackageDTO toDTO(Package packageInstance) {
+        return new PackageDTO(
+                packageInstance.getId(),
+                packageInstance.getPackageType(),
+                packageInstance.getPackageMaterial(),
+                packageInstance.getOrderRef()
+        );
     }
 
+    public List<PackageDTO> toDTOs(List<Package> packages) {
+        return packages.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    @GET
+    @Path("/")
+    public List<PackageDTO> getAllPackages() {
+        return toDTOs(packageBean.all());
+    }
+/*
     @GET
     @Path("{id}")
     public Response get(@PathParam("id") Long packageId) {
@@ -140,4 +151,5 @@ public class PackageService {
         return securityContext.isUserInRole("LogisticsOperator") ? "LogisticsOperator" :
                 securityContext.isUserInRole("Manufacturer") ? "Manufacturer" : "UnknownRole";
     }
+ */
 }

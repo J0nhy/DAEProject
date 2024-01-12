@@ -5,16 +5,16 @@ import jakarta.validation.constraints.NotNull;
 
 
 @Entity
-@Table(name = "values")
-@NamedQuery(name = "getAllValues", query = "select v from Value v order by v.id")
-public class Value {
+@Table(name = "sensors")
+@NamedQuery(name = "getAllSensors", query = "select s from Sensor s order by s.id")
+public class Sensor {
 
     @Id
     private long id;
 
     @NotNull
-    private String sensorType;  // de Temperatura, Humidade, localização ou se ja foi aberto
-  
+    private SensorType sensorType;  // de Temperatura, Humidade, localização ou se ja foi aberto
+
     @NotNull
     private String value; // valor devolvido pelo sensor
 
@@ -28,12 +28,12 @@ public class Value {
     @NotNull
     private long timestamp; // data e hora em que foi lido
 
-    //@OneToOne
+    @OneToOne
     @NotNull
     private Package packageRef; // embalagem a que se refere esta leitura
 
 
-    public Value(long id, String sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
+    public Sensor(long id, SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
         this.id = id;
         this.sensorType = sensorType;
         this.value = value;
@@ -44,14 +44,14 @@ public class Value {
         this.packageRef = packageRef;
     }
 
-    public Value() {
+    public Sensor() {
     }
 
     public long getId() {
         return id;
     }
 
-    public String getSensorType() {
+    public SensorType getSensorType() {
         return sensorType;
     }
 
@@ -83,7 +83,7 @@ public class Value {
         this.id = id;
     }
 
-    public void setSensorType(String sensorType) {
+    public void setSensorType(SensorType sensorType) {
         this.sensorType = sensorType;
     }
 

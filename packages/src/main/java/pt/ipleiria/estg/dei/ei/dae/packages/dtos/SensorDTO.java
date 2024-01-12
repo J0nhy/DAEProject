@@ -1,13 +1,14 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.dtos;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Value;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.SensorType;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ValueDTO {
+public class SensorDTO {
     private Long id;
-    private String sensorType;
+    private SensorType sensorType;
     private String value;
     private String dataType;
     private int maxValue;
@@ -15,7 +16,7 @@ public class ValueDTO {
     private long timestamp;
     private Package packageRef;
     
-    public ValueDTO(Long id, String sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
+    public SensorDTO(Long id, SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
         this.id = id;
         this.sensorType = sensorType;
         this.value = value;
@@ -26,14 +27,14 @@ public class ValueDTO {
         this.packageRef = packageRef;
     }
 
-    public ValueDTO() {
+    public SensorDTO() {
     }
     
     public Long getId() {
         return id;
     }
 
-    public String getSensorType() {
+    public SensorType getSensorType() {
         return sensorType;
     }
 
@@ -65,7 +66,7 @@ public class ValueDTO {
         this.id = id;
     }
 
-    public void setSensorType(String sensorType) {
+    public void setSensorType(SensorType sensorType) {
         this.sensorType = sensorType;
     }
 
@@ -93,20 +94,20 @@ public class ValueDTO {
         this.packageRef = packageRef;
     }
 
-    public static ValueDTO from(Value value_) {
-        return new ValueDTO(
-                value_.getId(),
-                value_.getSensorType(),
-                value_.getValue(),
-                value_.getDataType(),
-                value_.getMaxValue(),
-                value_.getMinValue(),
-                value_.getTimestamp(),
-                value_.getPackageRef()
+    public static SensorDTO from(Sensor sensor_) {
+        return new SensorDTO(
+                sensor_.getId(),
+                sensor_.getSensorType(),
+                sensor_.getValue(),
+                sensor_.getDataType(),
+                sensor_.getMaxValue(),
+                sensor_.getMinValue(),
+                sensor_.getTimestamp(),
+                sensor_.getPackageRef()
         );
     }
 
-    public static List<ValueDTO> from(List<Value> values) {
-        return values.stream().map(ValueDTO::from).collect(Collectors.toList());
+    public static List<SensorDTO> from(List<Sensor> sensors) {
+        return sensors.stream().map(SensorDTO::from).collect(Collectors.toList());
     }
 }
