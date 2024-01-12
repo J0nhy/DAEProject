@@ -21,6 +21,7 @@ public class Order {
     @ManyToOne
     private Customer customer;
 
+
     @NotNull
     @ManyToOne
     private LogisticsOperator logisticsOperators;
