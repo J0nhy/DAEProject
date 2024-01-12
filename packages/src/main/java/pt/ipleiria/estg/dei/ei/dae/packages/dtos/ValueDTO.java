@@ -1,6 +1,6 @@
-package com.packages.dtos;
-import com.packages.entities.Value;
-import com.packages.entities.Package;
+package pt.ipleiria.estg.dei.ei.dae.packages.dtos;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Value;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,8 +1,8 @@
-package com.packages.ejbs;
+package pt.ipleiria.estg.dei.ei.dae.packages.ejbs;
 
-import com.packages.entities.Package;
-import com.packages.entities.PackageType;
-import com.packages.entities.Value;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Value;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;

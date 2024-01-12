@@ -1,4 +1,4 @@
-package com.packages.ws;
+package pt.ipleiria.estg.dei.ei.dae.packages.ws;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.hibernate.Hibernate;
+import pt.ipleiria.estg.dei.ei.dae.packages.dtos.PackageDTO;
 
 @Path("/packages")
 @Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
