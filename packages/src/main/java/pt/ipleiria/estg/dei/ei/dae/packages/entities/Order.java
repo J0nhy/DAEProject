@@ -19,8 +19,8 @@ public class Order {
     
     @NotNull
     @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
-
 
     @NotNull
     @ManyToOne

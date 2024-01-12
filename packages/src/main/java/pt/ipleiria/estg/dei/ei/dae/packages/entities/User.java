@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 // Extra: try the other strategies… what happens to the database?
-public class User{
+public class User extends Versionable{
     @Id
     private String username;
     @NotNull

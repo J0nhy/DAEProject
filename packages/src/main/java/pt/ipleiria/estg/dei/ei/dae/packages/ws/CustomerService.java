@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Path("/customers")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
-public class CustomerService extends Customer {
+public class CustomerService {
     @EJB
     private CustomerBean customerBean;
 
@@ -38,6 +38,55 @@ public class CustomerService extends Customer {
     @Path("/") // means: the relative url path is “/api/students/”
     public List<CustomerDTO> getAllCustomers() {
         return toDTOs(customerBean.getAll());
+    }
+
+
+    @GET
+    @Path("{username}")
+    public Response getCustomerDetails(@PathParam("username") String username){
+        Customer customer = customerBean.findCustomer(username);
+        System.out.println("Customer: " + customer);
+        if (customer != null){
+            return Response.status(Response.Status.OK).entity(toDTO(customer)).build();
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @POST
+    @Path("/")
+    public Response createNewCustomer(CustomerDTO customerDTO){
+        customerBean.create(customerDTO.getUsername(),
+                customerDTO.getPassword(),
+                customerDTO.getName(),
+                customerDTO.getEmail(),
+                customerDTO.getNif(),
+                customerDTO.getPhone(),
+                customerDTO.getAddress()
+        );
+        Customer customer = customerBean.findCustomer(customerDTO.getUsername());
+        return Response.status(Response.Status.CREATED).entity(toDTO(customer)).build();
+    }
+
+    @PUT
+    @Path("{username}")
+    public Response updateCustomer(@PathParam("username") String username, CustomerDTO customerDTO){
+        Customer customer = customerBean.findCustomer(username);
+        customer = customerBean.update(username,
+                customerDTO.getPassword() != null ? customerDTO.getPassword() : customer.getPassword(),
+                customerDTO.getName() != null ? customerDTO.getName() : customer.getName(),
+                customerDTO.getEmail() != null ? customerDTO.getEmail() : customer.getEmail(),
+                customerDTO.getNif() != 0 ? customerDTO.getNif() : customer.getNif(),
+                customerDTO.getPhone() != 0 ? customerDTO.getPhone() : customer.getPhone(),
+                customerDTO.getAddress() != null ? customerDTO.getAddress() : customer.getAddress()
+        );
+        return Response.status(Response.Status.OK).entity(toDTO(customer)).build();
+    }
+
+    @DELETE
+    @Path("{username}")
+    public Response deleteCustomer(@PathParam("username") String username){
+        customerBean.removeStudent(username);
+        return Response.status(Response.Status.OK).build();
     }
 
 }

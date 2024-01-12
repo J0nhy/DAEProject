@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NamedQueries({
@@ -16,14 +18,22 @@ import java.io.Serializable;
 public class Customer extends User implements Serializable {
     private int nif;
     private int phone;
+    @NotNull
     private String address;
-    public Customer(){}
+    @NotNull
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Order> orders;
 
-    public Customer(String username, String password, String name, String email, int nif, int phone, String address){
+    public Customer(){
+        this.orders = new ArrayList<>();
+    }
+
+    public Customer(String username, String password, String name, String email, int nif, int phone, String address) {
         super(username, password, name, email);
         this.nif = nif;
         this.phone = phone;
         this.address = address;
+        this.orders = new ArrayList<>();
     }
 
     public int getNif() {
@@ -48,5 +58,13 @@ public class Customer extends User implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

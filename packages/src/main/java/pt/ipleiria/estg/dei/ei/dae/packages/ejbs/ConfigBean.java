@@ -16,6 +16,7 @@ public class ConfigBean {
 
     @EJB
     private PackageBean packageBean;
+
     private static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
     @PostConstruct
     public void populateDB() {
