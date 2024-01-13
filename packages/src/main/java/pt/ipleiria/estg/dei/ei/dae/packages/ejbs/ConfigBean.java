@@ -21,18 +21,25 @@ public class ConfigBean {
     @PostConstruct
     public void populateDB() {
 
+        System.out.println("Hello Java EE!");
+
         try{
-            System.out.println("Hello Java EE!");
-
             customerBean.create("Customer1", "123", "Customer1", "Customer1@mail.pt", 123456789, 123456789, "Customer1 address");
-            //customerBean.create("Customer2", "123", "Customer2", "Customer2@mail.pt", 123456789, 123456789, "Customer2 address");
-            //customerBean.create("Customer3", "123", "Customer3", "Customer3@mail.pt", 123456789, 123456789, "Customer3 address");
-            //customerBean.create("Customer4", "123", "Customer4", "Customer4@mail.pt", 123456789, 123456789, "Customer4 address");
-
-
-            packageBean.create(1L, PackageType.Primary, "Cardboard", "123456789");
+            customerBean.create("Customer2", "123", "Customer2", "Customer2@mail.pt", 123456789, 123456789, "Customer2 address");
+            customerBean.create("Customer3", "123", "Customer3", "Customer3@mail.pt", 123456789, 123456789, "Customer3 address");
+            customerBean.create("Customer4", "123", "Customer4", "Customer4@mail.pt", 123456789, 123456789, "Customer4 address");
 
             System.out.println("Customer Created");
+        }catch (Exception e){
+            logger.severe(e.getMessage());
+        }
+
+        try {
+            packageBean.create(1L, PackageType.Primary, "Cardboard", "123456789");
+            packageBean.create(2L, PackageType.Secondary, "Plastic", "123456789");
+            packageBean.create(3L, PackageType.Tertiary, "Wood", "123456789");
+
+            System.out.println("Package Created");
         }catch (Exception e){
             logger.severe(e.getMessage());
         }

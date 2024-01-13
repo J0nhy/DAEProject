@@ -7,6 +7,9 @@ import jakarta.ws.rs.core.Response;
 import pt.ipleiria.estg.dei.ei.dae.packages.dtos.CustomerDTO;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.CustomerBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Customer;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,18 +46,13 @@ public class CustomerService {
 
     @GET
     @Path("{username}")
-    public Response getCustomerDetails(@PathParam("username") String username){
-        Customer customer = customerBean.findCustomer(username);
-        System.out.println("Customer: " + customer);
-        if (customer != null){
-            return Response.status(Response.Status.OK).entity(toDTO(customer)).build();
-        }
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+    public Response getCustomerDetails(@PathParam("username") String username) throws MyEntityNotFoundException{
+        return Response.status(Response.Status.OK).entity(toDTO(customerBean.findCustomer(username))).build();
     }
 
     @POST
     @Path("/")
-    public Response createNewCustomer(CustomerDTO customerDTO){
+    public Response createNewCustomer(CustomerDTO customerDTO) throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException {
         customerBean.create(customerDTO.getUsername(),
                 customerDTO.getPassword(),
                 customerDTO.getName(),
@@ -69,9 +67,12 @@ public class CustomerService {
 
     @PUT
     @Path("{username}")
-    public Response updateCustomer(@PathParam("username") String username, CustomerDTO customerDTO){
+    public Response updateCustomer(@PathParam("username") String username, CustomerDTO customerDTO)
+        throws MyEntityNotFoundException, MyConstraintViolationException{
         Customer customer = customerBean.findCustomer(username);
-        customer = customerBean.update(username,
+
+        customer = customerBean.update(
+                username,
                 customerDTO.getPassword() != null ? customerDTO.getPassword() : customer.getPassword(),
                 customerDTO.getName() != null ? customerDTO.getName() : customer.getName(),
                 customerDTO.getEmail() != null ? customerDTO.getEmail() : customer.getEmail(),
@@ -84,7 +85,7 @@ public class CustomerService {
 
     @DELETE
     @Path("{username}")
-    public Response deleteCustomer(@PathParam("username") String username){
+    public Response deleteCustomer(@PathParam("username") String username)throws MyEntityNotFoundException{
         customerBean.removeStudent(username);
         return Response.status(Response.Status.OK).build();
     }

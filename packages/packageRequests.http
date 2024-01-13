@@ -6,3 +6,29 @@ Accept: application/json
 ##### GET CUSTOMERS
 GET http://localhost:8080/packages/api/customers
 Accept: application/json
+###
+GET http://localhost:8080/packages/api/customers/Customer5
+Accept: application/json
+###
+POST http://localhost:8080/packages/api/customers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "Customer5",
+  "password": "password",
+  "name": "John Doe",
+  "email": "customer2@mail.pt",
+  "address": "123 Main St"
+}
+###
+PUT http://localhost:8080/packages/api/customers/Customer5
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Bruno ads"
+}
+###
+DELETE http://localhost:8080/packages/api/customers/Customer5
+Accept: application/json
