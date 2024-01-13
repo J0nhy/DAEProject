@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.ws;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -10,6 +11,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.Customer;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 @Path("/customers")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
+@Authenticated
+@RolesAllowed({}) //TODO: add roles, em principio só os proprios clientes podem aceder aos seus dados
 public class CustomerService {
     @EJB
     private CustomerBean customerBean;

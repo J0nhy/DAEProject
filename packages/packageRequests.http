@@ -1,3 +1,12 @@
+### REQUEST JWT TOKEN
+POST http://localhost:8080/packages/api/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "Customer1",
+  "password": "123"
+}
 ##### GET PACKAGES
 GET http://localhost:8080/packages/api/packages
 Accept: application/json
@@ -6,12 +15,17 @@ Accept: application/json
 ##### GET CUSTOMERS
 GET http://localhost:8080/packages/api/customers
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJDdXN0b21lcjEiLCJpYXQiOjE3MDUxNzI3OTgsImV4cCI6MTcwNTE3NjM5OH0.KdpGxCx6MN_KuQ-VNYUD4md4rrbOdIC7CLjqvo6NCJ7ET9V1tUMUSl0nDBcBYT8D
+
 ###
 GET http://localhost:8080/packages/api/customers/Customer5
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJDdXN0b21lcjEiLCJpYXQiOjE3MDUxNzI3OTgsImV4cCI6MTcwNTE3NjM5OH0.KdpGxCx6MN_KuQ-VNYUD4md4rrbOdIC7CLjqvo6NCJ7ET9V1tUMUSl0nDBcBYT8D
+
 ###
 POST http://localhost:8080/packages/api/customers
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJDdXN0b21lcjEiLCJpYXQiOjE3MDUxNzI3OTgsImV4cCI6MTcwNTE3NjM5OH0.KdpGxCx6MN_KuQ-VNYUD4md4rrbOdIC7CLjqvo6NCJ7ET9V1tUMUSl0nDBcBYT8D
 Content-Type: application/json
 
 {
@@ -24,6 +38,7 @@ Content-Type: application/json
 ###
 PUT http://localhost:8080/packages/api/customers/Customer5
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJDdXN0b21lcjEiLCJpYXQiOjE3MDUxNzI3OTgsImV4cCI6MTcwNTE3NjM5OH0.KdpGxCx6MN_KuQ-VNYUD4md4rrbOdIC7CLjqvo6NCJ7ET9V1tUMUSl0nDBcBYT8D
 Content-Type: application/json
 
 {
@@ -32,3 +47,4 @@ Content-Type: application/json
 ###
 DELETE http://localhost:8080/packages/api/customers/Customer5
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJDdXN0b21lcjEiLCJpYXQiOjE3MDUxNzI3OTgsImV4cCI6MTcwNTE3NjM5OH0.KdpGxCx6MN_KuQ-VNYUD4md4rrbOdIC7CLjqvo6NCJ7ET9V1tUMUSl0nDBcBYT8D
