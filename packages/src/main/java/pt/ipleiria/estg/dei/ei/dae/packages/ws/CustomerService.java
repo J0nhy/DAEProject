@@ -3,8 +3,10 @@ package pt.ipleiria.estg.dei.ei.dae.packages.ws;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import pt.ipleiria.estg.dei.ei.dae.packages.dtos.CustomerDTO;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.CustomerBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Customer;
@@ -20,10 +22,13 @@ import java.util.stream.Collectors;
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
 @Authenticated
-@RolesAllowed({}) //TODO: add roles, em principio só os proprios clientes podem aceder aos seus dados
+//@RolesAllowed({}) //TODO: add roles, em principio só os proprios clientes podem aceder aos seus dados
 public class CustomerService {
     @EJB
     private CustomerBean customerBean;
+
+    @Context
+    private SecurityContext securityContext;
 
     private CustomerDTO toDTO(Customer customer){
         return new CustomerDTO(
@@ -51,6 +56,12 @@ public class CustomerService {
     @GET
     @Path("{username}")
     public Response getCustomerDetails(@PathParam("username") String username) throws MyEntityNotFoundException{
+        var principal = securityContext.getUserPrincipal();
+
+        if(!principal.getName().equals(username)) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
         return Response.status(Response.Status.OK).entity(toDTO(customerBean.findCustomer(username))).build();
     }
 
