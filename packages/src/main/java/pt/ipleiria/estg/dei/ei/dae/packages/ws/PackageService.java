@@ -16,6 +16,9 @@ import pt.ipleiria.estg.dei.ei.dae.packages.dtos.PackageDTO;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.PackageBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.SensorBean;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
 @Path("/packages")
 @Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
@@ -49,107 +52,69 @@ public class PackageService {
     public List<PackageDTO> getAllPackages() {
         return toDTOs(packageBean.all());
     }
-/*
+
     @GET
     @Path("{id}")
-    public Response get(@PathParam("id") Long packageId) {
-        Package package_ = packageBean.find(packageId);
-        if (package_ != null) {
-            return Response.ok(PackageDTO.from(package_)).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND)
-                .entity("ERROR_FINDING_PACKAGE")
-                .build();
-    }
-
-    @GET
-    @Path("{id}/sensors")
-    public Response getPackageSensors(@PathParam("id") Long packageId) throws MyEntityNotFoundException {
-        Package package_ = packageBean.findOrFail(packageId);
-        var sensors = package_.getSensors();
-
-        if (sensors == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("ERROR_FINDING_PACKAGE_SENSORS").build();
-        }
-
-        Hibernate.initialize(sensors);
-        return Response.ok(SensorDTO.from(sensors)).build();
+    public Response getPackageDetails(@PathParam("id") Long id) throws Exception {
+        return Response.status(Response.Status.OK).entity(toDTO(packageBean.find(id))).build();
     }
 
     @POST
     @Path("/")
-    //@Authenticated
-    //@RolesAllowed({"Admin"})
-    public Response createNewPackage(PackageDTO packageDTO) throws MyConstraintViolationException {
-        packageBean.create(
-                packageDTO.getId(),
-                packageDTO.getPackagingType(),
-                packageDTO.getPackagingMaterial()
+    public Response createNewPackage(PackageDTO packageDTO) throws Exception {
+        packageBean.create(packageDTO.getId(),
+                packageDTO.getPackageType(),
+                packageDTO.getPackageMaterial(),
+                packageDTO.getOrderRef()
         );
-        Package newPackage = packageBean.find(packageDTO.getId());
-        return Response.status(Response.Status.CREATED).entity(PackageDTO.from(newPackage)).build();
+        Package package_ = packageBean.find(packageDTO.getId());
+        return Response.status(Response.Status.CREATED).entity(toDTO(package_)).build();
     }
 
     @PUT
     @Path("{id}")
-    //@Authenticated
-    //@RolesAllowed({"Admin"})
-    public Response updatePackage(@PathParam("id") Long id, PackageDTO packageDTO)
-            throws MyEntityNotFoundException {
-        packageBean.update(
-                packageDTO.getId(),
-                packageDTO.getPackagingType(),
-                packageDTO.getPackagingMaterial()
-        );
+    public Response updatePackage(@PathParam("id") Long id, PackageDTO packageDTO) throws Exception {
         Package package_ = packageBean.find(id);
-        return Response.status(Response.Status.OK).entity(PackageDTO.from(package_)).build();
+
+        packageBean.update(
+                id,
+                packageDTO.getPackageType() != null ? packageDTO.getPackageType() : package_.getPackageType(),
+                packageDTO.getPackageMaterial() != null ? packageDTO.getPackageMaterial() : package_.getPackageMaterial()
+        );
+        package_ = packageBean.find(id);
+        return Response.status(Response.Status.OK).entity(toDTO(package_)).build();
     }
 
-    // Add and Remove a Sensor of a package
-    @POST
-    @Authenticated
-    @RolesAllowed({"Manufacturer", "LogisticsOperator"})
-    @Path("{id}/sensor/{sensorId}")
-    public Response addSensorToPackage(@PathParam("id") Long id, @PathParam("sensorId") Long sensorId)
-            throws MyEntityNotFoundException {
+    @PUT
+    @Path("{id}/{value}")
+    public Response addValueToPackage(@PathParam("id") Long id, @PathParam("value") Long valueId) throws Exception {
+        Package package_ = packageBean.find(id);
 
-        if (!securityContext.isUserInRole("Manufacturer") || !securityContext.isUserInRole("LogisticsOperator")){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        packageBean.addSensorToPackage(id, sensorId);
-        return Response.ok().build();
+        packageBean.addValueToPackage(
+                id,
+                valueId
+        );
+        package_ = packageBean.find(id);
+        return Response.status(Response.Status.OK).entity(toDTO(package_)).build();
     }
 
-    @DELETE
-    @Authenticated
-    @RolesAllowed({"Manufacturer", "LogisticsOperator"})
-    @Path("{id}/sensor/{sensorId}")
-    public Response deleteSensorOfPackage(@PathParam("id") Long id, @PathParam("sensorId") Long sensorId)
-            throws MyEntityNotFoundException {
+    @PUT
+    @Path("{id}/{value}")
+    public Response removeValueFromPackage(@PathParam("id") Long id, @PathParam("value") Long valueId) throws Exception {
+        Package package_ = packageBean.find(id);
 
-        if (!securityContext.isUserInRole("Manufacturer") || !securityContext.isUserInRole("LogisticsOperator")){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        packageBean.removeSensorFromPackage(id, sensorId);
-        return Response.ok().build();
+        packageBean.removeValueFromPackage(
+                id,
+                valueId
+        );
+        package_ = packageBean.find(id);
+        return Response.status(Response.Status.OK).entity(toDTO(package_)).build();
     }
-    // ------------
 
     @DELETE
     @Path("{id}")
-    //@Authenticated
-    //@RolesAllowed({"Admin"})
-    public Response delete(@PathParam("id") Long packagingId) throws MyEntityNotFoundException {
-        packageBean.remove(packagingId);
-        return Response.ok().build();
+    public Response deletePackage(@PathParam("id") Long id) throws Exception {
+        packageBean.removePackage(id);
+        return Response.status(Response.Status.OK).build();
     }
-
-    // Helper method to get the user's role from the security context
-    private String getUserRole() {
-        return securityContext.isUserInRole("LogisticsOperator") ? "LogisticsOperator" :
-                securityContext.isUserInRole("Manufacturer") ? "Manufacturer" : "UnknownRole";
-    }
- */
 }

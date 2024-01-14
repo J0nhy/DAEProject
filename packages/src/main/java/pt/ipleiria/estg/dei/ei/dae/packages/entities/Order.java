@@ -9,6 +9,8 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 @Table(name = "orders")
 @NamedQuery(name = "getAllOrders", query = "select o from Order o order by o.id")
+@NamedQuery(name = "getAllOrdersByCustomer", query = "select o from Order o WHERE o.customer = :customer order by o.id"
+)
 public class Order {
 
     @Id
@@ -107,5 +109,20 @@ public class Order {
         }
         this.products.add(p);
     }
+
+    public void removePackage(Package p) {
+        if (this.packages == null) {
+            this.packages = new ArrayList<>();
+        }
+        this.packages.remove(p);
+    }
+
+    public void removeProduct(Product p) {
+        if (this.products == null) {
+            this.products = new ArrayList<>();
+        }
+        this.products.remove(p);
+    }
+
 
 }

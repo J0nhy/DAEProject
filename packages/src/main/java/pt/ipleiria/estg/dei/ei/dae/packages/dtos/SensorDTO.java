@@ -3,10 +3,11 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.SensorType;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SensorDTO {
+public class SensorDTO implements Serializable {
     private Long id;
     private SensorType sensorType;
     private String value;
@@ -94,20 +95,4 @@ public class SensorDTO {
         this.packageRef = packageRef;
     }
 
-    public static SensorDTO from(Sensor sensor_) {
-        return new SensorDTO(
-                sensor_.getId(),
-                sensor_.getSensorType(),
-                sensor_.getValue(),
-                sensor_.getDataType(),
-                sensor_.getMaxValue(),
-                sensor_.getMinValue(),
-                sensor_.getTimestamp(),
-                sensor_.getPackageRef()
-        );
-    }
-
-    public static List<SensorDTO> from(List<Sensor> sensors) {
-        return sensors.stream().map(SensorDTO::from).collect(Collectors.toList());
-    }
 }

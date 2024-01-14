@@ -41,6 +41,7 @@ public class Package implements Serializable {
     }
 
     public Package() {
+        this.products = new ArrayList<>();
         this.values =  new ArrayList<>();
     }
 
