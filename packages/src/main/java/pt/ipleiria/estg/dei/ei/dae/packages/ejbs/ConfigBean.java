@@ -17,6 +17,9 @@ public class ConfigBean {
     @EJB
     private PackageBean packageBean;
 
+    @EJB
+    private ManufacturerBean manufacturerBean;
+
     private static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
     @PostConstruct
     public void populateDB() {
@@ -40,6 +43,15 @@ public class ConfigBean {
             packageBean.create(3L, PackageType.Tertiary, "Wood", "123456789");
 
             System.out.println("Package Created");
+        }catch (Exception e){
+            logger.severe(e.getMessage());
+        }
+
+        try {
+            manufacturerBean.create("Manufacturer1", "123", "Manufacturer1", "Manufacturer1@mail.pt",
+                    123456789, 999999999, "Manufacturer1 adress");
+
+
         }catch (Exception e){
             logger.severe(e.getMessage());
         }
