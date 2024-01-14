@@ -11,6 +11,7 @@ import Icons from 'src/pages/Icons.vue'
 import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
+import ManufacturerList from 'src/pages/ManufacturerList.vue'
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
         path: 'table-list',
         name: 'Table List',
         component: TableList
+      },
+      {
+        path: 'manufacturer-list',
+        name: 'Manufacturer List',
+        component: ManufacturerList
       },
       {
         path: 'typography',
