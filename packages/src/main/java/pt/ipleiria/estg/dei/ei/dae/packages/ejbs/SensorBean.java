@@ -37,14 +37,6 @@ public class SensorBean {
         return entityManager.find(Sensor.class, SensorId);
     }
 
-    public void remove(Long id) throws Exception {
-        Sensor sensor = find(id);
-
-        if (sensor != null) {
-            entityManager.remove(sensor);
-        }
-    }
-
     public void update(long id, SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) throws Exception {
         
         Sensor sensor_ = find(id);
@@ -64,6 +56,14 @@ public class SensorBean {
             
         } catch (ConstraintViolationException e) {
             throw new Exception(e);
+        }
+    }
+
+    public void remove(Long id) throws Exception {
+        Sensor sensor = find(id);
+
+        if (sensor != null) {
+            entityManager.remove(sensor);
         }
     }
 }

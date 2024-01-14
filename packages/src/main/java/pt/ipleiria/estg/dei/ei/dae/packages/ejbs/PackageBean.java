@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.ejbs;
 
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Customer;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
@@ -8,6 +9,7 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
 
@@ -44,8 +46,14 @@ public class PackageBean {
 
         entityManager.lock(package_, LockModeType.OPTIMISTIC);
 
+        // orderRef nao faz sentido passar, para isso cancela-se a encomenda e faz-se uma nova
         package_.setPackageType(type);
         package_.setPackageMaterial(material);
+    }
+
+    public void removePackage(Long id) throws Exception {
+        Package package_ = find(id);
+        entityManager.remove(package_);
     }
 
     public void addValueToPackage(Long packageId, Long valueId) throws Exception {
