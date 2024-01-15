@@ -32,6 +32,8 @@ public class ConfigBean {
             customerBean.create("Customer3", "123", "Customer3", "Customer3@mail.pt", 123456789, 123456789, "Customer3 address");
             customerBean.create("Customer4", "123", "Customer4", "Customer4@mail.pt", 123456789, 123456789, "Customer4 address");
 
+            customerBean.delete("Customer4");
+
             System.out.println("Customer Created");
         }catch (Exception e){
             logger.severe(e.getMessage());

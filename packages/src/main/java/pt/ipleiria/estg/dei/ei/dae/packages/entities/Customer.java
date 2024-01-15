@@ -3,6 +3,8 @@ package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ import java.util.List;
                 query = "SELECT c FROM Customer c ORDER BY c.name" //JPQL
         )
 })
+@SQLDelete(sql="UPDATE users SET deleted = TRUE WHERE username = ? AND version = ? AND dtype = 'Customer'")
+@Where(clause = "deleted IS FALSE")
 public class Customer extends User implements Serializable {
     private int nif;
     private int phone;
@@ -23,6 +27,8 @@ public class Customer extends User implements Serializable {
     @NotNull
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Order> orders;
+
+    private boolean deleted;
 
     public Customer(){
         this.orders = new ArrayList<>();

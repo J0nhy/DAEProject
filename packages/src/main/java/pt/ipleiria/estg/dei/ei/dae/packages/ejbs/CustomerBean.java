@@ -67,4 +67,9 @@ public class CustomerBean {
         Customer customer = findCustomer(username);
         entityManager.remove(customer);
     }
+
+    public void delete(String username){
+        var customer = entityManager.find(Customer.class, username);
+        entityManager.remove(customer);
+    }
 }
