@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Path("/manufacturers")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
-@Authenticated
 //@RolesAllowed({}) //TODO: add roles, em principio só os proprios clientes podem aceder aos seus dados
 public class ManufacturerService {
     @EJB

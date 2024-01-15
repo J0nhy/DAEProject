@@ -28,6 +28,8 @@ import "./registerServiceWorker";
 Vue.use(VueRouter);
 Vue.use(LightBootstrap);
 
+
+
 // configure router
 const router = new VueRouter({
   routes, // short for routes: routes

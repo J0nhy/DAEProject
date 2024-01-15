@@ -5,6 +5,8 @@ function resolveSrc(_path) {
   return path.join(__dirname, _path);
 }
 
+
+
 module.exports = {
   lintOnSave: false,
   configureWebpack: {
@@ -32,4 +34,5 @@ module.exports = {
     // Enable CSS source maps.
     sourceMap: process.env.NODE_ENV !== 'production'
   }
+
 };

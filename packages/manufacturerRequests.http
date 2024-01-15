@@ -11,12 +11,12 @@ Content-Type: application/json
 ##### Get Manufacturers
 GET http://localhost:8080/packages/api/manufacturers
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQzODMxLCJleHAiOjE3MDUyNDc0MzF9.szl4DOW4CqA0ricYweqoh3RVhWmDC6wAcXvIQRGyT12TQKB5dITEKCWFLjmcIQHf
+
 
 ##### Get Single Manufacturer
 GET http://localhost:8080/packages/api/manufacturers/Manufacturer1
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjU0MzU5LCJleHAiOjE3MDUyNTc5NTl9.ZGh0Tvx-yh2aGb9_Rqp2a7zFmlm3zve8QcJqs-bfEWZlnV61NGJhbbCVeo14jTb3
 
 ##### Create Manufacturer
 POST http://localhost:8080/packages/api/manufacturers
