@@ -62,6 +62,8 @@ public class Order {
     }
 
     public Order() {
+        this.packages = new ArrayList<>();
+        this.products = new ArrayList<>();
     }
 
     public Long getId() {

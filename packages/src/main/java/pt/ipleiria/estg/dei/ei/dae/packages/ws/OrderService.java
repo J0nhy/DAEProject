@@ -48,7 +48,7 @@ public class OrderService {
         return toDTOs(orderBean.all());
     }
     @GET
-    @Path("/{customer}")
+    @Path("/customer/{customer}")
     public List<OrderDTO> getAllOrdersByCustomer(@PathParam("customer") Long customer) {
         return toDTOs(orderBean.allByCustomer(customer));
     }
@@ -105,7 +105,7 @@ public class OrderService {
     }
 
     @PUT
-    @Path("{id}/{package}")
+    @Path("{id}/addpackage/{package}")
     public Response addPackageToOrder(@PathParam("id") Long id, @PathParam("package") Long packageId) throws Exception {
         Order order = orderBean.find(id);
 
@@ -118,7 +118,7 @@ public class OrderService {
     }
 
     @PUT
-    @Path("{id}/{product}")
+    @Path("{id}/addproduct/{product}")
     public Response addProductToOrder(@PathParam("id") Long id, @PathParam("product") Long productId) throws Exception {
         Order order = orderBean.find(id);
 
@@ -131,7 +131,7 @@ public class OrderService {
     }
 
     @PUT
-    @Path("{id}/{package}")
+    @Path("{id}/removepackage/{package}")
     public Response removePackageFromOrder(@PathParam("id") Long id, @PathParam("package") Long packageId) throws Exception {
         Order order = orderBean.find(id);
 
@@ -144,7 +144,7 @@ public class OrderService {
     }
 
     @PUT
-    @Path("{id}/{product}")
+    @Path("{id}/removeproduct/{product}")
     public Response removeProductFromOrder(@PathParam("id") Long id, @PathParam("product") Long productId) throws Exception {
         Order order = orderBean.find(id);
 

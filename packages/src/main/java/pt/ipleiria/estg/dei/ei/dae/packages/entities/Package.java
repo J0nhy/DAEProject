@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "packages")
 @NamedQuery(name = "getAllPackages", query = "select p from Package p order by p.packageType")
 public class Package implements Serializable {
 

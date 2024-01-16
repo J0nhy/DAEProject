@@ -3,9 +3,11 @@ package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "products")
 @NamedQuery(name = "getAllProducts", query = "select p from Product p order by p.productName")
 public class Product {
 

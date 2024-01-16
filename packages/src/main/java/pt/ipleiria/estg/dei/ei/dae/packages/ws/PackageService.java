@@ -39,7 +39,9 @@ public class PackageService {
                 packageInstance.getId(),
                 packageInstance.getPackageType(),
                 packageInstance.getPackageMaterial(),
-                packageInstance.getOrderRef()
+                packageInstance.getOrderRef(),
+                packageInstance.getValues(),
+                packageInstance.getProducts()
         );
     }
 
@@ -86,7 +88,7 @@ public class PackageService {
     }
 
     @PUT
-    @Path("{id}/{value}")
+    @Path("{id}/add/{value}")
     public Response addValueToPackage(@PathParam("id") Long id, @PathParam("value") Long valueId) throws Exception {
         Package package_ = packageBean.find(id);
 
@@ -99,7 +101,7 @@ public class PackageService {
     }
 
     @PUT
-    @Path("{id}/{value}")
+    @Path("{id}/remove/{value}")
     public Response removeValueFromPackage(@PathParam("id") Long id, @PathParam("value") Long valueId) throws Exception {
         Package package_ = packageBean.find(id);
 
