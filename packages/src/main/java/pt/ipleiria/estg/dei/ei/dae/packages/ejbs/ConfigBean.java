@@ -5,8 +5,10 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Product;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 @Singleton
@@ -26,6 +28,11 @@ public class ConfigBean {
 
     @EJB
     private ProductBean productBean;
+
+
+    private List<Product> products;
+
+    private Product product;
 
     private static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
     @PostConstruct
@@ -69,6 +76,12 @@ public class ConfigBean {
 
 
         productBean.create(1L,"Canivete","Canivete Suiço", "Armas","China", "1", "d", "10", "2");
+        productBean.create(2L,"Canivete2","Canivete Suiço2", "Armas2","China2", "12", "d2", "102", "22");
+
+
+        //products.add(productBean.find(1L));
+       // products.add(productBean.find(2L));
+
 
         //CRIACAO TESTE ORDERS
         orderBean.create(1L,"Em Processamento",customerBean.findCustomer("Customer1"));

@@ -24,7 +24,7 @@ public class Customer extends User implements Serializable {
     private int phone;
     @NotNull
     private String address;
-    @NotNull
+    //@NotNull
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Order> orders;
 

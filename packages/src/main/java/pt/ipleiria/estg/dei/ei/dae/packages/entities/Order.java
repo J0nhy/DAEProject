@@ -36,10 +36,20 @@ public class Order {
     @OneToMany // uma encomenda pode ter vários produtos
     private List<Product> products;
 
+    public Order(long id, String status, Customer customer,List<Package> packages, List<Product> products) {
+        this.id = id;
+        this.status = status;
+        this.customer = customer;
+        this.packages = packages;
+        this.products = products;
+
+    }
+
     public Order(long id, String status, Customer customer) {
         this.id = id;
         this.status = status;
         this.customer = customer;
+
     }
 
     public Order(long id, String status, Customer customer, LogisticsOperator logisticsOperators, List<Package> packages, List<Product> products) {

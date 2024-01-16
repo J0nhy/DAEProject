@@ -24,6 +24,12 @@ public class OrderBean {
     private ProductBean productBean;
 
 
+    public void create(Long id, String status, Customer customer,List<Package> packages, List<Product> products) {
+
+        Order order = new Order(id, status, customer, packages, products);
+        entityManager.persist(order);
+    }
+
     public void create(Long id, String status, Customer customer) {
 
         Order order = new Order(id, status, customer);

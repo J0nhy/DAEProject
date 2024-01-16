@@ -14,6 +14,7 @@ import Upgrade from 'src/pages/Upgrade.vue'
 import ManufacturerList from 'src/pages/ManufacturerList.vue'
 import ManufacturerCreate from 'src/pages/ManufacturerCreate.vue'
 import OrderList from 'src/pages/OrderList.vue'
+import Login from 'src/pages/auth-test.vue'
 const routes = [
   {
     path: '/',
@@ -39,6 +40,11 @@ const routes = [
         path: 'table-list',
         name: 'Table List',
         component: TableList
+      },
+      {
+        path: 'login',
+        name: 'login',
+        component: Login
       },
       {
         path: 'manufacturer-list',
