@@ -14,6 +14,10 @@
         <i class="nc-icon nc-notes"></i>
         <p>Table list</p>
       </sidebar-link>
+      <sidebar-link to="/admin/order-list">
+        <i class="nc-icon nc-notes"></i>
+        <p>Orders</p>
+      </sidebar-link>
       <sidebar-link to="/admin/manufacturer-list">
         <i class="nc-icon nc-notes"></i>
         <p>Manufacturers</p>

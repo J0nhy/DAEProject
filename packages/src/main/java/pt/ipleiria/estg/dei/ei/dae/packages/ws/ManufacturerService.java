@@ -102,7 +102,7 @@ public class ManufacturerService {
 
     @DELETE
     @Path("{username}")
-    public Response deleteCustomer(@PathParam("username") String username)throws MyEntityNotFoundException{
+    public Response deleteManufacturer(@PathParam("username") String username)throws MyEntityNotFoundException{
         manufacturerBean.removeManufacturer(username);
         return Response.status(Response.Status.OK).build();
     }

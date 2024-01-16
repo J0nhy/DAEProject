@@ -24,17 +24,23 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @NotNull
+    //@NotNull
     @ManyToOne
     private LogisticsOperator logisticsOperators;
 
-    @NotNull
+    //@NotNull
     @OneToMany // uma encomenda pode ter várias embalagens
     private List<Package> packages;
 
-    @NotNull
+    //@NotNull
     @OneToMany // uma encomenda pode ter vários produtos
     private List<Product> products;
+
+    public Order(long id, String status, Customer customer) {
+        this.id = id;
+        this.status = status;
+        this.customer = customer;
+    }
 
     public Order(long id, String status, Customer customer, LogisticsOperator logisticsOperators, List<Package> packages, List<Product> products) {
         this.id = id;

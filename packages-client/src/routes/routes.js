@@ -12,7 +12,8 @@ import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
 import ManufacturerList from 'src/pages/ManufacturerList.vue'
-
+import ManufacturerCreate from 'src/pages/ManufacturerCreate.vue'
+import OrderList from 'src/pages/OrderList.vue'
 const routes = [
   {
     path: '/',
@@ -43,6 +44,16 @@ const routes = [
         path: 'manufacturer-list',
         name: 'Manufacturer List',
         component: ManufacturerList
+      },
+      {
+        path: 'order-list',
+        name: 'Order List',
+        component: OrderList
+      },
+      {
+        path: 'manufacturer-create',
+        name: 'Manufacturer Create',
+        component: ManufacturerCreate
       },
       {
         path: 'typography',

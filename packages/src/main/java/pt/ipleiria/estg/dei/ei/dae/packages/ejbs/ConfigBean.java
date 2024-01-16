@@ -5,6 +5,7 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
 import java.util.logging.Logger;
 
@@ -20,9 +21,15 @@ public class ConfigBean {
     @EJB
     private ManufacturerBean manufacturerBean;
 
+    @EJB
+    private OrderBean orderBean;
+
+    @EJB
+    private ProductBean productBean;
+
     private static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
     @PostConstruct
-    public void populateDB() {
+    public void populateDB() throws Exception {
 
         System.out.println("Hello Java EE!");
 
@@ -49,6 +56,7 @@ public class ConfigBean {
             logger.severe(e.getMessage());
         }
 
+        //Create Manufacturer
         try {
             manufacturerBean.create("Manufacturer1", "123", "Manufacturer1", "Manufacturer1@mail.pt",
                     123456789, 999999999, "Manufacturer1 adress");
@@ -57,6 +65,13 @@ public class ConfigBean {
         }catch (Exception e){
             logger.severe(e.getMessage());
         }
+
+
+
+        productBean.create(1L,"Canivete","Canivete Suiço", "Armas","China", "1", "d", "10", "2");
+
+        //CRIACAO TESTE ORDERS
+        orderBean.create(1L,"Em Processamento",customerBean.findCustomer("Customer1"));
 
     }
 }

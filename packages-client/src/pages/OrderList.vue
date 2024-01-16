@@ -1,12 +1,6 @@
 <template>
-
   <div class="content">
-
-
     <div class="container-fluid">
-      <button class="btn btn-success btn-fill float-top" @click.prevent="$router.push({ name: 'Manufacturer Create' })">
-      Create Manufacturer
-      </button>
       <br><br>
       <div class="row">
         <div class="col-12">
@@ -15,8 +9,8 @@
                 body-classes="table-full-width table-responsive"
           >
             <template slot="header">
-              <h4 class="card-title">Manufacturers</h4>
-              <p class="card-category">List of Manufacturers</p>
+              <h4 class="card-title">Orders</h4>
+              <p class="card-category">List of Orders</p>
             </template>
 
             <l-table class="table-hover table-striped"
@@ -24,9 +18,7 @@
                      :data="table1.data">
             </l-table>
           </card>
-
         </div>
-
       </div>
     </div>
   </div>
@@ -52,14 +44,14 @@ export default {
     }
   },
   created() {
-    this.fetchManufacturers();
+    this.fetchOrders();
   },
   methods: {
-    async fetchManufacturers() {
+    async fetchOrders() {
       try {
         const token = 'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjU1ODAyLCJleHAiOjE3MDUyNTk0MDJ9.XrpDtNfxdL5xAJY4otd_XiowfCaBwgpX_YOj4ruloYOvgwa0mv-JBHUqOmK_uNxH'; // Substitua com o seu token real
         const apiUrl = process.env.VUE_APP_API_URL
-        const response = await fetch(`${apiUrl}/manufacturers`, {
+        const response = await fetch(`${apiUrl}/orders`, {
           method: 'GET',
           //mode: 'no-cors',
 
@@ -73,9 +65,9 @@ export default {
       const responseBody = await response.json();
       console.log('Corpo da resposta:', responseBody);
 
-       this.table1.data = responseBody; // Assuming the API returns an array of manufacturers
+       this.table1.data = responseBody;
       } catch (error) {
-        console.error('Error fetching manufacturers:', error);
+        console.error('Error fetching orders:', error);
       }
     }
   }

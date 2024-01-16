@@ -1,4 +1,4 @@
-package pt.ipleiria.estg.dei.ei.dae.packages.providers;
+package pt.ipleiria.estg.dei.ei.dae.academics.providers;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.container.ContainerResponseFilter;

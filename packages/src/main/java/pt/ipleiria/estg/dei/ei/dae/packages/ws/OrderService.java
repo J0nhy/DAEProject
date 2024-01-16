@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.ws;
 
 import jakarta.ejb.EJB;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
