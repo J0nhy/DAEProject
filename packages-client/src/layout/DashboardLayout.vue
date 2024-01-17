@@ -22,6 +22,10 @@
         <i class="nc-icon nc-notes"></i>
         <p>Manufacturers</p>
       </sidebar-link>
+      <sidebar-link to="/admin/logisticsoperator-list">
+        <i class="nc-icon nc-notes"></i>
+        <p>Logistics Operator</p>
+      </sidebar-link>
       <sidebar-link to="/admin/typography">
         <i class="nc-icon nc-paper-2"></i>
         <p>Typography</p>

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Path("/testes")
+@Path("/logisticsoperators")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
 

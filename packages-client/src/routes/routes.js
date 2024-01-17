@@ -15,6 +15,9 @@ import ManufacturerList from 'src/pages/ManufacturerList.vue'
 import ManufacturerCreate from 'src/pages/ManufacturerCreate.vue'
 import OrderList from 'src/pages/OrderList.vue'
 import Login from 'src/pages/auth-test.vue'
+import LogisticsOperatorList from 'src/pages/LogisticsOperator/LogisticsOperator.vue'
+import LogisticsOperatorAdd from 'src/pages/LogisticsOperator/LogisticsOperatorAdd.vue'
+
 const routes = [
   {
     path: '/',
@@ -50,6 +53,16 @@ const routes = [
         path: 'manufacturer-list',
         name: 'Manufacturer List',
         component: ManufacturerList
+      },
+      {
+        path: 'logisticsoperator-list',
+        name: 'logisticsoperator List',
+        component: LogisticsOperatorList
+      },
+      {
+        path: 'logisticsoperator-add',
+        name: 'logisticsoperator Add',
+        component: LogisticsOperatorAdd
       },
       {
         path: 'order-list',
