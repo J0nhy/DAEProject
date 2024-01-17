@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 public class Sensor {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull
@@ -33,8 +34,7 @@ public class Sensor {
     private Package packageRef; // embalagem a que se refere esta leitura
 
 
-    public Sensor(long id, SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
-        this.id = id;
+    public Sensor( SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
         this.sensorType = sensorType;
         this.value = value;
         this.dataType = dataType;
@@ -45,10 +45,6 @@ public class Sensor {
     }
 
     public Sensor() {
-    }
-
-    public long getId() {
-        return id;
     }
 
     public SensorType getSensorType() {
@@ -77,10 +73,6 @@ public class Sensor {
 
     public Package getPackageRef() {
         return packageRef;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public void setSensorType(SensorType sensorType) {

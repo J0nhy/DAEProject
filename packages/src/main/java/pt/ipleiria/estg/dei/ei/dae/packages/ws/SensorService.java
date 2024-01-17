@@ -27,7 +27,6 @@ public class SensorService {
 
     private SensorDTO toDTO(Sensor sensor) {
         return new SensorDTO(
-                sensor.getId(),
                 sensor.getSensorType(),
                 sensor.getValue(),
                 sensor.getDataType(),
@@ -57,7 +56,7 @@ public class SensorService {
     @POST
     @Path("/")
     public Response createNewSensor(SensorDTO sensorDTO) throws Exception {
-        sensorBean.create(sensorDTO.getId(),
+        sensorBean.create(
                 sensorDTO.getSensorType(),
                 sensorDTO.getValue(),
                 sensorDTO.getDataType(),

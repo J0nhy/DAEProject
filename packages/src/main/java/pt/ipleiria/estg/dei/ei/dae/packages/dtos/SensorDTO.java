@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SensorDTO implements Serializable {
-    private Long id;
+    private long id;
     private SensorType sensorType;
     private String value;
     private String dataType;
@@ -17,8 +17,7 @@ public class SensorDTO implements Serializable {
     private long timestamp;
     private Package packageRef;
     
-    public SensorDTO(Long id, SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
-        this.id = id;
+    public SensorDTO( SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
         this.sensorType = sensorType;
         this.value = value;
         this.dataType = dataType;
@@ -30,9 +29,13 @@ public class SensorDTO implements Serializable {
 
     public SensorDTO() {
     }
-    
-    public Long getId() {
+
+    public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public SensorType getSensorType() {
@@ -61,10 +64,6 @@ public class SensorDTO implements Serializable {
 
     public Package getPackageRef() {
         return packageRef;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setSensorType(SensorType sensorType) {

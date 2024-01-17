@@ -6,7 +6,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.SensorType;
 import java.io.Serializable;
 
 public class ProductDTO implements Serializable {
-    private Long id;
+    private long id;
     private String productName; // name of the product
     private String productDescription; // description of the product
     private String productCategory; // category of the product
@@ -17,8 +17,7 @@ public class ProductDTO implements Serializable {
     private String productWeight; // shipping weight of the product
 
 
-    public ProductDTO(Long id, String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) {
-        this.id = id;
+    public ProductDTO( String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) {
         this.productName = productName;
         this.productDescription = productDescription;
         this.productCategory = productCategory;
@@ -31,9 +30,13 @@ public class ProductDTO implements Serializable {
 
     public ProductDTO() {
     }
-    
-    public Long getId() {
+
+    public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getProductName() {
@@ -66,10 +69,6 @@ public class ProductDTO implements Serializable {
 
     public String getProductWeight() {
         return productWeight;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setProductName(String productName) {
@@ -107,7 +106,6 @@ public class ProductDTO implements Serializable {
     @Override
 public String toString() {
         return "ProductDTO{" +
-                "id=" + id +
                 ", productName='" + productName + '\'' +
                 ", productDescription='" + productDescription + '\'' +
                 ", productCategory='" + productCategory + '\'' +

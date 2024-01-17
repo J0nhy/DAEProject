@@ -14,7 +14,8 @@ import jakarta.validation.constraints.NotNull;
 public class Order {
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @NotNull
     private String status;
@@ -24,41 +25,21 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    //@NotNull
     @ManyToOne
+    @JoinColumn(name = "logisticsOperator_id")
     private LogisticsOperator logisticsOperators;
 
-    //@NotNull
     @OneToMany // uma encomenda pode ter várias embalagens
     private List<Package> packages;
 
-    //@NotNull
     @OneToMany // uma encomenda pode ter vários produtos
     private List<Product> products;
 
-    public Order(long id, String status, Customer customer,List<Package> packages, List<Product> products) {
-        this.id = id;
+    public Order( String status, Customer customer) {
         this.status = status;
         this.customer = customer;
-        this.packages = packages;
-        this.products = products;
-
-    }
-
-    public Order(long id, String status, Customer customer) {
-        this.id = id;
-        this.status = status;
-        this.customer = customer;
-
-    }
-
-    public Order(long id, String status, Customer customer, LogisticsOperator logisticsOperators, List<Package> packages, List<Product> products) {
-        this.id = id;
-        this.status = status;
-        this.customer = customer;
-        this.logisticsOperators = logisticsOperators;
-        this.packages = packages;
-        this.products = products;
+        this.packages = new ArrayList<>();
+        this.products = new ArrayList<>();
     }
 
     public Order() {
@@ -66,7 +47,7 @@ public class Order {
         this.products = new ArrayList<>();
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
@@ -86,7 +67,7 @@ public class Order {
         return packages;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
     

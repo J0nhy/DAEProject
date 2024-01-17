@@ -1,9 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -12,7 +9,8 @@ import jakarta.validation.constraints.NotNull;
 public class Product {
 
     @Id
-    private Long id; // product id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id; // product id
 
     @NotNull
     private String productName; // name of the product
@@ -34,11 +32,11 @@ public class Product {
 
     private String productWeight; // shipping weight of the product
 
+
     public Product() {
     }
 
-    public Product(Long id, String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) {
-        this.id = id;
+    public Product( String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) {
         this.productName = productName;
         this.productDescription = productDescription;
         this.productCategory = productCategory;
@@ -49,7 +47,7 @@ public class Product {
         this.productWeight = productWeight;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
@@ -85,7 +83,7 @@ public class Product {
         return productWeight;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

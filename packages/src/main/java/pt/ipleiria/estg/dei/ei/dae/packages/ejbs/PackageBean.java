@@ -1,14 +1,12 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.ejbs;
 
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Customer;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
@@ -22,9 +20,11 @@ public class PackageBean {
     @EJB
     private SensorBean valueBean;
 
-    public void create(Long id, PackageType packageType, String packageMaterial, String orderRef) {
+    @EJB
+    private OrderBean orderBean;
 
-            Package package_ = new Package(id, packageType, packageMaterial, orderRef);
+    public void create( PackageType packageType, String packageMaterial){
+            Package package_ = new Package(packageType, packageMaterial);
             entityManager.persist(package_);
             entityManager.flush();
     }
@@ -33,10 +33,10 @@ public class PackageBean {
         return entityManager.createNamedQuery("getAllPackages", Package.class).getResultList();
     }
 
-    public Package find(Long packageId) throws Exception {
+    public Package find(Long packageId) throws MyEntityNotFoundException {
         Package package_ = entityManager.find(Package.class, packageId);
         if (package_ == null) {
-            throw new Exception("Package '" + packageId + "' not found");
+            throw new MyEntityNotFoundException("Package '" + packageId + "' not found");
         }
         return entityManager.find(Package.class, packageId);
     }

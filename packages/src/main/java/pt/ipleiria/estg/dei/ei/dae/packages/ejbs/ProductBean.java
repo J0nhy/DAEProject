@@ -8,6 +8,7 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
 @Stateless
@@ -15,9 +16,8 @@ public class ProductBean {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(long id, String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) {
-
-        Product product = new Product(id, productName, productDescription, productCategory, productManufacturer, productBrand, productImage, productPrice, productWeight);
+    public void create(String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) {
+        Product product = new Product(productName, productDescription, productCategory, productManufacturer, productBrand, productImage, productPrice, productWeight);
         entityManager.persist(product);
     }
 
@@ -25,11 +25,11 @@ public class ProductBean {
         return entityManager.createNamedQuery("getAllProducts", Product.class).getResultList();
     }
 
-    public Product find(Long id) throws Exception {
+    public Product find(long id) throws MyEntityNotFoundException {
 
         Product product = entityManager.find(Product.class, id);
         if (product == null) {
-            throw new Exception("Product '" + id + "' not found");
+            throw new MyEntityNotFoundException("Product '" + id + "' not found");
         }
         return entityManager.find(Product.class, id);
     }
