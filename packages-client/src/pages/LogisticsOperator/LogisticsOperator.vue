@@ -59,7 +59,7 @@
         try {
           //const token = 'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjU1ODAyLCJleHAiOjE3MDUyNTk0MDJ9.XrpDtNfxdL5xAJY4otd_XiowfCaBwgpX_YOj4ruloYOvgwa0mv-JBHUqOmK_uNxH'; // Substitua com o seu token real
           const apiUrl = process.env.VUE_APP_API_URL
-          const response = await fetch(`${apiUrl}/testes`, {
+          const response = await fetch(`${apiUrl}/logisticsoperators`, {
             method: 'GET',
             //mode: 'no-cors',
   
