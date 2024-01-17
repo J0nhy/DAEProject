@@ -53,9 +53,9 @@ public class LogisticsOperatorService {
     @GET
     @Path("/")
     public List<LogisticsOperatorDTO> getAllLogisticsOperators() {
-        LogisticsOperatorBean logisticsOperatorBean = new LogisticsOperatorBean(); // Crie uma instância da classe
         return toDTOs(logisticsOperatorBean.getAll());
     }
+    
 
 
 

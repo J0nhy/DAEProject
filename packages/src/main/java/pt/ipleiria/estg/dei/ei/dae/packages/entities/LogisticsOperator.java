@@ -11,7 +11,7 @@ import java.io.Serializable;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllLogisticsOperators",
-                query = "SELECT m FROM Manufacturer m ORDER BY m.name" //JPQL
+                query = "SELECT m FROM LogisticsOperator m ORDER BY m.name" //JPQL
         )
 })
 public class LogisticsOperator extends User implements Serializable {
