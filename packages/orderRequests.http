@@ -14,6 +14,7 @@ Accept: application/json
 //Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1NDI5NTg0LCJleHAiOjE3MDU0MzMxODR9.awEt47NmNxk8M4CP3JHqdKkk7j1ZEYX4pudUvJjIhRVlHL3GFEvvk40pLcANEXww
 
 
+
 ##### Get Single Manufacturer
 GET http://localhost:8080/packages/api/manufacturers/Manufacturer1
 Accept: application/json
