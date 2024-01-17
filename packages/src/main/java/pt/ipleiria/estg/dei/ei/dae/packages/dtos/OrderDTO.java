@@ -1,9 +1,4 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.dtos;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotNull;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 
@@ -15,16 +10,25 @@ public class OrderDTO implements Serializable {
     private long id;
     private String status;
     private Customer customer;
+
+    private String customerName;
     private LogisticsOperator logisticsOperators;
     private List<Package> packages;
     private List<Product> products;
 
-    public OrderDTO( String status, Customer customer, LogisticsOperator logisticsOperators) {
+    private Long packageID;
+
+    public OrderDTO(String status, String customer, LogisticsOperator logisticsOperators, Long packageId) {
         this.status = status;
-        this.customer = customer;
+        this.customerName = customer;
         this.logisticsOperators = logisticsOperators;
-        this.packages = new ArrayList<>();
-        this.products = new ArrayList<>();
+        this.packageID = packageId;
+    }
+
+    public OrderDTO(String status, String customer, LogisticsOperator logisticsOperators) {
+        this.status = status;
+        this.customerName = customer;
+        this.logisticsOperators = logisticsOperators;
     }
 
     public OrderDTO() {
@@ -84,6 +88,15 @@ public class OrderDTO implements Serializable {
         this.products = products;
     }
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    /*
     @Override
     public String toString() {
         return "OrderDTO{" +
@@ -91,5 +104,5 @@ public class OrderDTO implements Serializable {
                 ", customer=" + customer +
                 ", logisticsOperators=" + logisticsOperators +
                 '}';
-    }
+    }*/
 }

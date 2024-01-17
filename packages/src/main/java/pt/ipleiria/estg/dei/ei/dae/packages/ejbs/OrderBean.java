@@ -26,10 +26,12 @@ public class OrderBean {
     @EJB
     private ProductBean productBean;
 
+    @EJB LogisticsOperatorBean logisticsOperatorBean;
 
-    public void create(String status, Customer customer, List<Package> packages, List<Product> products)
+
+    public void create(String status, Customer customer, LogisticsOperator logisticsOperator, List<Package> packages, List<Product> products)
         throws MyEntityNotFoundException{
-        Order order = new Order(status, customer);
+        Order order = new Order(status, customer, logisticsOperator);
         for (Package p : packages) {
             try {
                 Package package_ = packageBean.find(p.getId());
