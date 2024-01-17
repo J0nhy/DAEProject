@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.LogisticsOperator;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Product;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
@@ -22,6 +23,8 @@ public class ConfigBean {
 
     @EJB
     private ManufacturerBean manufacturerBean;
+    @EJB
+    private LogisticsOperatorBean logisticsOperatorBean;
 
     @EJB
     private OrderBean orderBean;
@@ -72,7 +75,16 @@ public class ConfigBean {
         }catch (Exception e){
             logger.severe(e.getMessage());
         }
+    //
+        //Create logisticsOperator
+        try {
+            logisticsOperatorBean.create("logistics1", "123", "logi1", "logi1@mail.pt",
+                    "FEDEX");
 
+
+        }catch (Exception e){
+            logger.severe(e.getMessage());
+        }
 
 
         productBean.create(1L,"Canivete","Canivete Suiço", "Armas","China", "1", "d", "10", "2");
