@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
+import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Customer;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
@@ -43,6 +44,7 @@ public class CustomerBean {
         if (customer == null) {
             throw new MyEntityNotFoundException("Customer with username: " + username + " not found");
         }
+        Hibernate.initialize(customer.getOrders());
         return customer;
     }
 

@@ -8,7 +8,10 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -24,21 +27,26 @@ public class OrderBean {
     private ProductBean productBean;
 
 
-    public void create(Long id, String status, Customer customer,List<Package> packages, List<Product> products) {
-
-        Order order = new Order(id, status, customer, packages, products);
-        entityManager.persist(order);
-    }
-
-    public void create(Long id, String status, Customer customer) {
-
-        Order order = new Order(id, status, customer);
-        entityManager.persist(order);
-    }
-
-    public void create(Long id, String status, Customer customer, LogisticsOperator logisticsOperator, List<Package> packages, List<Product> products) {
-
-        Order order = new Order(id, status, customer, logisticsOperator, packages, products);
+    public void create(String status, Customer customer, List<Package> packages, List<Product> products)
+        throws MyEntityNotFoundException{
+        Order order = new Order(status, customer);
+        for (Package p : packages) {
+            try {
+                Package package_ = packageBean.find(p.getId());
+                order.addPackage(package_);
+                package_.setOrder(order);
+            } catch (MyEntityNotFoundException e) {
+                throw new MyEntityNotFoundException("Package with id: " + p.getId() + " not found");
+            }
+        }
+        for (Product p : products) {
+            try {
+                Product product = productBean.find(p.getId());
+                order.addProduct(product);
+            } catch (MyEntityNotFoundException e) {
+                throw new MyEntityNotFoundException("Product with id: " + p.getId() + " not found");
+            }
+        }
         entityManager.persist(order);
     }
 
@@ -53,11 +61,11 @@ public class OrderBean {
                 .getResultList();
     }
 
-    public Order find(Long id) throws Exception {
+    public Order find(Long id) throws MyEntityNotFoundException {
 
         Order order = entityManager.find(Order.class, id);
         if (order == null) {
-            throw new Exception("Order '" + id + "' not found");
+            throw new MyEntityNotFoundException("Order '" + id + "' not found");
         }
         return entityManager.find(Order.class, order);
     }

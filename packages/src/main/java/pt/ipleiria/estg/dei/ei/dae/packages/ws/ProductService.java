@@ -27,7 +27,6 @@ public class ProductService {
 
     private ProductDTO toDTO(Product product) {
         return new ProductDTO(
-                product.getId(),
                 product.getProductName(),
                 product.getProductDescription(),
                 product.getProductCategory(),
@@ -58,7 +57,7 @@ public class ProductService {
     @POST
     @Path("/")
     public Response createNewProduct(ProductDTO productDTO) throws Exception {
-        productBean.create(productDTO.getId(),
+        productBean.create(
                 productDTO.getProductName(),
                 productDTO.getProductDescription(),
                 productDTO.getProductCategory(),

@@ -36,12 +36,9 @@ public class PackageService {
 
     private PackageDTO toDTO(Package packageInstance) {
         return new PackageDTO(
-                packageInstance.getId(),
                 packageInstance.getPackageType(),
                 packageInstance.getPackageMaterial(),
-                packageInstance.getOrderRef(),
-                packageInstance.getValues(),
-                packageInstance.getProducts()
+                packageInstance.getOrder()
         );
     }
 
@@ -64,10 +61,9 @@ public class PackageService {
     @POST
     @Path("/")
     public Response createNewPackage(PackageDTO packageDTO) throws Exception {
-        packageBean.create(packageDTO.getId(),
+        packageBean.create(
                 packageDTO.getPackageType(),
-                packageDTO.getPackageMaterial(),
-                packageDTO.getOrderRef()
+                packageDTO.getPackageMaterial()
         );
         Package package_ = packageBean.find(packageDTO.getId());
         return Response.status(Response.Status.CREATED).entity(toDTO(package_)).build();

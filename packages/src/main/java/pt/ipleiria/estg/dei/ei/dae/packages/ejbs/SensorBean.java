@@ -18,9 +18,8 @@ public class SensorBean {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(long id, SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
-
-        Sensor sensor_ = new Sensor(id, sensorType, value, dataType, maxValue, minValue, timestamp, packageRef);
+    public void create(SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
+        Sensor sensor_ = new Sensor( sensorType, value, dataType, maxValue, minValue, timestamp, packageRef);
         entityManager.persist(sensor_);
     }
 

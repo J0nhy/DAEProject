@@ -8,30 +8,40 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDTO implements Serializable {
-    private Long id;
+    private long id;
     private String status;
     private Customer customer;
     private LogisticsOperator logisticsOperators;
     private List<Package> packages;
     private List<Product> products;
 
-    public OrderDTO(Long id, String status, Customer customer, LogisticsOperator logisticsOperators, List<Package> packages, List<Product> products) {
-        this.id = id;
+    public OrderDTO( String status, Customer customer, LogisticsOperator logisticsOperators) {
         this.status = status;
         this.customer = customer;
         this.logisticsOperators = logisticsOperators;
-        this.packages = packages;
-        this.products = products;
+        this.packages = new ArrayList<>();
+        this.products = new ArrayList<>();
     }
 
     public OrderDTO() {
+        this.packages = new ArrayList<>();
+        this.products = new ArrayList<>();
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     public String getStatus() {
@@ -52,10 +62,6 @@ public class OrderDTO implements Serializable {
 
     public List<Product> getProducts() {
         return products;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setStatus(String status) {
@@ -81,7 +87,6 @@ public class OrderDTO implements Serializable {
     @Override
     public String toString() {
         return "OrderDTO{" +
-                "id=" + id +
                 ", status='" + status + '\'' +
                 ", customer=" + customer +
                 ", logisticsOperators=" + logisticsOperators +

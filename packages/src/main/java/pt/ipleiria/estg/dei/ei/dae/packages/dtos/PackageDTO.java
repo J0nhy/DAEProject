@@ -1,31 +1,28 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.dtos;
-import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotNull;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
+
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Product;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Order;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PackageDTO implements Serializable{
-    private Long id;
+    private long id;
     private PackageType PackageType;
     private String packageMaterial;
-    private String orderRef;
+    private Order order;
     private List<Sensor> values;
     private List<Product> products;
 
-    public PackageDTO(Long id, PackageType PackageType, String packageMaterial, String orderRef, List<Sensor> values, List<Product> products) {
-        this.id = id;
+    public PackageDTO( PackageType PackageType, String packageMaterial, Order order) {
         this.PackageType = PackageType;
         this.packageMaterial = packageMaterial;
-        this.orderRef = orderRef;
-        this.products = products;
-        this.values =  values;
+        this.order = order;
+        this.products = new ArrayList<>();
+        this.values =  new ArrayList<>();
     }
 
     public PackageDTO() {
@@ -33,8 +30,12 @@ public class PackageDTO implements Serializable{
         this.values =  new ArrayList<>();
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public PackageType getPackageType() {
@@ -45,12 +46,8 @@ public class PackageDTO implements Serializable{
         return packageMaterial;
     }
 
-    public String getOrderRef() {
-        return orderRef;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public Order getOrder() {
+        return order;
     }
 
     public void setPackageType(PackageType PackageType) {
@@ -61,8 +58,8 @@ public class PackageDTO implements Serializable{
         this.packageMaterial = packageMaterial;
     }
 
-    public void setOrderRef(String orderRef) {
-        this.orderRef = orderRef;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public List<Sensor> getValues() {

@@ -29,12 +29,9 @@ public class OrderService {
 
     private OrderDTO toDTO(Order order) {
         return new OrderDTO(
-                order.getId(),
                 order.getStatus(),
                 order.getCustomer(),
-                order.getLogisticsOperators(),
-                order.getPackages(),
-                order.getProducts()
+                order.getLogisticsOperators()
         );
     }
 
@@ -47,6 +44,7 @@ public class OrderService {
     public List<OrderDTO> getAllOrders() {
         return toDTOs(orderBean.all());
     }
+
     @GET
     @Path("/customer/{customer}")
     public List<OrderDTO> getAllOrdersByCustomer(@PathParam("customer") Long customer) {
@@ -63,12 +61,11 @@ public class OrderService {
     @Path("/")
     public Response createNewOrder(OrderDTO orderDTO) throws Exception {
         orderBean.create(
-                orderDTO.getId(),
                 orderDTO.getStatus(),
                 orderDTO.getCustomer(),
-                orderDTO.getLogisticsOperators(),
                 orderDTO.getPackages(),
                 orderDTO.getProducts()
+
         );
         Order order = orderBean.find(orderDTO.getId());
         return Response.status(Response.Status.CREATED).entity(toDTO(order)).build();

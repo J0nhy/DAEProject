@@ -13,7 +13,8 @@ import java.util.List;
 public class Package implements Serializable {
 
     @Id
-    private Long id; // package id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id; // package id
 
     @NotNull
     private PackageType packageType; // primary, secondary, tertiary
@@ -27,16 +28,14 @@ public class Package implements Serializable {
     @NotNull
     @OneToMany
     private List<Product> products; // products inside the package
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order; // referencia da encomenda
 
-    @NotNull
-    private String orderRef; // referencia da encomenda
 
-
-    public Package(Long id, PackageType packageType, String packageMaterial, String orderRef) {
-        this.id = id;
+    public Package( PackageType packageType, String packageMaterial) {
         this.packageType = packageType;
         this.packageMaterial = packageMaterial;
-        this.orderRef = orderRef;
         this.products = new ArrayList<>();
         this.values =  new ArrayList<>();
     }
@@ -46,7 +45,7 @@ public class Package implements Serializable {
         this.values =  new ArrayList<>();
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
@@ -66,7 +65,7 @@ public class Package implements Serializable {
         return values;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -86,12 +85,12 @@ public class Package implements Serializable {
         this.values = values;
     }
 
-    public String getOrderRef() {
-        return orderRef;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderRef(String orderRef) {
-        this.orderRef = orderRef;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     @Override
