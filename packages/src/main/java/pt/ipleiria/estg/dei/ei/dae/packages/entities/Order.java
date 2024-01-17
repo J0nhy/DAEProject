@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.internal.util.logging.Log;
 
 @Entity
 @Table(name = "orders")
@@ -14,7 +15,8 @@ import jakarta.validation.constraints.NotNull;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "TBL_METADATA_ID_SEQ")
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull
@@ -24,6 +26,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    private String customerName;
 
     @ManyToOne
     @JoinColumn(name = "logisticsOperator_id")
@@ -35,9 +39,12 @@ public class Order {
     @OneToMany // uma encomenda pode ter vários produtos
     private List<Product> products;
 
-    public Order( String status, Customer customer) {
+
+
+    public Order(String status, Customer customer, LogisticsOperator logisticsOperator) {
         this.status = status;
         this.customer = customer;
+        this.logisticsOperators = logisticsOperator;
         this.packages = new ArrayList<>();
         this.products = new ArrayList<>();
     }
@@ -57,6 +64,14 @@ public class Order {
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    public String getCustomerName(){
+        return customer.getName();
+    }
+
+    public Long getPackageId(){
+        return 1L;
     }
 
     public LogisticsOperator getLogisticsOperators() {
@@ -123,5 +138,7 @@ public class Order {
         this.products.remove(p);
     }
 
-
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 }

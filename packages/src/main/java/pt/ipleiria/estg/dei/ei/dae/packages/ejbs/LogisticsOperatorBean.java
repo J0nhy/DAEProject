@@ -4,6 +4,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
+import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Customer;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.LogisticsOperator;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
@@ -35,5 +36,14 @@ public class LogisticsOperatorBean {
     }
     public List<LogisticsOperator> getAll() {
         return entityManager.createNamedQuery("getAllLogisticsOperators", LogisticsOperator.class).getResultList();
+    }
+
+    public LogisticsOperator findLogisticOperator(String username) throws MyEntityNotFoundException {
+        LogisticsOperator logisticsOperator = entityManager.find(LogisticsOperator.class, username);
+        if (logisticsOperator == null) {
+            throw new MyEntityNotFoundException("Logistic Operator with username: " + username + " not found");
+        }
+        //Hibernate.initialize(logisticsOperator.getOrders());
+        return logisticsOperator;
     }
 }

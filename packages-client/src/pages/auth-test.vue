@@ -14,20 +14,7 @@
     <button @click="reset">RESET</button>
   </div>
 
-  <div v-if="token">
-    <h2>API Request Form</h2>
-    <div>Path:
-      <input v-model="apiFormData.path">
-    </div>
-    <div>Token: {{ token }}</div>
-    <button @click="sendRequest">SEND REQUEST</button>
-  </div>
-  <div v-if="messages.length > 0">
-    <h2>Messages</h2>
-    <div v-for="message in messages">
-      <pre>{{ message }}</pre>
-    </div>
-  </div>
+
 </template>
 
 <script setup>

@@ -44,7 +44,7 @@ public class CustomerBean {
         if (customer == null) {
             throw new MyEntityNotFoundException("Customer with username: " + username + " not found");
         }
-        Hibernate.initialize(customer.getOrders());
+        //Hibernate.initialize(customer.getOrders());
         return customer;
     }
 

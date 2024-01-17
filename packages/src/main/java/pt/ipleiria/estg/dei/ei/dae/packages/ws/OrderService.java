@@ -30,7 +30,7 @@ public class OrderService {
     private OrderDTO toDTO(Order order) {
         return new OrderDTO(
                 order.getStatus(),
-                order.getCustomer(),
+                order.getCustomerName(),
                 order.getLogisticsOperators()
         );
     }
@@ -63,6 +63,7 @@ public class OrderService {
         orderBean.create(
                 orderDTO.getStatus(),
                 orderDTO.getCustomer(),
+                orderDTO.getLogisticsOperators(),
                 orderDTO.getPackages(),
                 orderDTO.getProducts()
 

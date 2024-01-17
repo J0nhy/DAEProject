@@ -17,6 +17,8 @@ import OrderList from 'src/pages/OrderList.vue'
 import Login from 'src/pages/auth-test.vue'
 import LogisticsOperatorList from 'src/pages/LogisticsOperator/LogisticsOperator.vue'
 import LogisticsOperatorAdd from 'src/pages/LogisticsOperator/LogisticsOperatorAdd.vue'
+import CustomerList from 'src/pages/Customers/CustomersList.vue'
+import CustomerCreate from 'src/pages/Customers/CustomersCreate.vue'
 
 const routes = [
   {
@@ -60,6 +62,11 @@ const routes = [
         component: LogisticsOperatorList
       },
       {
+        path: 'customer-list',
+        name: 'Customer List',
+        component: CustomerList
+      },
+      {
         path: 'logisticsoperator-add',
         name: 'logisticsoperator Add',
         component: LogisticsOperatorAdd
@@ -73,6 +80,11 @@ const routes = [
         path: 'manufacturer-create',
         name: 'Manufacturer Create',
         component: ManufacturerCreate
+      },
+      {
+        path: 'customer-create',
+        name: 'Customer Create',
+        component: CustomerCreate
       },
       {
         path: 'typography',
