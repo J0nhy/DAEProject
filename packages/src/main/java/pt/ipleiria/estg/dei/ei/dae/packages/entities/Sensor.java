@@ -3,118 +3,104 @@ package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 
 @Entity
 @Table(name = "sensors")
-@NamedQuery(name = "getAllSensors", query = "select s from Sensor s order by s.id")
+@NamedQuery(name = "getAllSensors", query = "SELECT s FROM Sensor s ORDER BY s.id")
+@NamedQuery(name = "getSensorById", query = "SELECT s FROM Sensor s WHERE s.id = :id")
+@NamedQuery(name = "getSensorsByPackage", query = "SELECT s FROM Sensor s WHERE s.type = :package")
+@NamedQuery(name = "getSensorsBySource", query = "SELECT s FROM Sensor s WHERE s.source = :source")
+@NamedQuery(name = "getSensorsNotAttribute", query = "SELECT s FROM Sensor s WHERE s.id NOT IN (SELECT s.id FROM Sensor s JOIN s.packagging p WHERE p.id = :productId)")
 public class Sensor {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "TBL_METADATA_ID_SEQ")
+    @Column(name="id")
     private long id;
-
     @NotNull
-    private SensorType sensorType;  // de Temperatura, Humidade, localização ou se ja foi aberto
-
+    private String source;  // tipo de embalagem (Produto/Encomenda) é preciso?
     @NotNull
-    private String value; // valor devolvido pelo sensor
-
+    private String type;    // enum / tabela tipo de Sensor (Temperatura, Humidade, Pressão, integridade, localização)
     @NotNull
-    private String dataType;  // unidade em que é medido (ºC, %, cord., true/false)
-
-    private int maxValue;     // valor máximo 
-    
-    private int minValue;     // valor mínimo
-
+    private String unit;    // enum / tabela unidade de medida (ºC, %, Pa, m/s, m, etc)
     @NotNull
-    private long timestamp; // data e hora em que foi lido
-
-    @OneToOne
+    private String max;     // valor máximo aceitável
     @NotNull
-    private Package packageRef; // embalagem a que se refere esta leitura
+    private String min;     // valor mínimo aceitável
 
-
-    public Sensor( SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
-        this.sensorType = sensorType;
-        this.value = value;
-        this.dataType = dataType;
-        this.maxValue = maxValue;
-        this.minValue = minValue;
-        this.timestamp = timestamp;
-        this.packageRef = packageRef;
-    }
+    @ManyToOne
+    @JoinTable(
+            name = "sensors_package",
+            joinColumns = @JoinColumn(name = "sensor_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "package_id", referencedColumnName = "id")
+    )
+    private Package packagging;
 
     public Sensor() {
     }
 
-    public SensorType getSensorType() {
-        return sensorType;
+    public Sensor(String source, String type, String unit, String max, String min) {
+        this.source = source;
+        this.type = type;
+        this.unit = unit;
+        this.max = max;
+        this.min = min;
     }
 
-    public String getValue() {
-        return value;
+    public Long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public String getDataType() {
-        return dataType;
+    public String getSource() {
+        return source;
     }
 
-    public int getMaxValue() {
-        return maxValue;
+    public void setSource(String source) {
+        this.source = source;
     }
 
-    public int getMinValue() {
-        return minValue;
+    public String getType() {
+        return type;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public Package getPackageRef() {
-        return packageRef;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setSensorType(SensorType sensorType) {
-        this.sensorType = sensorType;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public String getMax() {
+        return max;
     }
 
-    public void setDataType(String dataType) {
-        this.dataType = dataType;
+    public void setMax(String max) {
+        this.max = max;
     }
 
-    public void setMaxValue(int maxValue) {
-        this.maxValue = maxValue;
+    public String getMin() {
+        return min;
     }
 
-    public void setMinValue(int minValue) {
-        this.minValue = minValue;
+    public void setMin(String min) {
+        this.min = min;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public Package getPackagging() {
+        return packagging;
     }
 
-    public void setPackageRef(Package packageRef) {
-        this.packageRef = packageRef;
-    }
-
-    @Override
-    public String toString() {
-        return "Values{" +
-                "id=" + id +
-                ", sensorType='" + sensorType + '\'' +
-                ", value='" + value + '\'' +
-                ", dataType='" + dataType + '\'' +
-                ", maxValue=" + maxValue +
-                ", minValue=" + minValue +
-                ", timestamp=" + timestamp +
-                ", packageRef=" + packageRef +
-                '}';
+    public void setPackaging(Package packagging) {
+        this.packagging = packagging;
     }
 
 }

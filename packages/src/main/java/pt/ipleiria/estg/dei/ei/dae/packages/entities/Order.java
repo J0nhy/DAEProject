@@ -1,60 +1,65 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.internal.util.logging.Log;
-
 @Entity
 @Table(name = "orders")
-@NamedQuery(name = "getAllOrders", query = "select o from Order o order by o.id")
-@NamedQuery(name = "getAllOrdersByCustomer", query = "select o from Order o WHERE o.customer = :customer order by o.id"
-)
-public class Order {
+//@NamedQuery(name = "getAllOrders", query = "SELECT o FROM Orderr o ORDER BY o.id")
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllOrders",
+                query = "SELECT o FROM Order o ORDER BY o.id"
+        ),
+
+        @NamedQuery(
+                name = "getOrdersByEndConsumer",
+                query = "SELECT o FROM Order o WHERE o.customer.username = :endConsumerUsername ORDER BY o.id"
+        ),
+        // get orders with orderItems
+        @NamedQuery(
+                name = "getOrdersWithOrderItems",
+                query = "SELECT o FROM Order o JOIN FETCH OrderItem orderItem WHERE o.id = orderItem.order.id ORDER BY o.id"
+        )
+})
+public class Order extends Versionable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "TBL_METADATA_ID_SEQ")
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    @Column(name="id")
+    private Long id;
     @NotNull
     private String status;
-    
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "customer_id")
     private Customer customer;
-
-    private String customerName;
-
     @ManyToOne
-    @JoinColumn(name = "logisticsOperator_id")
     private LogisticsOperator logisticsOperators;
 
-    @OneToMany // uma encomenda pode ter várias embalagens
-    private List<Package> packages;
+    @ManyToOne
+    private PackageSensor packageSensor;
 
-    @OneToMany // uma encomenda pode ter vários produtos
-    private List<Product> products;
-
-
-
-    public Order(String status, Customer customer, LogisticsOperator logisticsOperator) {
-        this.status = status;
-        this.customer = customer;
-        this.logisticsOperators = logisticsOperator;
-        this.packages = new ArrayList<>();
-        this.products = new ArrayList<>();
-    }
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<OrderItem> orderItems;
 
     public Order() {
-        this.packages = new ArrayList<>();
-        this.products = new ArrayList<>();
+        this.orderItems = new ArrayList<>();
     }
 
-    public long getId() {
+    public Order(String status, Customer customer) {
+        this.status = status;
+        this.customer = customer;
+        this.orderItems = new ArrayList<>();
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
         return id;
     }
 
@@ -62,83 +67,49 @@ public class Order {
         return status;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
 
-    public String getCustomerName(){
-        return customer.getName();
-    }
-
-    public Long getPackageId(){
-        return 1L;
+    public void setCustomer(Customer consumer) {
+        this.customer = customer;
     }
 
     public LogisticsOperator getLogisticsOperators() {
         return logisticsOperators;
     }
 
-    public List<Package> getPackages() {
-        return packages;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-    
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
     public void setLogisticsOperators(LogisticsOperator logisticsOperators) {
         this.logisticsOperators = logisticsOperators;
     }
 
-    public void setPackages(List<Package> packages) {
-        this.packages = packages;
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
-    public void setProduct(List<Product> products) {
-        this.products = products;
+    public void addOrderItem(OrderItem orderItem) {
+        this.orderItems.add(orderItem);
+        orderItem.setOrder(this);
     }
 
-    public void addPackage(Package p) {
-        if (this.packages == null) {
-            this.packages = new ArrayList<>();
-        }
-        this.packages.add(p);
+    public void removeOrderItem(OrderItem orderItem) {
+        this.orderItems.remove(orderItem);
+        orderItem.setOrder(null);
     }
 
-    public void addProduct(Product p) {
-        if (this.products == null) {
-            this.products = new ArrayList<>();
-        }
-        this.products.add(p);
+    public PackageSensor getPackageSensor() {
+        return packageSensor;
     }
 
-    public void removePackage(Package p) {
-        if (this.packages == null) {
-            this.packages = new ArrayList<>();
-        }
-        this.packages.remove(p);
-    }
-
-    public void removeProduct(Product p) {
-        if (this.products == null) {
-            this.products = new ArrayList<>();
-        }
-        this.products.remove(p);
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setPackageSensor(PackageSensor packageSensor) {
+        this.packageSensor = packageSensor;
     }
 }

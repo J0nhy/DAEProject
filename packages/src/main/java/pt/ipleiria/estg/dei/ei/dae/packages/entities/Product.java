@@ -2,121 +2,93 @@ package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
+
+import javax.sound.midi.Sequence;
+import java.util.List;
 
 @Entity
-@Table(name = "products")
-@NamedQuery(name = "getAllProducts", query = "select p from Product p order by p.productName")
-public class Product {
+@NamedQuery(name = "getAllProducts", query = "SELECT p FROM Product p ORDER BY p.name")
+public class Product{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id; // product id
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "TBL_METADATA_ID_SEQ")
+    @Column(name="id")
+    private Long id;
 
     @NotNull
-    private String productName; // name of the product
-
-    private String productDescription; // description of the product
+    private String name;
 
     @NotNull
-    private String productCategory; // category of the product
-
-    private String productManufacturer; // manufacturer of the product
-
+    // for save a base64 image
+    @Column(length=10485760)
+    private String image;
     @NotNull
-    private String productBrand; // brand of the product
-
-    private String productImage; // image of the product
-
+    private int stock;
     @NotNull
-    private String productPrice; // price of the product
+    @ManyToOne
+    private Manufacturer manufacturer;
 
-    private String productWeight; // shipping weight of the product
-
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<UnitProduct> unitProducts;
 
     public Product() {
     }
 
-    public Product( String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) {
-        this.productName = productName;
-        this.productDescription = productDescription;
-        this.productCategory = productCategory;
-        this.productManufacturer = productManufacturer;
-        this.productBrand = productBrand;
-        this.productImage = productImage;
-        this.productPrice = productPrice;
-        this.productWeight = productWeight;
+    public Product(String name, int stock, String image, Manufacturer manufacturer) {
+        this.name = name;
+        this.stock = stock;
+        this.manufacturer = manufacturer;
+        this.image = image;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public String getProductName() {
-        return productName;
-    }
-
-    public String getProductDescription() {
-        return productDescription;
-    }
-
-    public String getProductCategory() {
-        return productCategory;
-    }
-
-    public String getProductManufacturer() {
-        return productManufacturer;
-    }
-
-    public String getProductBrand() {
-        return productBrand;
-    }
-
-    public String getProductImage() {
-        return productImage;
-    }
-
-    public String getProductPrice() {
-        return productPrice;
-    }
-
-    public String getProductWeight() {
-        return productWeight;
-    }
-
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductDescription(String productDescription) {
-        this.productDescription = productDescription;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setProductCategory(String productCategory) {
-        this.productCategory = productCategory;
+    public int getStock() {
+        return stock;
     }
 
-    public void setProductManufacturer(String productManufacturer) {
-        this.productManufacturer = productManufacturer;
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
-    public void setProductBrand(String productBrand) {
-        this.productBrand = productBrand;
+    public Manufacturer getManufacturer() {
+        return manufacturer;
     }
 
-    public void setProductImage(String productImage) {
-        this.productImage = productImage;
+    public void setManufacturer(Manufacturer manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
-    public void setProductPrice(String productPrice) {
-        this.productPrice = productPrice;
+    public String getImage() {
+        return image;
     }
 
-    public void setProductWeight(String productWeight) {
-        this.productWeight = productWeight;
+    public void setImage(String image) {
+        this.image = image;
     }
+
+    public List<UnitProduct> getUnitProducts() {
+        return unitProducts;
+    }
+
+    public void setUnitProducts(List<UnitProduct> unitProducts) {
+        this.unitProducts = unitProducts;
+    }
+
 
 }

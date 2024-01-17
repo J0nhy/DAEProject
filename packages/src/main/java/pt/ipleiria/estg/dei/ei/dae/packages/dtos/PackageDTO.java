@@ -1,81 +1,56 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.dtos;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Product;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Order;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class PackageDTO implements Serializable{
-    private long id;
-    private PackageType PackageType;
+public class PackageDTO implements java.io.Serializable {
+    private Long id;
+    private PackageType packageType;
     private String packageMaterial;
-    private Order order;
-    private List<Sensor> values;
-    private List<Product> products;
-
-    public PackageDTO( PackageType PackageType, String packageMaterial, Order order) {
-        this.PackageType = PackageType;
-        this.packageMaterial = packageMaterial;
-        this.order = order;
-        this.products = new ArrayList<>();
-        this.values =  new ArrayList<>();
-    }
 
     public PackageDTO() {
-        this.products = new ArrayList<>();
-        this.values =  new ArrayList<>();
+
+    }
+
+    public PackageDTO(long id, PackageType packageType, String packageMaterial) {
+        this.id = id;
+        this.packageType = packageType;
+        this.packageMaterial = packageMaterial;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     public PackageType getPackageType() {
-        return PackageType;
+        return packageType;
+    }
+
+    public void setPackageType(PackageType packageType) {
+        this.packageType = packageType;
     }
 
     public String getPackageMaterial() {
         return packageMaterial;
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setPackageType(PackageType PackageType) {
-        this.PackageType = PackageType;
-    }
-
-    public void setPackageMaterial(String packageMaterial) {
+    public void setPackageaterial(String packageMaterial) {
         this.packageMaterial = packageMaterial;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+
+    public static PackageDTO from(Package package_) {
+        return new PackageDTO(
+        );
     }
 
-    public List<Sensor> getValues() {
-        return values;
+    public static List<PackageDTO> from(List<Package> packages) {
+        return packages.stream().map(PackageDTO::from).collect(Collectors.toList());
     }
-
-    public void setValues(List<Sensor> values) {
-        this.values = values;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
 }

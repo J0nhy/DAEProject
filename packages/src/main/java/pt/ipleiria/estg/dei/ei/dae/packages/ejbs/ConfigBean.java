@@ -8,6 +8,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.LogisticsOperator;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Product;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class ConfigBean {
     private CustomerBean customerBean;
 
     @EJB
-    private PackageBean packageBean;
+    private ProductPackageBean productPackageBean;
 
     @EJB
     private ManufacturerBean manufacturerBean;
@@ -34,10 +35,19 @@ public class ConfigBean {
     @EJB
     private ProductBean productBean;
 
+    @EJB
+    private OrderItemBean orderItemBean;
 
-    private List<Product> products;
+    @EJB
+    private PackageSensorBean packageSensorBean;
 
-    private Product product;
+    @EJB
+    private SensorBean sensorBean;
+
+    @EJB
+    private UnitProductBean unitProductBean;
+
+
 
     private static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
     @PostConstruct
@@ -59,29 +69,7 @@ public class ConfigBean {
             logger.severe(e.getMessage());
         }
 
-        //CREATE PACKAGES
-        try {
-            packageBean.create(PackageType.Primary, "Wood");
-            packageBean.create(PackageType.Secondary, "Metal");
-            packageBean.create(PackageType.Tertiary, "Glass");
-            packageBean.create(PackageType.Primary, "Paper");
-            packageBean.create(PackageType.Secondary, "Fabric");
-            packageBean.create(PackageType.Tertiary, "Ceramic");
-            packageBean.create(PackageType.Primary, "Rubber");
-            packageBean.create(PackageType.Secondary, "Aluminum");
-            packageBean.create(PackageType.Tertiary, "Cardboard");
-            packageBean.create(PackageType.Primary, "Plastic");
-            packageBean.create(PackageType.Secondary, "Leather");
-            packageBean.create(PackageType.Tertiary, "Concrete");
-            packageBean.create(PackageType.Primary, "Foil");
-            packageBean.create(PackageType.Secondary, "Bamboo");
-            packageBean.create(PackageType.Tertiary, "Nylon");
 
-
-            System.out.println("Package Created");
-        }catch (Exception e){
-            logger.severe(e.getMessage());
-        }
 
         //Create Manufacturer
         try {
@@ -97,46 +85,73 @@ public class ConfigBean {
         try {
             logisticsOperatorBean.create("logistics1", "123", "logi1", "logi1@mail.pt",
                     "FEDEX");
+            logisticsOperatorBean.create("logistic2", "123", "logi2", "logi2@mail.pt",
+                    "NACEX");
+            logisticsOperatorBean.create("logistic3", "123", "logi3", "logi3@mail.pt",
+                    "CTT");
 
 
         }catch (Exception e){
             logger.severe(e.getMessage());
+        }
+
+        //create packages
+        try {
+            productPackageBean.create(PackageType.Primary, "Wood");
+            productPackageBean.create(PackageType.Secondary, "Metal");
+            productPackageBean.create(PackageType.Tertiary, "Glass");
+           /* productPackageBean.create(PackageType.Primary, "Paper");
+            productPackageBean.create(PackageType.Secondary, "Fabric");
+            productPackageBean.create(PackageType.Tertiary, "Ceramic");
+            productPackageBean.create(PackageType.Primary, "Rubber");
+            productPackageBean.create(PackageType.Secondary, "Aluminum");
+            productPackageBean.create(PackageType.Tertiary, "Cardboard");
+            productPackageBean.create(PackageType.Primary, "Plastic");
+            productPackageBean.create(PackageType.Secondary, "Leather");
+            productPackageBean.create(PackageType.Tertiary, "Concrete");
+            productPackageBean.create(PackageType.Primary, "Foil");
+            productPackageBean.create(PackageType.Secondary, "Bamboo");
+            productPackageBean.create(PackageType.Tertiary, "Nylon");
+*/
+            System.out.println("Package created");
+        }catch (MyConstraintViolationException e) {
+            logger.warning(e.getMessage());
         }
 
         //Create Products
         try {
 
-            productBean.create("Product1", "Product1 description", "Product1 category", "Product1 manufacturer",
-                    "Product1 brand", "Product1 image", "1.0", "1.0");
-            productBean.create("Product2", "Product2 description", "Product2 category", "Product2 manufacturer",
-                    "Product2 brand", "Product2 image", "2.0", "2.0");
-            productBean.create("Product3", "Product3 description", "Product3 category", "Product3 manufacturer",
-                    "Product3 brand", "Product3 image", "3.0", "3.0");
-            productBean.create("Product4", "Product4 description", "Product4 category", "Product4 manufacturer",
-                    "Product4 brand", "Product4 image", "4.0", "4.0");
-            productBean.create("Product5", "Product5 description", "Product5 category", "Product5 manufacturer",
-                    "Product5 brand", "Product5 image", "5.0", "5.0");
-            productBean.create("Product6", "Product6 description", "Product6 category", "Product6 manufacturer",
-                    "Product6 brand", "Product6 image", "6.0", "6.0");
-            productBean.create("Product7", "Product7 description", "Product7 category", "Product7 manufacturer",
-                    "Product7 brand", "Product7 image", "7.0", "7.0");
-            productBean.create("Product8", "Product8 description", "Product8 category", "Product8 manufacturer",
-                    "Product8 brand", "Product8 image", "8.0", "8.0");
-            productBean.create("Product9", "Product9 description", "Product9 category", "Product9 manufacturer",
-                    "Product9 brand", "Product9 image", "9.0", "9.0");
-            productBean.create("Product10", "Product10 description", "Product10 category", "Product10 manufacturer",
-                    "Product10 brand", "Product10 image", "10.0", "10.0");
-            productBean.create("Product11", "Product11 description", "Product11 category", "Product11 manufacturer",
-                    "Product11 brand", "Product11 image", "11.0", "11.0");
-            productBean.create("Product12", "Product12 description", "Product12 category", "Product12 manufacturer",
-                    "Product12 brand", "Product12 image", "12.0", "12.0");
-            productBean.create("Product13", "Product13 description", "Product13 category", "Product13 manufacturer",
-                    "Product13 brand", "Product13 image", "13.0", "13.0");
-            productBean.create("Product14", "Product14 description", "Product14 category", "Product14 manufacturer",
-                    "Product14 brand", "Product14 image", "14.0", "14.0");
-            productBean.create("Product15", "Product15 description", "Product15 category", "Product15 manufacturer",
-                    "Product15 brand", "Product15 image", "15.0", "15.0");
-
+            productBean.create("Product1", 10, "Product1 image", "Manufacturer1",
+                    1);
+            productBean.create("Product2", 10, "Product2 image", "Manufacturer1",
+                    0);
+            /*productBean.create("Product3", 10, "Product3 image", "Manufacturer1",
+                    3);
+            productBean.create("Product4", 10, "Product4 image", "Manufacturer1",
+                    4);
+            productBean.create("Product5", 10, "Product5 image", "Manufacturer1",
+                    5);
+            productBean.create("Product6", 10, "Product6 image", "Manufacturer1",
+                    1);
+            productBean.create("Product7", 10, "Product7 image", "Manufacturer1",
+                    2);
+            productBean.create("Product8", 10, "Product8 image", "Manufacturer1",
+                    3);
+            productBean.create("Product9", 10, "Product9 image", "Manufacturer1",
+                    4);
+            productBean.create("Product10", 10, "Product10 image", "Manufacturer1",
+                    5);
+            productBean.create("Product11", 10, "Product11 image", "Manufacturer1",
+                    1);
+            productBean.create("Product12", 10, "Product12 image", "Manufacturer1",
+                    2);
+            productBean.create("Product13", 10, "Product13 image", "Manufacturer1",
+                    3);
+            productBean.create("Product14", 10, "Product14 image", "Manufacturer1",
+                    4);
+            productBean.create("Product15", 10, "Product15 image", "Manufacturer1",
+                    5);
+*/
 
         }catch (Exception e){
             logger.severe(e.getMessage());
@@ -144,67 +159,58 @@ public class ConfigBean {
 
 
         try {
-            List<Package> packages1 = new ArrayList<>();
-            List<Package> packages2 = new ArrayList<>();
-            List<Package> packages3 = new ArrayList<>();
-            List<Package> packages4 = new ArrayList<>();
-            List<Package> packages5 = new ArrayList<>();
+            String data  = "{\n" +
+                    "  \"status\": \"WAITING_PAYMENT\",\n" +
+                    "  \"orderItems\": [\n" +
+                    "    {\n" +
+                    "      \"quantity\": 1,\n" +
+                    "      \"productId\": \"1\"\n" +
+                    "    }\n" +
+                    "  ]\n" +
+                    "}";
 
-            List<Product> products1 = new ArrayList<>();
-            List<Product> products2 = new ArrayList<>();
-            List<Product> products3 = new ArrayList<>();
-            List<Product> products4 = new ArrayList<>();
-            List<Product> products5 = new ArrayList<>();
+            long order = orderBean.create("Customer1", data );
 
-            packages1.add(packageBean.find((long) 1));
-            packages1.add(packageBean.find((long) 2));
-            packages1.add(packageBean.find((long) 3));
+            data  = "{\n" +
+                    "  \"status\": \"WAITING_PAYMENT\",\n" +
+                    "  \"orderItems\": [\n" +
+                    "    {\n" +
+                    "      \"quantity\": 4,\n" +
+                    "      \"productId\": \"2\"\n" +
+                    "    }\n" +
+                    "  ]\n" +
+                    "}";
 
-            packages2.add(packageBean.find((long) 4));
-            packages2.add(packageBean.find((long) 5));
-            packages2.add(packageBean.find((long) 6));
-
-            packages3.add(packageBean.find((long) 7));
-            packages3.add(packageBean.find((long) 8));
-            packages3.add(packageBean.find((long) 9));
-
-            packages4.add(packageBean.find((long) 10));
-            packages4.add(packageBean.find((long) 11));
-            packages4.add(packageBean.find((long) 12));
-
-            packages5.add(packageBean.find((long) 13));
-            packages5.add(packageBean.find((long) 14));
-            packages5.add(packageBean.find((long) 15));
-
-            products1.add(productBean.find((long) 1));
-            products1.add(productBean.find((long) 2));
-            products1.add(productBean.find((long) 3));
-
-            products2.add(productBean.find((long) 4));
-            products2.add(productBean.find((long) 5));
-            products2.add(productBean.find((long) 6));
-
-            products3.add(productBean.find((long) 7));
-            products3.add(productBean.find((long) 8));
-            products3.add(productBean.find((long) 9));
-
-            products4.add(productBean.find((long) 10));
-            products4.add(productBean.find((long) 11));
-            products4.add(productBean.find((long) 12));
-
-            products5.add(productBean.find((long) 13));
-            products5.add(productBean.find((long) 14));
-            products5.add(productBean.find((long) 15));
-
-            orderBean.create("Pending", customerBean.findCustomer("Customer1"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages1, products1);
-            orderBean.create("Pending", customerBean.findCustomer("Customer2"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages2, products2);
-            orderBean.create("Pending", customerBean.findCustomer("Customer3"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages3, products3);
-            orderBean.create("Pending", customerBean.findCustomer("Customer4"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages4, products4);
-            orderBean.create("Pending", customerBean.findCustomer("Customer1"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages5, products5);
+            long order2 = orderBean.create("Customer2", data );
 
 
         }catch (Exception e){
             logger.severe(e.getMessage());
+        }
+
+        try {
+            orderItemBean.create(1, 1, 1);
+            orderItemBean.create(2, 2, 4);
+            System.out.println("OrderItem created");
+        }catch (Exception e){
+            logger.warning(e.getMessage());
+        }
+
+        try {
+            sensorBean.create("Product", "sensor1", "sensor1", "sensor1", "sensor1");
+            sensorBean.create("Order", "sensor2", "sensor2", "sensor2", "sensor2");
+
+            System.out.println("Sensor created");
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+
+        try{
+            packageSensorBean.addSensorToPackage(1,1);
+            packageSensorBean.addSensorToPackage(2,1);
+            System.out.println("SensorValue add");
+        }catch (Exception e){
+            logger.warning(e.getMessage());
         }
     }
 }

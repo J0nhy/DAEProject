@@ -1,34 +1,62 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.dtos;
-import jakarta.validation.constraints.NotNull;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.SensorType;
+
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Product;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ProductDTO implements Serializable {
     private long id;
-    private String productName; // name of the product
-    private String productDescription; // description of the product
-    private String productCategory; // category of the product
-    private String productManufacturer; // manufacturer of the product
-    private String productBrand; // brand of the product
-    private String productImage; // image of the product
-    private String productPrice; // price of the product
-    private String productWeight; // shipping weight of the product
+    private String name;
+    private int stock;
+    private String image;
+    private String manufacturerUsername;
+    private long packageProductId;
 
-
-    public ProductDTO( String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) {
-        this.productName = productName;
-        this.productDescription = productDescription;
-        this.productCategory = productCategory;
-        this.productManufacturer = productManufacturer;
-        this.productBrand = productBrand;
-        this.productImage = productImage;
-        this.productPrice = productPrice;
-        this.productWeight = productWeight;
-    }
+    private String packagingMaterial;
 
     public ProductDTO() {
+    }
+
+    public ProductDTO(Long id, String name, int stock, String image, String manufacturerUsername) {
+        this.id = id;
+        this.name = name;
+        this.stock = stock;
+        this.image = image;
+        this.manufacturerUsername = manufacturerUsername;
+    }
+
+    public ProductDTO(String name, int stock, String image, String username) {
+        this.name = name;
+        this.stock = stock;
+        this.image = image;
+        this.manufacturerUsername = username;
+    }
+
+    public ProductDTO(String name, int stock, String image, String username, long packageProductId) {
+        this.name = name;
+        this.stock = stock;
+        this.image = image;
+        this.manufacturerUsername = username;
+        this.packageProductId = packageProductId;
+    }
+    public ProductDTO(long id, String name, int stock, String image, String username, long packageProductId) {
+        this.id = id;
+        this.name = name;
+        this.stock = stock;
+        this.image = image;
+        this.manufacturerUsername = username;
+        this.packageProductId = packageProductId;
+    }
+
+    public ProductDTO(long id, String name, int stock, String image, String username, long packageProductId, String packagingMaterial) {
+        this.id = id;
+        this.name = name;
+        this.stock = stock;
+        this.image = image;
+        this.manufacturerUsername = username;
+        this.packageProductId = packageProductId;
+        this.packagingMaterial = packagingMaterial;
     }
 
     public long getId() {
@@ -39,81 +67,69 @@ public class ProductDTO implements Serializable {
         this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public String getProductDescription() {
-        return productDescription;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getProductCategory() {
-        return productCategory;
+    public int getStock() {
+        return stock;
     }
 
-    public String getProductManufacturer() {
-        return productManufacturer;
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
-    public String getProductBrand() {
-        return productBrand;
+    public String getManufacturerUsername() {
+        return manufacturerUsername;
     }
 
-    public String getProductImage() {
-        return productImage;
+    public void setManufacturerUsername(String manufacturerUsername) {
+        this.manufacturerUsername = manufacturerUsername;
     }
 
-    public String getProductPrice() {
-        return productPrice;
+    public String getImage() {
+        return image;
     }
 
-    public String getProductWeight() {
-        return productWeight;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public long getPackageProductId() {
+        return packageProductId;
     }
 
-    public void setProductDescription(String productDescription) {
-        this.productDescription = productDescription;
+    public void setPackageProductId(int packageProductId) {
+        this.packageProductId = packageProductId;
     }
 
-    public void setProductCategory(String productCategory) {
-        this.productCategory = productCategory;
+    public String getPackagingMaterial() {
+        return packagingMaterial;
     }
 
-    public void setProductManufacturer(String productManufacturer) {
-        this.productManufacturer = productManufacturer;
+    public void setPackagingMaterial(String packagingMaterial) {
+        this.packagingMaterial = packagingMaterial;
     }
 
-    public void setProductBrand(String productBrand) {
-        this.productBrand = productBrand;
+    public static List<ProductDTO> toDTOs(List<Product> all) {
+        return all.stream().map(ProductDTO::toDTO).collect(java.util.stream.Collectors.toList());
+    }
+    public static ProductDTO toDTO(Product product) {
+        return new ProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getStock(),
+                product.getImage(),
+                product.getManufacturer().getUsername(),
+                product.getUnitProducts().get(0).getPackageSensor() == null ? 0 :
+                        product.getUnitProducts().get(0).getPackageSensor().getPackagging().getId(),
+                product.getUnitProducts().get(0).getPackageSensor() == null ? null :
+                        product.getUnitProducts().get(0).getPackageSensor().getPackagging().getPackageMaterial()
+        );
     }
 
-    public void setProductImage(String productImage) {
-        this.productImage = productImage;
-    }
-
-    public void setProductPrice(String productPrice) {
-        this.productPrice = productPrice;
-    }
-
-    public void setProductWeight(String productWeight) {
-        this.productWeight = productWeight;
-    }
-
-    @Override
-public String toString() {
-        return "ProductDTO{" +
-                ", productName='" + productName + '\'' +
-                ", productDescription='" + productDescription + '\'' +
-                ", productCategory='" + productCategory + '\'' +
-                ", productManufacturer='" + productManufacturer + '\'' +
-                ", productBrand='" + productBrand + '\'' +
-                ", productImage='" + productImage + '\'' +
-                ", productPrice='" + productPrice + '\'' +
-                ", productWeight='" + productWeight + '\'' +
-                '}';
-    }
 }
