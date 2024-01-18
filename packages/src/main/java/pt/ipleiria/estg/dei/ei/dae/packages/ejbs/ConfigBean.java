@@ -196,11 +196,26 @@ public class ConfigBean {
             products5.add(productBean.find((long) 14));
             products5.add(productBean.find((long) 15));
 
-            orderBean.create("Pending", customerBean.findCustomer("Customer1"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages1, products1);
-            orderBean.create("Pending", customerBean.findCustomer("Customer2"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages2, products2);
-            orderBean.create("Pending", customerBean.findCustomer("Customer3"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages3, products3);
-            orderBean.create("Pending", customerBean.findCustomer("Customer4"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages4, products4);
-            orderBean.create("Pending", customerBean.findCustomer("Customer1"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages5, products5);
+            orderBean.create("Pending",
+                    customerBean.findCustomer("Customer1"),
+                    logisticsOperatorBean.findLogisticOperator("logistics1"),
+                    packages1, products1);
+            orderBean.create("Pending",
+                    customerBean.findCustomer("Customer2"),
+                    logisticsOperatorBean.findLogisticOperator("logistics1"),
+                    packages2, products2);
+            orderBean.create("Pending",
+                    customerBean.findCustomer("Customer3"),
+                    logisticsOperatorBean.findLogisticOperator("logistics1"),
+                    packages3, products3);
+            orderBean.create("Pending",
+                    customerBean.findCustomer("Customer4"),
+                    logisticsOperatorBean.findLogisticOperator("logistics1"),
+                    packages4, products4);
+            orderBean.create("Pending",
+                    customerBean.findCustomer("Customer1"),
+                    logisticsOperatorBean.findLogisticOperator("logistics1"),
+                    packages5, products5);
 
 
         }catch (Exception e){
