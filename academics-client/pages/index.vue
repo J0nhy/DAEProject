@@ -17,7 +17,7 @@
                 <nuxt-link to="/orderCustomer">Customer Orders</nuxt-link><br>
             </template>
             <template v-if="userRole === 'LogisticsOperator'">
-                <nuxt-link to="/orderLogistic">Logistic Orders</nuxt-link><br>
+                <nuxt-link to="/logistics">Logistic Orders</nuxt-link><br>
             </template>
             <template v-if="userRole === 'Manufacturer'">
 
