@@ -58,12 +58,13 @@ public class ManufacturerService {
     @GET
     @Path("{username}")
     public Response getManufacturerDetails(@PathParam("username") String username) throws MyEntityNotFoundException{
+        /*
         var principal = securityContext.getUserPrincipal();
 
         if(!principal.getName().equals(username)) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-
+        */
         return Response.status(Response.Status.OK).entity(toDTO(manufacturerBean.findManufacturer(username))).build();
     }
 

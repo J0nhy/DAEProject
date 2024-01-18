@@ -14,6 +14,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Stateless
 public class OrderBean {
@@ -30,38 +31,29 @@ public class OrderBean {
     @EJB LogisticsOperatorBean logisticsOperatorBean;
 
 
-    public long create(String status, Customer customer, List<Product> products)
+    public Order create(String status, Customer customer)
         throws MyEntityNotFoundException{
         Order order = new Order(status, customer);
-        /*for (Package p : packages) {
-            try {
-                Package package_ = packageBean.find(p.getId());
-                order.addPackage(package_);
-                package_.setOrder(order);
-            } catch (MyEntityNotFoundException e) {
-                throw new MyEntityNotFoundException("Package with id: " + p.getId() + " not found");
-            }
-        }*/
-        for (Product p : products) {
-            try {
-                Product product = productBean.find(p.getId());
-                order.addProduct(product);
-            } catch (MyEntityNotFoundException e) {
-                throw new MyEntityNotFoundException("Product with id: " + p.getId() + " not found");
-            }
+
+        Random rand = new Random();
+        int i = rand.nextInt(6);
+        Product product = null;
+        for (int count = 0; count < i; count++) {
+            product = productBean.create("Product" + count, "Product" + count + " Description", "Product" + count + " Category", "Manufacturer" + count, "Brand" + count, "Image" + count, "Price" + count, "Weight" + count);
+            order.addProduct(product);
         }
         entityManager.persist(order);
-        return order.getId();
+        return order;
     }
 
     public List<Order> all() {
         return entityManager.createNamedQuery("getAllOrders", Order.class).getResultList();
     }
 
-    public List<Order> allByCustomer(long customerId) {
+    public List<Order> allByCustomer(String username) {
         return entityManager
                 .createNamedQuery("getAllOrdersByCustomer", Order.class)
-                .setParameter("customer", customerId)  // Assuming "customer" is the parameter name in the named query
+                .setParameter("username", username)  // Assuming "customer" is the parameter name in the named query
                 .getResultList();
     }
 
@@ -112,6 +104,7 @@ public class OrderBean {
         }
     }
 
+    //Temos de validar se está atribuida a outra encomenda
     public void addPackageToOrder(long id, long packageId) throws Exception {
         Order order = find(id);
 
@@ -149,6 +142,7 @@ public class OrderBean {
         }
 
         order.removePackage(package_);
+        package_.removeOrder(order);
         entityManager.merge(order);
     }
 
