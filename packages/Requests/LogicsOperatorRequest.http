@@ -1,0 +1,52 @@
+#####LOGISTICS OPERATOR
+##### TOKEN
+POST http://localhost:8080/packages/api/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "logistics1",
+  "password": "123"
+}
+
+##### Get ALL
+GET http://localhost:8080/packages/api/logisticsoperators
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1NTk4NTM2LCJleHAiOjE3MDU2MDIxMzZ9.YEjEnt_ySnrtucLFPkkm4uXUhZzhwDvgvtPtxR9q2-t0ljDndMKsBdcE9t92-6wB
+
+
+##### Get Single Logistics Operator
+GET http://localhost:8080/packages/api/logisticsoperators/logistics2
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1NTk4NTM2LCJleHAiOjE3MDU2MDIxMzZ9.YEjEnt_ySnrtucLFPkkm4uXUhZzhwDvgvtPtxR9q2-t0ljDndMKsBdcE9t92-6wB
+
+
+##### Create Logistics Operator
+POST http://localhost:8080/packages/api/logisticsoperators
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1NTk4NTM2LCJleHAiOjE3MDU2MDIxMzZ9.YEjEnt_ySnrtucLFPkkm4uXUhZzhwDvgvtPtxR9q2-t0ljDndMKsBdcE9t92-6wB
+Content-Type: application/json
+
+{
+  "username": "logistics2",
+  "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+  "email": "logi1@mail.pt",
+  "name": "logi1",
+  "company": "FEDEX"
+}
+
+#####Update Manufacturer
+PUT http://localhost:8080/packages/api/logisticsoperators/logistics2
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQzODMxLCJleHAiOjE3MDUyNDc0MzF9.szl4DOW4CqA0ricYweqoh3RVhWmDC6wAcXvIQRGyT12TQKB5dITEKCWFLjmcIQHf
+Content-Type: application/json
+
+{
+  "email": "manufacturer1@mail.pt"
+}
+
+#####Delete Manufacturer
+DELETE http://localhost:8080/packages/api/logisticsoperators/logistics2
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
+

@@ -7,8 +7,12 @@ Content-Type: application/json
   "username": "Customer1",
   "password": "123"
 }
-##### GET PACKAGES
-GET http://localhost:8080/packages/api/sensors
+##### GET PRODUCTS
+GET http://localhost:8080/packages/api/products
+Accept: application/json
+
+##### GET PRODUCT 1
+GET http://localhost:8080/packages/api/products/1
 Accept: application/json
 
 

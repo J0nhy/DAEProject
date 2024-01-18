@@ -32,15 +32,33 @@ public class PackageBean {
             entityManager.persist(package_);
 
             if (packageType == PackageType.Primary){
-                package_.addSensor(sensorBean.create(SensorType.Location, "Armazem Lisboa","local", package_));
+                Sensor sensor = sensorBean.create(SensorType.Location, "Armazem Lisboa","local");
+                package_.addSensor(sensor);
+                sensor.setPackageRef(package_);
+
             } else if (packageType == PackageType.Secondary){
-                package_.addSensor(sensorBean.create(SensorType.Location, "Armazem Lisboa","local", package_));
-                package_.addSensor(sensorBean.create(SensorType.Temperature, "10","ºC", package_));
+                Sensor sensor = sensorBean.create(SensorType.Location, "Armazem Lisboa","local");
+                Sensor sensor2 =sensorBean.create(SensorType.Temperature, "10","ºC");
+
+                package_.addSensor(sensor);
+                package_.addSensor(sensor2);
+                sensor.setPackageRef(package_);
+                sensor2.setPackageRef(package_);
+
             } else if (packageType == PackageType.Tertiary){
-                package_.addSensor(sensorBean.create(SensorType.Location, "Armazem Lisboa","local", package_));
-                package_.addSensor(sensorBean.create(SensorType.Temperature, "10","ºC", package_));
-                package_.addSensor(sensorBean.create(SensorType.Humidity, "15","%", package_));
-                package_.addSensor(sensorBean.create(SensorType.Opened, "NO","YES/NO", package_));
+                Sensor sensor = sensorBean.create(SensorType.Location, "Armazem Lisboa","local");
+                Sensor sensor2 = sensorBean.create(SensorType.Temperature, "10","ºC");
+                Sensor sensor3 = sensorBean.create(SensorType.Humidity, "15","%");
+                Sensor sensor4 = sensorBean.create(SensorType.Opened, "NO","YES/NO");
+
+                package_.addSensor(sensor);
+                package_.addSensor(sensor2);
+                package_.addSensor(sensor3);
+                package_.addSensor(sensor4);
+                sensor.setPackageRef(package_);
+                sensor2.setPackageRef(package_);
+                sensor3.setPackageRef(package_);
+                sensor4.setPackageRef(package_);
             }
     }
 

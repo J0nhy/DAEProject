@@ -12,9 +12,9 @@ public class SensorDTO implements Serializable {
     private SensorType sensorType;
     private String value;
     private String dataType;
-    private Package packageRef;
+    private long packageRef;
     
-    public SensorDTO(long id,  SensorType sensorType, String value, String dataType, Package packageRef) {
+    public SensorDTO(long id,  SensorType sensorType, String value, String dataType, long packageRef) {
         this.id = id;
         this.sensorType = sensorType;
         this.value = value;
@@ -45,7 +45,7 @@ public class SensorDTO implements Serializable {
         return dataType;
     }
 
-    public Package getPackageRef() {
+    public long getPackageRef() {
         return packageRef;
     }
 
@@ -61,7 +61,7 @@ public class SensorDTO implements Serializable {
         this.dataType = dataType;
     }
 
-    public void setPackageRef(Package packageRef) {
+    public void setPackageRef(long packageRef) {
         this.packageRef = packageRef;
     }
 

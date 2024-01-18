@@ -9,13 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "sensors")
-//@NamedQuery(name = "getAllSensors", query = "select s from Sensor s order by s.id")
-@NamedQueries({
-        @NamedQuery(
-                name = "getAllSensors",
-                query = "SELECT s FROM Sensor s ORDER BY s.packageRef.packageMaterial, s.sensorType" //JPQL
-        )
-})
+@NamedQuery(name = "getAllSensors", query = "select s from Sensor s order by s.sensorType")
 public class Sensor implements Serializable {
 
     @Id
@@ -36,11 +30,10 @@ public class Sensor implements Serializable {
     private Package packageRef; // embalagem a que se refere esta leitura
 
 
-    public Sensor( SensorType sensorType, String value, String dataType, Package packageRef) {
+    public Sensor( SensorType sensorType, String value, String dataType) {
         this.sensorType = sensorType;
         this.value = value;
         this.dataType = dataType;
-        this.packageRef = packageRef;
     }
 
     public Sensor() {
@@ -84,6 +77,10 @@ public class Sensor implements Serializable {
 
     public void setPackageRef(Package packageRef) {
         this.packageRef = packageRef;
+    }
+
+    public long getPackageId() {
+        return packageRef.getId();
     }
 
     @Override

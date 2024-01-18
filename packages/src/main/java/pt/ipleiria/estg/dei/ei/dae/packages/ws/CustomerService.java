@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Path("/customers")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
-@Authenticated
+//@Authenticated
 //@RolesAllowed({}) //TODO: add roles, em principio só os proprios clientes podem aceder aos seus dados
 public class CustomerService {
     @EJB
@@ -53,6 +53,24 @@ public class CustomerService {
         return customers.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+    private CustomerDTO toDTOWithoutOrders(Customer customer){
+        return new CustomerDTO(
+                customer.getUsername(),
+                customer.getPassword(),
+                customer.getEmail(),
+                customer.getName(),
+                customer.getNif(),
+                customer.getPhone(),
+                customer.getAddress(),
+                null
+
+        );
+    }
+
+    private List<CustomerDTO> toDTOsWithoutOrders(List<Customer> customers){
+        return customers.stream().map(this::toDTOWithoutOrders).collect(Collectors.toList());
+    }
+
     private OrderDTO toDTO(Order order) {
         return new OrderDTO(
                 order.getId(),
@@ -71,19 +89,20 @@ public class CustomerService {
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/") // means: the relative url path is “/api/students/”
     public List<CustomerDTO> getAllCustomers() {
-        return toDTOs(customerBean.getAll());
+        return toDTOsWithoutOrders(customerBean.getAll());
     }
 
 
     @GET
     @Path("{username}")
     public Response getCustomerDetails(@PathParam("username") String username) throws MyEntityNotFoundException{
+        /*
         var principal = securityContext.getUserPrincipal();
 
         if(!principal.getName().equals(username)) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-
+        */
         return Response.status(Response.Status.OK).entity(toDTO(customerBean.findCustomer(username))).build();
     }
 

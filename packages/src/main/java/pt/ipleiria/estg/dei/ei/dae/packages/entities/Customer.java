@@ -28,7 +28,6 @@ public class Customer extends User implements Serializable {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Order> orders;
 
-    private boolean deleted;
 
     public Customer(){
         this.orders = new ArrayList<>();
@@ -73,6 +72,5 @@ public class Customer extends User implements Serializable {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
-
 
 }

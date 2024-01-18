@@ -53,7 +53,7 @@ public class PackageService {
                 sensor.getSensorType(),
                 sensor.getValue(),
                 sensor.getDataType(),
-                null
+                0
         );
     }
 

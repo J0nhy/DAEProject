@@ -23,9 +23,12 @@ public class CustomerBean {
 
     public void create (String username, String password, String name, String email, int nif, int phone, String  address)
         throws MyEntityExistsException, MyConstraintViolationException {
-        Customer customer = null;
-        if (entityManager.find(Customer.class, username) != null){
-            throw new MyEntityExistsException("Customer with username: " + username + " already exists");
+        Customer customer = entityManager.find(Customer.class, username);
+        if (customer != null){
+            if (!customer.isDeleted()){
+                throw new MyEntityExistsException("Customer with username: " + username + " already exists");
+            }
+            throw new MyEntityExistsException("Account with username: " + username + " was deleted.");
         }
         try{
             customer = new Customer(username, hasher.hash(password), name, email, nif, phone, address);
@@ -44,7 +47,7 @@ public class CustomerBean {
         if (customer == null) {
             throw new MyEntityNotFoundException("Customer with username: " + username + " not found");
         }
-        //Hibernate.initialize(customer.getOrders());
+        Hibernate.initialize(customer.getOrders());
         return customer;
     }
 
