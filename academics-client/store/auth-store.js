@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+
 export const useAuthStore = defineStore("authStore", () => {
     const token = ref(null)
     const user = ref(null)
@@ -10,8 +11,10 @@ export const useAuthStore = defineStore("authStore", () => {
         userRole.value = null
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        
+
         router.push('/')
+        //redirect to login page
+
 
 
     }

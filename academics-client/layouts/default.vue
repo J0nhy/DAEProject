@@ -41,20 +41,13 @@ onMounted(() => {
 
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <nuxt-link class="nav-link" to="/">Home</nuxt-link>
-          </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="!token">
             <nuxt-link class="nav-link" to="/auth/login">Login</nuxt-link>
-          </li>
-          <li class="nav-item">
-            <nuxt-link class="nav-link" to="/customers">Customers</nuxt-link>
           </li>
         </ul>
         
         <ul class="navbar-nav">
-          <li class="nav-item">
-            
+          <li class="nav-item" v-if="token">
             <a href="#" class="nav-link" @click.prevent="logout">Logout</a>
           </li>
         </ul>

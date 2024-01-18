@@ -13,6 +13,7 @@ export default defineNuxtConfig({
   ],
   css: [
     'bootstrap/dist/css/bootstrap.css',
-    
+    'bootstrap-icons/font/bootstrap-icons.css',
+
   ]
 })
