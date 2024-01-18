@@ -13,7 +13,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-
+//teste
 @Singleton
 @Startup
 public class ConfigBean {
