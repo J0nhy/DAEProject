@@ -8,8 +8,8 @@ const {token, user} = storeToRefs(authStore)
 
 function logout() {
   authStore.logout()
-  router.push('/')
-
+ // router.push('/')
+ router.push('/auth/login');
 }
 
 onMounted(() => {
@@ -42,7 +42,7 @@ onMounted(() => {
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <nuxt-link class="nav-link" to="/auth-test">Test</nuxt-link>
+            <nuxt-link class="nav-link" to="/">Home</nuxt-link>
           </li>
           <li class="nav-item">
             <nuxt-link class="nav-link" to="/auth/login">Login</nuxt-link>
@@ -54,6 +54,7 @@ onMounted(() => {
         
         <ul class="navbar-nav">
           <li class="nav-item">
+            
             <a href="#" class="nav-link" @click.prevent="logout">Logout</a>
           </li>
         </ul>
