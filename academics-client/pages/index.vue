@@ -6,11 +6,11 @@
             <template v-if="userRole === 'Customer'">
                 <nuxt-link to="/customers">Customers</nuxt-link><br>
             </template>
-            <template v-if="userRole === 'LogisticsOperator'">
+            <template v-if="p === 'LogisticsOperator'">
                 <nuxt-link to="/logistics">Logistic Operators</nuxt-link><br>
             </template>
             <template v-if="userRole === 'Manufacturer'">
-                <nuxt-link to="/manufacturers">Manufacturers</nuxt-link><br>
+                <nuxt-link to="orders/manufacturers">Manufacturers</nuxt-link><br>
             </template>
             <hr>
             <template v-if="userRole === 'Customer'">
@@ -19,11 +19,6 @@
             <template v-if="userRole === 'LogisticsOperator'">
                 <nuxt-link to="/logistics">Logistic Orders</nuxt-link><br>
             </template>
-            <template v-if="userRole === 'Manufacturer'">
-
-                <nuxt-link to="/orderManufacturer">Manufacturer Orders</nuxt-link><br>
-            </template>
-
         </div>
     </div>
 </template>
