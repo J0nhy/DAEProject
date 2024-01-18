@@ -1,120 +1,97 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.dtos;
-
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.SensorType;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 public class SensorDTO implements Serializable {
-
     private long id;
-
-    private String source;
-
-    private String type;
-
+    private SensorType sensorType;
     private String value;
-
-    private String unit;
-
-    private String max;
-
-    private String min;
+    private String dataType;
+    private int maxValue;
+    private int minValue;
+    private long timestamp;
+    private Package packageRef;
+    
+    public SensorDTO( SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
+        this.sensorType = sensorType;
+        this.value = value;
+        this.dataType = dataType;
+        this.maxValue = maxValue;
+        this.minValue = minValue;
+        this.timestamp = timestamp;
+        this.packageRef = packageRef;
+    }
 
     public SensorDTO() {
     }
 
-    public SensorDTO(long id, String type, String source) {
-        this.id = id;
-        this.type = type;
-        this.source = source;
-    }
-
-    public SensorDTO(long id, String source, String type,  String unit, String max, String min) {
-        this.id = id;
-        this.source = source;
-        this.type = type;
-        this.unit = unit;
-        this.max = max;
-        this.min = min;
-    }
-
-    public SensorDTO(Long id, String source, String type, String unit, String max, String min) {
-        this.id = id;
-        this.source = source;
-        this.type = type;
-        this.unit = unit;
-        this.max = max;
-        this.min = min;
-    }
-    public SensorDTO(String source, String type, String unit, String max, String min) {
-        this.source = source;
-        this.type = type;
-        this.unit = unit;
-        this.max = max;
-        this.min = min;
-    }
-
-    public Long getId() {
+    public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
 
-    public String getSource() {
-        return source;
+    public SensorType getSensorType() {
+        return sensorType;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public String getValue() {
+        return value;
     }
 
-    public String getType() {
-        return type;
+    public String getDataType() {
+        return dataType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public int getMaxValue() {
+        return maxValue;
     }
 
-    public String getUnit() {
-        return unit;
+    public int getMinValue() {
+        return minValue;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public String getMax() {
-        return max;
+    public Package getPackageRef() {
+        return packageRef;
     }
 
-    public void setMax(String max) {
-        this.max = max;
+    public void setSensorType(SensorType sensorType) {
+        this.sensorType = sensorType;
     }
 
-    public String getMin() {
-        return min;
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    public void setMin(String min) {
-        this.min = min;
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
     }
 
-    public static  List<SensorDTO> toDTOs(List<Sensor> sensors) {
-        return sensors.stream().map(SensorDTO::toDTO).collect(java.util.stream.Collectors.toList());
+    public void setMaxValue(int maxValue) {
+        this.maxValue = maxValue;
     }
-    public static SensorDTO toDTO(Sensor sensor) {
-        return new SensorDTO(
-                sensor.getId(),
-                sensor.getSource(),
-                sensor.getType(),
-                sensor.getUnit(),
-                sensor.getMax(),
-                sensor.getMin()
-        );
+
+    public void setMinValue(int minValue) {
+        this.minValue = minValue;
     }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setPackageRef(Package packageRef) {
+        this.packageRef = packageRef;
+    }
+
 }

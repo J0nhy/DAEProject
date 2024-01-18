@@ -2,21 +2,16 @@ package pt.ipleiria.estg.dei.ei.dae.packages.ejbs;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import jakarta.json.Json;
-import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
-import org.hibernate.Hibernate;
+import jakarta.validation.ConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
-import java.io.StringReader;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -26,167 +21,150 @@ public class OrderBean {
     private EntityManager entityManager;
 
     @EJB
-    private OrderBean orderBean;
+    private PackageBean packageBean;
 
     @EJB
-    private UnitProductBean unitProductBean;
+    private ProductBean productBean;
+
+    @EJB LogisticsOperatorBean logisticsOperatorBean;
 
 
-    public List<Order> all() {
-        return entityManager.createNamedQuery("getOrdersWithOrderItems", Order.class).getResultList();
+    public void create(String status, Customer customer, LogisticsOperator logisticsOperator, List<Package> packages, List<Product> products)
+        throws MyEntityNotFoundException{
+        Order order = new Order(status, customer, logisticsOperator);
+        for (Package p : packages) {
+            try {
+                Package package_ = packageBean.find(p.getId());
+                order.addPackage(package_);
+                package_.setOrder(order);
+            } catch (MyEntityNotFoundException e) {
+                throw new MyEntityNotFoundException("Package with id: " + p.getId() + " not found");
+            }
+        }
+        for (Product p : products) {
+            try {
+                Product product = productBean.find(p.getId());
+                order.addProduct(product);
+            } catch (MyEntityNotFoundException e) {
+                throw new MyEntityNotFoundException("Product with id: " + p.getId() + " not found");
+            }
+        }
+        entityManager.persist(order);
     }
 
-    public List<Order> getOrdersByEndConsumer(String customerName) {
-        return entityManager.createNamedQuery("getOrdersByEndConsumer", Order.class)
-                .setParameter("customerName", customerName)
+    public List<Order> all() {
+        return entityManager.createNamedQuery("getAllOrders", Order.class).getResultList();
+    }
+
+    public List<Order> allByCustomer(Long customerId) {
+        return entityManager
+                .createNamedQuery("getAllOrdersByCustomer", Order.class)
+                .setParameter("customer", customerId)  // Assuming "customer" is the parameter name in the named query
                 .getResultList();
     }
 
-    public long create(String customerName, String data) throws MyEntityNotFoundException, MyConstraintViolationException {
+    public Order find(Long id) throws MyEntityNotFoundException {
 
-        try(JsonReader jsonReader = Json.createReader(new StringReader(data))){
-
-            JsonObject jsonObject = jsonReader.readObject();
-
-            String status = jsonObject.getString("status");
-
-            JsonArray orderItems = jsonObject.getJsonArray("orderItems");
-
-            // check endCostumer
-            Customer customer = entityManager.find(Customer.class, customerName);
-            if (customer == null) throw new IllegalArgumentException("End Consumer with username " + customerName + " not found");
-
-            // create order
-            Order order = new Order(status, customer);
-            entityManager.persist(order);
-
-            // add order items
-            for (int i = 0; i < orderItems.size(); i++) {
-                JsonObject orderItem = orderItems.getJsonObject(i);
-                Long productId = orderItem.getJsonNumber("productId").longValue();
-                int quantity = orderItem.getInt("quantity");
-
-                Product product = entityManager.find(Product.class, productId);
-                if (product == null) throw new IllegalArgumentException("Product with id " + productId + " not found");
-
-                product.setStock(product.getStock() - quantity);
-                entityManager.merge(product);
-
-                UnitProduct unitProduct = unitProductBean.getUnitProductByProductId(productId);
-                unitProduct.setAvailable(false);
-                entityManager.merge(unitProduct);
-
-                OrderItem orderItem1 = new OrderItem(unitProduct, quantity, order);
-                orderItem1.setOrderr(order);
-                entityManager.persist(orderItem1);
-            }
-
-            return order.getId();
-        }catch (Exception e){
-
-
-            return -1;
+        Order order = entityManager.find(Order.class, id);
+        if (order == null) {
+            throw new MyEntityNotFoundException("Order '" + id + "' not found");
         }
-
-
+        return entityManager.find(Order.class, order);
     }
 
-    public void update(Long id, String status, String endConsumerName, String logisticOptName, long packageId)
-            throws MyEntityNotFoundException {
+    public void update(Long id, String status, Customer customer, LogisticsOperator logisticsOperator) throws Exception {
+        
+        Order order = find(id);
 
-        //Orderr order = findOrFail(id);
-        Order order = entityManager.find(Order.class, id);
+        try {
+            entityManager.lock(order, LockModeType.OPTIMISTIC);
 
-        if (order == null){
-            throw new EntityNotFoundException("Orderr with id '" + id + "' not found in database");
+            order.setId(id);
+            order.setStatus(status);
+            order.setCustomer(customer);
+            order.setLogisticsOperators(logisticsOperator);
+
+            entityManager.merge(order);
+            
+        } catch (ConstraintViolationException e) {
+            throw new Exception(e);
         }
-        entityManager.lock(order, LockModeType.OPTIMISTIC);
+    }
 
-        order.setStatus(status);
+    public void updateStatus(Long id, String status) throws Exception {
 
-        if (logisticOptName != null) {
-            LogisticsOperator logisticOpt = entityManager.find(LogisticsOperator.class, logisticOptName);
-            if (logisticOpt == null) throw new IllegalArgumentException("Logistics Operator with username " + logisticOptName + " not found");
-            order.setLogisticsOperators(logisticOpt);
+        Order order = find(id);
+
+        try {
+            entityManager.lock(order, LockModeType.OPTIMISTIC);
+
+            order.setId(id);
+            order.setStatus(status);
+
+            entityManager.merge(order);
+
+        } catch (ConstraintViolationException e) {
+            throw new Exception(e);
         }
-        if (packageId != 0){
-            PackageOrder packageOrder = entityManager.find(PackageOrder.class, packageId);
-            if (packageOrder == null) throw new IllegalArgumentException("Package with id " + packageId + " not found");
+    }
+
+    public void addPackageToOrder(Long id, Long packageId) throws Exception {
+        Order order = find(id);
+
+        Package package_ = packageBean.find(packageId);
+
+        if (package_ == null) {
+            throw new Exception("Package '" + packageId + "' not found");
         }
 
+        order.addPackage(package_);
         entityManager.merge(order);
     }
 
-    public List<OrderItem> getProductsByOrder(Long orderId) throws MyEntityNotFoundException {
-        Order order = orderBean.findOrFail(orderId);
-        return order.getOrderItems();
+    public void addProductToOrder(Long id, Long productId) throws Exception {
+        Order order = find(id);
+
+        Product product = productBean.find(productId);
+
+        if (product == null) {
+            throw new Exception("Product '" + productId + "' not found");
+        }
+
+        order.addProduct(product);
+        entityManager.merge(order);
     }
 
-    public void delete(Long id) throws MyEntityNotFoundException {
-        var order = findOrFail(id);
+    public void removePackageFromOrder(Long id, Long packageId) throws Exception {
+        Order order = find(id);
+
+        Package package_ = packageBean.find(packageId);
+
+        if (package_ == null) {
+            throw new Exception("Package '" + packageId + "' not found");
+        }
+
+        order.removePackage(package_);
+        entityManager.merge(order);
+    }
+
+    public void removeProductFromOrder(Long id, Long productId) throws Exception {
+        Order order = find(id);
+
+        Product product = productBean.find(productId);
+
+        if (product == null) {
+            throw new Exception("Product '" + productId + "' not found");
+        }
+
+        order.removeProduct(product);
+        entityManager.merge(order);
+    }
+
+    public void remove(Long id) throws Exception {
+        Order order = find(id);
+
         if (order != null) {
             entityManager.remove(order);
         }
-    }
-
-    public Order find(Long orderId) throws MyEntityNotFoundException {
-        return entityManager.find(Order.class, orderId);
-    }
-
-    public Order findOrFail(Long orderId) throws MyEntityNotFoundException {
-        var order = find(orderId);
-        if (order == null) {
-            throw new MyEntityNotFoundException("Order with id '" + orderId + "' not found");
-        }
-        return order;
-    }
-
-
-    public Order getOrderProducts(Long orderId) {
-        Order order = entityManager.find(Order.class, orderId);
-        if (order == null) throw new IllegalArgumentException("Order with id " + orderId + " not found");
-
-        Hibernate.initialize(order.getOrderItems());
-
-        if (order.getOrderItems().isEmpty()) throw new IllegalArgumentException("Order with id " + orderId + " has no products");
-
-        order.getOrderItems().forEach(orderItem -> {
-            Hibernate.initialize(orderItem.getUnitProduct());
-            Hibernate.initialize(orderItem.getUnitProduct().getPackageSensor());
-            Hibernate.initialize(orderItem.getUnitProduct().getPackageSensor().getSensorValues());
-        });
-        return order;
-
-    }
-
-    public void addProductToOrder(long order, int i, int i1) throws MyEntityNotFoundException {
-
-
-    }
-
-    public List<Order> getAll() {
-        List<Order> orders = entityManager.createNamedQuery("getOrdersWithOrderItems", Order.class).getResultList();
-
-        orders.forEach(orderr -> {
-            Hibernate.initialize(orderr.getOrderItems());
-            orderr.getOrderItems().forEach(orderItem -> {
-                Hibernate.initialize(orderItem.getUnitProduct());
-                Hibernate.initialize(orderItem.getUnitProduct().getPackageSensor());
-                Hibernate.initialize(orderItem.getUnitProduct().getPackageSensor().getSensorValues());
-            });
-        });
-        return orders;
-
-    }
-
-    public void updateOrderPackage(Long id, Long packageId) {
-        Order order = entityManager.find(Order.class, id);
-        if (order == null) throw new IllegalArgumentException("Order with id " + id + " not found");
-
-        PackageOrder packageOrder = entityManager.find(PackageOrder.class, packageId);
-        if (packageOrder == null) throw new IllegalArgumentException("Package with id " + packageId + " not found");
-
-        entityManager.merge(order);
-
     }
 }

@@ -2,17 +2,15 @@ package pt.ipleiria.estg.dei.ei.dae.packages.ws;
 
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import pt.ipleiria.estg.dei.ei.dae.packages.dtos.*;
+import jakarta.ws.rs.core.SecurityContext;
+import pt.ipleiria.estg.dei.ei.dae.packages.dtos.ProductDTO;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.ProductBean;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.ProductBean;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,179 +22,80 @@ public class ProductService {
     @EJB
     private ProductBean productBean;
 
-    // get all products
+    @Context
+    private SecurityContext securityContext;
+
+    private ProductDTO toDTO(Product product) {
+        return new ProductDTO(
+                product.getProductName(),
+                product.getProductDescription(),
+                product.getProductCategory(),
+                product.getProductManufacturer(),
+                product.getProductBrand(),
+                product.getProductImage(),
+                product.getProductPrice(),
+                product.getProductWeight()
+        );
+    }
+
+    public List<ProductDTO> toDTOs(List<Product> products) {
+        return products.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
     @GET
     @Path("/")
     public List<ProductDTO> getAllProducts() {
-        return ProductDTO.toDTOs(productBean.all());
+        return toDTOs(productBean.all());
     }
 
-
-    // get product by id
     @GET
     @Path("{id}")
-    public Response getProductDetails(@PathParam("id") Long id) throws MyEntityNotFoundException {
-        Product product = productBean.findWithPackage(id);
-        if (product != null) {
-            return Response.ok(ProductDTO.toDTO(product)).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND)
-                .entity("ERROR_FINDING_PRODUCT")
-                .build();
+    public Response getProductDetails(@PathParam("id") Long id) throws Exception {
+        return Response.status(Response.Status.OK).entity(toDTO(productBean.find(id))).build();
     }
 
-    // get all sensors not attribute from a product
-    @GET
-    @Path("{id}/sensorsNotAttribute")
-    public Response getProductSensorsNotAttribute(@PathParam("id") Long id) throws MyEntityNotFoundException {
-        List<Sensor> sensors = productBean.getAllSensorsNotAttribute(id);
-        if (sensors.size() >= 0) {
-            return Response.ok(SensorDTO.toDTOs(sensors)).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND)
-                .entity("ERROR_FINDING_SENSORS")
-                .build();
-    }
-
-    // get all unit products from a product
-    @GET
-    @Path("{id}/unitProducts")
-    public Response getProductUnitProducts(@PathParam("id") Long id) throws MyEntityNotFoundException {
-        List< UnitProduct> unitProducts = productBean.getAllUnitProducts(id);
-        if (unitProducts.size() > 0) {
-            return Response.ok(unitProductDTOs(unitProducts)).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND)
-                .entity("ERROR_FINDING_PRODUCT")
-                .build();
-    }
-
-    @PUT
-    @Path("{id}/addSensor/{sensorId}")
-    public Response addSensorToUnitProduct(@PathParam("id") Long productId, @PathParam("sensorId") Long sensorId) {
-        List<UnitProduct> unitProducts = productBean.addSensorToProduct(productId, sensorId);
-        if (!unitProducts.isEmpty() ) {
-            return Response.ok(unitProductDTOs(unitProducts)).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND)
-                .entity("ERROR_FINDING_UNIT_PRODUCT")
-                .build();
-    }
-
-    private List<UnitProductDTO> unitProductDTOs(List<UnitProduct> unitProducts) {
-        return unitProducts.stream().map(this::unitProductDTO).collect(java.util.stream.Collectors.toList());
-    }
-
-    private UnitProductDTO unitProductDTO(UnitProduct unitProduct) {
-        return new UnitProductDTO(
-                unitProduct.getId(),
-                unitProduct.getSerialNumber(),
-                unitProduct.getAvailable(),
-                productDTO(unitProduct.getProduct() == null ? null : unitProduct.getProduct()),
-                packageSensorToDTO(unitProduct.getPackageSensor() == null ? null : unitProduct.getPackageSensor())
-        );
-    }
-
-    private ProductDTO productDTO(Product product) {
-        return new ProductDTO(
-                product.getName(),
-                product.getStock(),
-                product.getImage(),
-                product.getManufacturer().getUsername()
-        );
-    }
-
-    private PackageSensorDTO packageSensorToDTO(PackageSensor packageSensor) {
-        if (packageSensor != null)
-            return new PackageSensorDTO(
-                    packageSensor.getId(),
-                    sensorValueDTOs(packageSensor.getSensorValues() == null ? null : packageSensor.getSensorValues()),
-                    packageDTO(packageSensor.getPackagging() == null ? null : packageSensor.getPackagging()));
-        else
-            return new PackageSensorDTO();
-    }
-
-    private List<SensorValueDTO> sensorValueDTOs(List<SensorValue> sensorValues) {
-        return sensorValues.stream().map(this::sensorValueDTO).collect(Collectors.toList());
-    }
-
-    private SensorValueDTO sensorValueDTO(SensorValue sensorValue) {
-        return new SensorValueDTO(
-                sensorValue.getId(),
-                SensorDTO.toDTO(sensorValue.getSensor()),
-                sensorValue.getValue()
-        );
-    }
-    private PackageDTO packageDTO(Package aPackage) {
-        return new PackageDTO(
-                aPackage.getId(),
-                aPackage.getPackageType(),
-                aPackage.getPackageMaterial()
-        );
-    }
-
-    // create new product
     @POST
     @Path("/")
-    public Response createNewProduct(ProductDTO productDTO) throws
-            MyEntityNotFoundException, MyEntityExistsException, MyConstraintViolationException {
-        long id  = productBean.create(
-                productDTO.getName(),
-                productDTO.getStock(),
-                productDTO.getImage(),
-                productDTO.getManufacturerUsername(),
-                productDTO.getPackageProductId()
+    public Response createNewProduct(ProductDTO productDTO) throws Exception {
+        productBean.create(
+                productDTO.getProductName(),
+                productDTO.getProductDescription(),
+                productDTO.getProductCategory(),
+                productDTO.getProductManufacturer(),
+                productDTO.getProductBrand(),
+                productDTO.getProductImage(),
+                productDTO.getProductPrice(),
+                productDTO.getProductWeight()
         );
-        Product product = productBean.find(id);
-        if (product == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-        return Response.status(Response.Status.CREATED).entity(ProductDTO.toDTO(product)).build();
+        Product product = productBean.find(productDTO.getId());
+        return Response.status(Response.Status.CREATED).entity(toDTO(product)).build();
     }
-    // update product
+
     @PUT
     @Path("{id}")
-    public Response updateProduct(@PathParam("id") Long id, ProductDTO productDTO)
-            throws MyEntityNotFoundException {
+    public Response updateProduct(@PathParam("id") Long id, ProductDTO productDTO) throws Exception {
+        Product product = productBean.find(id);
+
         productBean.update(
                 id,
-                productDTO.getName(),
-                productDTO.getStock(),
-                productDTO.getManufacturerUsername(),
-                productDTO.getImage()
+                productDTO.getProductName() != null ? productDTO.getProductName() : product.getProductName(),
+                productDTO.getProductDescription() != null ? productDTO.getProductDescription() : product.getProductDescription(),
+                productDTO.getProductCategory() != null ? productDTO.getProductCategory() : product.getProductCategory(),
+                productDTO.getProductManufacturer() != null ? productDTO.getProductManufacturer() : product.getProductManufacturer(),
+                productDTO.getProductBrand() != null ? productDTO.getProductBrand() : product.getProductBrand(),
+                productDTO.getProductImage() != null ? productDTO.getProductImage() : product.getProductImage(),
+                productDTO.getProductPrice() != null ? productDTO.getProductPrice() : product.getProductPrice(),
+                productDTO.getProductWeight() != null ? productDTO.getProductWeight() : product.getProductWeight()
         );
-        Product product = productBean.find(id);
-        if (product == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        return Response.status(Response.Status.CREATED).entity(ProductDTO.toDTO(product)).build();
+
+        product = productBean.find(id);
+        return Response.status(Response.Status.OK).entity(toDTO(product)).build();
     }
 
-    // SETT PACKAGING
-    @PUT
-    @Path("{id}/package/{packageId}")
-    public Response setPackaging(@PathParam("id") Long id, @PathParam("packageId") Long packageId)
-            throws MyEntityNotFoundException {
-        productBean.setPackaging(id, packageId);
-        Product product = productBean.find(id);
-        if (product == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        return Response.status(Response.Status.CREATED).entity(ProductDTO.toDTO(product)).build();
-    }
-
-    // AUXILIARY FUNCTIONS
-
-    // delete product
     @DELETE
     @Path("{id}")
-    public Response deleteProduct(@PathParam("id") Long id) throws MyEntityNotFoundException{
-        productBean.delete(id);
-        return Response.ok().build();
+    public Response deleteProduct(@PathParam("id") Long id) throws Exception {
+        productBean.remove(id);
+        return Response.status(Response.Status.OK).build();
     }
-
-
-
-
-
 }
