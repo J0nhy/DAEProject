@@ -1,29 +1,43 @@
 <template>
-    <div v-if="error">Error: {{ error.message }}</div>
+    <div v-if="error" class="alert alert-danger">Error: {{ error.message }}</div>
     <div v-else>
-        <nuxt-link to="/">Home</nuxt-link> | <nuxt-link to="/create">Create a New Teacher</nuxt-link>
-        <h2>Teachers</h2>
-        <table>
-            <tr>
-                <th>Username</th>
-                <th>Name</th>
-                <th>E-mail</th>
-                <th>Office</th>
-                <th>actions</th>
-            </tr>
-            <tr v-for="teacher in teachers">
-                <td>{{ teacher.username }}</td>
-                <td>{{ teacher.name }}</td>
-                <td>{{ teacher.email }}</td>
-                <td>{{ teacher.office }}</td>
-                <nuxt-link :to="`/students/${teacher.username}`">Details</nuxt-link>
-            </tr>
-        </table>
+      <h2 class="mb-4">Orders</h2>
+      <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Customer Username</th>
+            <th>Logistics Operator</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="order in orders" :key="order.id">
+            <td>{{ order.id }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.customerUsername }}</td>
+            <td>
+              <span v-if="order.logisticsOperators">
+                {{ order.logisticsOperators.username }}
+              </span>
+              <span v-else class="text-muted">None</span>
+            </td>
+            <td>
+                <button @click.prevent="refresh" class="btn btn-primary">Refresh Data</button>
+                <button @click.prevent="refresh" class="btn btn-primary">Refresh Data</button>
+                <button @click.prevent="refresh" class="btn btn-primary">Refresh Data</button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <button @click.prevent="refresh">Refresh Data</button>
-</template>
-<script setup>
-    const config = useRuntimeConfig()
-    const api = config.public.API_URL
-    const { data: teachers, error, refresh } = await useFetch(`${api}/teachers`)
-</script>
+    <button @click.prevent="refresh" class="btn btn-primary">Refresh Data</button>
+  </template>
+  
+  <script setup>
+  const config = useRuntimeConfig()
+  const api = config.public.API_URL
+  const { data: orders, error, refresh } = await useFetch(`${api}/orders`)
+  </script>
+  

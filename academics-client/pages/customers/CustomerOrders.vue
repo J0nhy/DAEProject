@@ -63,7 +63,7 @@ export default {
 
 
       const responseBody = await response.json();
-      console.log('Corpo da resposta:', responseBody);
+     // console.log('Corpo da resposta:', responseBody);
 
        this.table1.data = responseBody;
       } catch (error) {
