@@ -20,13 +20,12 @@ public class Manufacturer extends User implements Serializable {
     private int phone;
     @NotNull
     private String address;
-
-    @OneToMany(mappedBy = "manufacturer")
-    private List<Product> products;
-
+    @NotNull
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Order> orders;
 
     public Manufacturer(){
-
+        this.orders = new ArrayList<>();
     }
 
     public Manufacturer(String username, String password, String name, String email, int nif, int phone, String address) {
@@ -34,9 +33,7 @@ public class Manufacturer extends User implements Serializable {
         this.nif = nif;
         this.phone = phone;
         this.address = address;
-        this.products = new ArrayList<>();
-
-
+        this.orders = new ArrayList<>();
     }
 
     public int getNif() {
@@ -63,12 +60,11 @@ public class Manufacturer extends User implements Serializable {
         this.address = address;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<Order> getOrders() {
+        return orders;
     }
 
-    public void addProduct(Product product) {
-        this.products.add(product);
-        product.setManufacturer(this);
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

@@ -24,9 +24,9 @@ public class LogisticsOperatorBean {
     public void create (String username, String password, String name, String email, String company)
             throws MyEntityExistsException, MyConstraintViolationException {
         LogisticsOperator logisticsOperator = null;
-        if (entityManager.find(Customer.class, username) != null){
-            throw new MyEntityExistsException("Logistic Operator with username: " + username + " already exists");
-        }
+       // if (entityManager.find(Customer.class, username) != null){
+         //   throw new MyEntityExistsException("Customer with username: " + username + " already exists");
+        //}
         try{
             logisticsOperator = new LogisticsOperator(username, hasher.hash(password), name, email, company);
             entityManager.persist(logisticsOperator);

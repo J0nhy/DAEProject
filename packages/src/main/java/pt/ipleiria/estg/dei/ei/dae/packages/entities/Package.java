@@ -2,63 +2,122 @@ package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Entity
 @Table(name = "packages")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@NamedQueries({
-        @NamedQuery(name = "getPackageByType", query = "SELECT p FROM Package p WHERE p.packageType = :packageType"),
-        @NamedQuery(name = "getAllPackages", query = "SELECT p FROM Package p ORDER BY p.id")
-})
-public class Package extends Versionable {
+@NamedQuery(name = "getAllPackages", query = "select p from Package p order by p.packageType")
+public class Package implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "TBL_METADATA_ID_SEQ")
-    @Column(name="id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id; // package id
+
     @NotNull
-    private PackageType packageType;  // [1º,2º,3º(Produto) ou encomenda / transporte]
+    private PackageType packageType; // primary, secondary, tertiary
+
     @NotNull
-    private String packageMaterial;
+    private String packageMaterial; // material of the package
 
-    @OneToMany(mappedBy = "aPackage")
-    private List<PackageSensor> packageSensors;
+    @OneToMany
+    private List<Sensor> values; // values watched by sensors
 
-    public Package() {
+    @NotNull
+    @OneToMany
+    private List<Product> products; // products inside the package
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order; // referencia da encomenda
 
-    }
-    public Package(PackageType packageType, String packageMaterial) {
+
+    public Package( PackageType packageType, String packageMaterial) {
         this.packageType = packageType;
         this.packageMaterial = packageMaterial;
+        this.products = new ArrayList<>();
+        this.values =  new ArrayList<>();
     }
 
-    public Long getId() {
+    public Package() {
+        this.products = new ArrayList<>();
+        this.values =  new ArrayList<>();
+    }
+
+    public long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public PackageType getPackageType() {
         return packageType;
     }
 
-    public void setPackageType(PackageType packageType) {
-        this.packageType = packageType;
-    }
-
     public String getPackageMaterial() {
         return packageMaterial;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public List<Sensor> getValues() {
+        return values;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setPackageType(PackageType packageType) {
+        this.packageType = packageType;
     }
 
     public void setPackageMaterial(String packageMaterial) {
         this.packageMaterial = packageMaterial;
     }
 
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public void setValues(List<Sensor> values) {
+        this.values = values;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    @Override
+    public String toString() {
+        return "Package{" +
+                "id=" + id +
+                ", packageType=" + packageType +
+                ", packageMaterial='" + packageMaterial + '\'' +
+                ", product=" + products +
+                ", values=" + values +
+                '}';
+    }
+
+    public void addProduct(Product product) {
+        this.products.add(product);
+    }
+
+    public void removeProduct(Product product) {
+        this.products.remove(product);
+    }
+
+    public void removeValue(Sensor value) {
+        this.values.remove(value);
+    }
+
+    public void addValue(Sensor value) {
+        this.values.add(value);
+    }
+    
 }

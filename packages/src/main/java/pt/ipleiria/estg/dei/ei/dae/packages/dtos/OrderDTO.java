@@ -1,98 +1,108 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.dtos;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDTO {
-
-    private Long id;
+public class OrderDTO implements Serializable {
+    private long id;
     private String status;
+    private Customer customer;
+
     private String customerName;
-    private String logisticsOperatorName;
-    private List<OrderItemDTO> OrderItems;
-    private long packageId;
+    private LogisticsOperator logisticsOperators;
+    private List<Package> packages;
+    private List<Product> products;
 
+    private Long packageID;
 
-    public OrderDTO(){
-        this.OrderItems = new ArrayList<>();
-    }
-    public OrderDTO(Long id, String status, String customerName, String logisticsOperatorName, long packageId,
-                    List<OrderItemDTO> orderItems) {
-        this.id = id;
+    public OrderDTO(String status, String customer, LogisticsOperator logisticsOperators, Long packageId) {
         this.status = status;
-        this.customerName = customerName;
-        this.logisticsOperatorName = logisticsOperatorName;
-        this.packageId = packageId;
-        this.OrderItems = orderItems;
+        this.customerName = customer;
+        this.logisticsOperators = logisticsOperators;
+        this.packageID = packageId;
     }
 
-    public OrderDTO(Long id, String status, String username, String username1, Long id1) {
-        this.id = id;
+    public OrderDTO(String status, String customer, LogisticsOperator logisticsOperators) {
         this.status = status;
-        this.customerName = username;
-        this.logisticsOperatorName = username1;
-        this.packageId = id1;
+        this.customerName = customer;
+        this.logisticsOperators = logisticsOperators;
     }
 
-    public OrderDTO(Long id, String status, String username, String username1, List<OrderItemDTO> orderItems) {
-        this.id = id;
-        this.status = status;
-        this.customerName = username;
-        this.logisticsOperatorName = username1;
-        this.OrderItems = orderItems;
+    public OrderDTO() {
+        this.packages = new ArrayList<>();
+        this.products = new ArrayList<>();
     }
 
-    public OrderDTO(Long id, String status, List<OrderItemDTO> orderItemDTOS) {
-        this.id = id;
-        this.status = status;
-        this.OrderItems = orderItemDTOS;
-    }
-
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     public String getStatus() {
         return status;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public LogisticsOperator getLogisticsOperators() {
+        return logisticsOperators;
+    }
+
+    public List<Package> getPackages() {
+        return packages;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setLogisticsOperators(LogisticsOperator logisticsOperators) {
+        this.logisticsOperators = logisticsOperators;
+    }
+
+    public void setPackages(List<Package> packages) {
+        this.packages = packages;
+    }
+
+    public void setProduct(List<Product> products) {
+        this.products = products;
     }
 
     public String getCustomerName() {
         return customerName;
     }
 
-    public void setCustomerName(String name) {
-        this.customerName = name;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
-    public String getLogisticsOperatorName() {
-        return logisticsOperatorName;
-    }
-
-    public void setLogisticsOperatorName(String logisticsOperatorName) {
-        this.logisticsOperatorName = logisticsOperatorName;
-    }
-
-    public long getPackageId() {
-        return packageId;
-    }
-
-    public void setPackageId(long packageId) {
-        this.packageId = packageId;
-    }
-
-    public List<OrderItemDTO> getOrderItems() {
-        return OrderItems;
-    }
-
-    public void setOrderItems(List<OrderItemDTO> orderItems) {
-        OrderItems = orderItems;
-    }
+    /*
+    @Override
+    public String toString() {
+        return "OrderDTO{" +
+                ", status='" + status + '\'' +
+                ", customer=" + customer +
+                ", logisticsOperators=" + logisticsOperators +
+                '}';
+    }*/
 }
