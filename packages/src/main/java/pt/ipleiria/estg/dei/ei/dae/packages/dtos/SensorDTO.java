@@ -14,7 +14,8 @@ public class SensorDTO implements Serializable {
     private String dataType;
     private Package packageRef;
     
-    public SensorDTO( SensorType sensorType, String value, String dataType, Package packageRef) {
+    public SensorDTO(long id,  SensorType sensorType, String value, String dataType, Package packageRef) {
+        this.id = id;
         this.sensorType = sensorType;
         this.value = value;
         this.dataType = dataType;

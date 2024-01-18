@@ -46,6 +46,14 @@ public class Sensor implements Serializable {
     public Sensor() {
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public SensorType getSensorType() {
         return sensorType;
     }
