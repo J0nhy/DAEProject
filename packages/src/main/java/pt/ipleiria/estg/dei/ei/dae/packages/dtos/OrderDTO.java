@@ -16,19 +16,9 @@ public class OrderDTO implements Serializable {
     private List<Package> packages;
     private List<Product> products;
 
-    private Long packageID;
-
-    public OrderDTO(String status, String customer, LogisticsOperator logisticsOperators, Long packageId) {
+    public OrderDTO(String status, Customer customer) {
         this.status = status;
-        this.customerName = customer;
-        this.logisticsOperators = logisticsOperators;
-        this.packageID = packageId;
-    }
-
-    public OrderDTO(String status, String customer, LogisticsOperator logisticsOperators) {
-        this.status = status;
-        this.customerName = customer;
-        this.logisticsOperators = logisticsOperators;
+        this.customer = customer;
     }
 
     public OrderDTO() {
@@ -96,13 +86,4 @@ public class OrderDTO implements Serializable {
         this.customerName = customerName;
     }
 
-    /*
-    @Override
-    public String toString() {
-        return "OrderDTO{" +
-                ", status='" + status + '\'' +
-                ", customer=" + customer +
-                ", logisticsOperators=" + logisticsOperators +
-                '}';
-    }*/
 }

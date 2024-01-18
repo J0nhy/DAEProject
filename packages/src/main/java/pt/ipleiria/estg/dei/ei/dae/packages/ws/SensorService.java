@@ -1,15 +1,18 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.ws;
 
 import jakarta.ejb.EJB;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import pt.ipleiria.estg.dei.ei.dae.packages.dtos.SensorDTO;
+import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.PackageBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.SensorBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +25,9 @@ public class SensorService {
     @EJB
     private SensorBean sensorBean;
 
+    @EJB
+    private PackageBean packageBean;
+
     @Context
     private SecurityContext securityContext;
 
@@ -30,9 +36,6 @@ public class SensorService {
                 sensor.getSensorType(),
                 sensor.getValue(),
                 sensor.getDataType(),
-                sensor.getMaxValue(),
-                sensor.getMinValue(),
-                sensor.getTimestamp(),
                 sensor.getPackageRef()
         );
     }
@@ -49,7 +52,7 @@ public class SensorService {
 
     @GET
     @Path("{id}")
-    public Response getSensorDetails(@PathParam("id") Long id) throws Exception {
+    public Response getSensorDetails(@PathParam("id") long id) throws Exception {
         return Response.status(Response.Status.OK).entity(toDTO(sensorBean.find(id))).build();
     }
 
@@ -60,9 +63,6 @@ public class SensorService {
                 sensorDTO.getSensorType(),
                 sensorDTO.getValue(),
                 sensorDTO.getDataType(),
-                sensorDTO.getMaxValue(),
-                sensorDTO.getMinValue(),
-                sensorDTO.getTimestamp(),
                 sensorDTO.getPackageRef()
         );
         Sensor sensor = sensorBean.find(sensorDTO.getId());
@@ -71,7 +71,7 @@ public class SensorService {
 
     @PUT
     @Path("{id}")
-    public Response updateSensor(@PathParam("id") Long id, SensorDTO sensorDTO) throws Exception {
+    public Response updateSensor(@PathParam("id") long id, SensorDTO sensorDTO) throws Exception {
         Sensor sensor = sensorBean.find(id);
 
         sensorBean.update(
@@ -79,9 +79,6 @@ public class SensorService {
                 sensorDTO.getSensorType() != null ? sensorDTO.getSensorType() : sensor.getSensorType(),
                 sensorDTO.getValue() != null ? sensorDTO.getValue() : sensor.getValue(),
                 sensorDTO.getDataType() != null ? sensorDTO.getDataType() : sensor.getDataType(),
-                sensorDTO.getMaxValue() != 0 ? sensorDTO.getMaxValue() : sensor.getMaxValue(),
-                sensorDTO.getMinValue() != 0 ? sensorDTO.getMinValue() : sensor.getMinValue(),
-                sensorDTO.getTimestamp() != 0 ? sensorDTO.getTimestamp() : sensor.getTimestamp(),
                 sensorDTO.getPackageRef() != null ? sensorDTO.getPackageRef() : sensor.getPackageRef()
         );
         sensor = sensorBean.find(id);
@@ -90,7 +87,7 @@ public class SensorService {
 
     @DELETE
     @Path("{id}")
-    public Response deleteSensor(@PathParam("id") Long id) throws Exception {
+    public Response deleteSensor(@PathParam("id") long id) throws Exception {
         sensorBean.remove(id);
         return Response.status(Response.Status.OK).build();
     }

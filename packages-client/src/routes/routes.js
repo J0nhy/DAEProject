@@ -11,14 +11,17 @@ import Icons from 'src/pages/Icons.vue'
 import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
-import ManufacturerList from 'src/pages/ManufacturerList.vue'
-import ManufacturerCreate from 'src/pages/ManufacturerCreate.vue'
+import ManufacturerList from 'src/pages/Manufacturers/ManufacturerList.vue'
+import ManufacturerCreate from 'src/pages/Manufacturers/ManufacturerCreate.vue'
 import OrderList from 'src/pages/OrderList.vue'
 import Login from 'src/pages/auth-test.vue'
 import LogisticsOperatorList from 'src/pages/LogisticsOperator/LogisticsOperator.vue'
 import LogisticsOperatorAdd from 'src/pages/LogisticsOperator/LogisticsOperatorAdd.vue'
 import CustomerList from 'src/pages/Customers/CustomersList.vue'
 import CustomerCreate from 'src/pages/Customers/CustomersCreate.vue'
+import ManufacturerOrders from 'src/pages/Manufacturers/ManufacturerOrders.vue'
+import LogisticOrders from 'src/pages/LogisticsOperator/LogisticOrders.vue'
+import CustomerOrders from 'src/pages/Customers/CustomerOrders.vue'
 
 const routes = [
   {
@@ -52,39 +55,9 @@ const routes = [
         component: Login
       },
       {
-        path: 'manufacturer-list',
-        name: 'Manufacturer List',
-        component: ManufacturerList
-      },
-      {
-        path: 'logisticsoperator-list',
-        name: 'logisticsoperator List',
-        component: LogisticsOperatorList
-      },
-      {
-        path: 'customer-list',
-        name: 'Customer List',
-        component: CustomerList
-      },
-      {
-        path: 'logisticsoperator-add',
-        name: 'logisticsoperator Add',
-        component: LogisticsOperatorAdd
-      },
-      {
         path: 'order-list',
         name: 'Order List',
         component: OrderList
-      },
-      {
-        path: 'manufacturer-create',
-        name: 'Manufacturer Create',
-        component: ManufacturerCreate
-      },
-      {
-        path: 'customer-create',
-        name: 'Customer Create',
-        component: CustomerCreate
       },
       {
         path: 'typography',
@@ -111,6 +84,75 @@ const routes = [
         name: 'Upgrade to PRO',
         component: Upgrade
       }
+    ]
+  },
+  {
+    path: '/logistic',
+    component: DashboardLayout,
+    redirect: '/admin/overview',
+    children: [
+      {
+        path: 'logisticsoperator-add',
+        name: 'logisticsoperator Add',
+        component: LogisticsOperatorAdd
+      },
+      {
+        path: 'logisticsoperator-list',
+        name: 'logisticsoperator List',
+        component: LogisticsOperatorList
+      },
+      {
+        path: 'order-list',
+        name: 'Order List',
+        component: LogisticOrders
+      },
+
+    ]
+  },
+  {
+    path: '/manufacturer',
+    component: DashboardLayout,
+    redirect: '/admin/overview',
+    children: [
+      {
+        path: 'manufacturer-list',
+        name: 'Manufacturer List',
+        component: ManufacturerList
+      },
+      {
+        path: 'order-list',
+        name: 'Order List',
+        component: ManufacturerOrders
+      },
+      {
+        path: 'manufacturer-create',
+        name: 'Manufacturer Create',
+        component: ManufacturerCreate
+      }
+
+    ]
+  },
+  {
+    path: '/customer',
+    component: DashboardLayout,
+    redirect: '/admin/overview',
+    children: [
+      {
+        path: 'customer-create',
+        name: 'Customer Create',
+        component: CustomerCreate
+      },
+      {
+        path: 'customer-list',
+        name: 'Customer List',
+        component: CustomerList
+      },
+      {
+        path: 'order-list',
+        name: 'Order List',
+        component: CustomerOrders
+      },
+
     ]
   },
   { path: '*', component: NotFound }

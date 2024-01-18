@@ -23,25 +23,39 @@ public class PackageBean {
     @EJB
     private OrderBean orderBean;
 
+    @EJB
+    private SensorBean sensorBean;
+
     public void create( PackageType packageType, String packageMaterial){
             Package package_ = new Package(packageType, packageMaterial);
             entityManager.persist(package_);
-            entityManager.flush();
+
+            if (packageType == PackageType.Primary){
+                package_.addSensor(sensorBean.create(SensorType.Location, "Armazem Lisboa","local", package_));
+            } else if (packageType == PackageType.Secondary){
+                package_.addSensor(sensorBean.create(SensorType.Location, "Armazem Lisboa","local", package_));
+                package_.addSensor(sensorBean.create(SensorType.Temperature, "10","ºC", package_));
+            } else if (packageType == PackageType.Tertiary){
+                package_.addSensor(sensorBean.create(SensorType.Location, "Armazem Lisboa","local", package_));
+                package_.addSensor(sensorBean.create(SensorType.Temperature, "10","ºC", package_));
+                package_.addSensor(sensorBean.create(SensorType.Humidity, "15","%", package_));
+                package_.addSensor(sensorBean.create(SensorType.Opened, "NO","YES/NO", package_));
+            }
     }
 
     public List<Package> all() {
         return entityManager.createNamedQuery("getAllPackages", Package.class).getResultList();
     }
 
-    public Package find(Long packageId) throws MyEntityNotFoundException {
+    public Package find(long packageId) throws MyEntityNotFoundException {
         Package package_ = entityManager.find(Package.class, packageId);
         if (package_ == null) {
             throw new MyEntityNotFoundException("Package '" + packageId + "' not found");
         }
-        return entityManager.find(Package.class, packageId);
+        return package_;
     }
 
-    public void update(Long id, PackageType type, String material) throws Exception {
+    public void update(long id, PackageType type, String material) throws Exception {
         Package package_ = find(id);
 
         entityManager.lock(package_, LockModeType.OPTIMISTIC);
@@ -51,26 +65,26 @@ public class PackageBean {
         package_.setPackageMaterial(material);
     }
 
-    public void removePackage(Long id) throws Exception {
+    public void removePackage(long id) throws Exception {
         Package package_ = find(id);
         entityManager.remove(package_);
     }
 
-    public void addValueToPackage(Long packageId, Long valueId) throws Exception {
+    public void addValueToPackage(long packageId, long valueId) throws Exception {
         Package package_ = find(packageId);
         SensorBean valueBean = new SensorBean();
 
-        Sensor value = valueBean.find(valueId);
+        Sensor sensor = valueBean.find(valueId);
 
-        if (value == null) {
+        if (sensor == null) {
             throw new Exception("Sensor '" + valueId + "' not found");
         }
 
-        package_.addValue(value);
+        package_.addSensor(sensor);
         entityManager.merge(package_);
     }
 
-    public void removeValueFromPackage(Long packageId, Long valueId) throws Exception {
+    public void removeValueFromPackage(long packageId, long valueId) throws Exception {
         Package package_ = find(packageId);
         SensorBean valueBean = new SensorBean();
 
@@ -79,7 +93,7 @@ public class PackageBean {
         if (value == null) {
             throw new Exception("Sensor '" + valueId + "' not found");
         }
-        package_.removeValue(value);
+        package_.removeSensor(value);
         entityManager.merge(package_);
     }
 }

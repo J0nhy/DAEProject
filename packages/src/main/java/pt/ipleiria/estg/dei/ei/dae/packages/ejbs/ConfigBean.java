@@ -46,7 +46,7 @@ public class ConfigBean {
         System.out.println("Hello Java EE!");
 
         //CREATE CUSTOMERS
-        try{
+        try {
             customerBean.create("Customer1", "123", "Customer1", "Customer1@mail.pt", 123456789, 123456789, "Customer1 address");
             customerBean.create("Customer2", "123", "Customer2", "Customer2@mail.pt", 123456789, 123456789, "Customer2 address");
             customerBean.create("Customer3", "123", "Customer3", "Customer3@mail.pt", 123456789, 123456789, "Customer3 address");
@@ -55,7 +55,7 @@ public class ConfigBean {
             customerBean.delete("Customer4");
 
             System.out.println("Customer Created");
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.severe(e.getMessage());
         }
 
@@ -79,7 +79,7 @@ public class ConfigBean {
 
 
             System.out.println("Package Created");
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.severe(e.getMessage());
         }
 
@@ -92,7 +92,7 @@ public class ConfigBean {
         }catch (Exception e){
             logger.severe(e.getMessage());
         }
-    //
+        //
         //Create logisticsOperator
         try {
             logisticsOperatorBean.create("logistics1", "123", "logi1", "logi1@mail.pt",
@@ -196,11 +196,30 @@ public class ConfigBean {
             products5.add(productBean.find((long) 14));
             products5.add(productBean.find((long) 15));
 
-            orderBean.create("Pending", customerBean.findCustomer("Customer1"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages1, products1);
-            orderBean.create("Pending", customerBean.findCustomer("Customer2"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages2, products2);
-            orderBean.create("Pending", customerBean.findCustomer("Customer3"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages3, products3);
-            orderBean.create("Pending", customerBean.findCustomer("Customer4"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages4, products4);
-            orderBean.create("Pending", customerBean.findCustomer("Customer1"),logisticsOperatorBean.findLogisticOperator("logistics1"), packages5, products5);
+            long order1 = orderBean.create("Pending", customerBean.findCustomer("Customer1"), products1);
+            long order2 = orderBean.create("Pending", customerBean.findCustomer("Customer2"), products2);
+            long order3 = orderBean.create("Pending", customerBean.findCustomer("Customer3"), products3);
+            long order4 = orderBean.create("Pending", customerBean.findCustomer("Customer1"), products4);
+            long order5 = orderBean.create("Pending", customerBean.findCustomer("Customer1"), products5);
+
+            orderBean.addPackageToOrder(order1, 1);
+            orderBean.addPackageToOrder(order1, 2);
+            orderBean.addPackageToOrder(order2, 3);
+            orderBean.addPackageToOrder(order2, 4);
+            orderBean.addPackageToOrder(order2, 5);
+            orderBean.addPackageToOrder(order3, 6);
+            orderBean.addPackageToOrder(order4, 7);
+            orderBean.addPackageToOrder(order4, 8);
+            orderBean.addPackageToOrder(order5, 9);
+            orderBean.addPackageToOrder(order5, 10);
+            orderBean.addPackageToOrder(order5, 11);
+            orderBean.addPackageToOrder(order5, 12);
+            orderBean.addPackageToOrder(order5, 13);
+            orderBean.addPackageToOrder(order5, 14);
+            orderBean.addPackageToOrder(order5, 15);
+
+            orderBean.setLogisticsOperator(order1, "logistics1");
+            orderBean.setLogisticsOperator(order2, "logistics1");
 
 
         }catch (Exception e){

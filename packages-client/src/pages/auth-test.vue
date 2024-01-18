@@ -18,19 +18,16 @@
 </template>
 
 <script setup>
-const config = useRuntimeConfig()
 const api = process.env.VUE_APP_API_URL
-const loginFormData = reactive({
+const loginFormData = ({
   username: null,
   password: null
 })
-const apiFormData = reactive({
-  path: "students"
-})
-const token = ref(null)
-const messages = ref([])
+
+const token = null
+const messages = []
 async function login() {
-  const { data, error } = await useFetch(`${api}/auth/login`, {
+  const { data, error } = await fetch(`${api}/auth/login`, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
@@ -50,20 +47,5 @@ function reset() {
   token.value = null
   messages.value = []
 }
-async function sendRequest() {
-  const { data, error } = await useFetch(`${api}/${apiFormData.path}`, {
-    method: 'get',
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ' + token.value
-    }
-  })
-  if (error.value) {
-    messages.value.push({ error: error.value.message })
-  }
 
-  if (data.value) {
-    messages.value.push({ payload: data.value })
-  }
-}
 </script>
