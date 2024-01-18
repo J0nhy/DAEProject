@@ -11,6 +11,10 @@ Content-Type: application/json
 GET http://localhost:8080/packages/api/packages
 Accept: application/json
 
+##### GET PACKAGE 1
+GET http://localhost:8080/packages/api/packages/2
+Accept: application/json
+
 
 ##### GET CUSTOMERS
 GET http://localhost:8080/packages/api/customers

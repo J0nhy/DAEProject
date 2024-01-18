@@ -80,6 +80,10 @@ public class Package implements Serializable {
         this.order = order;
     }
 
+    public long getOrderId() {
+        return order.getId();
+    }
+
     @Override
     public String toString() {
         return "Package{" +

@@ -122,6 +122,7 @@ public class OrderBean {
         }
 
         order.addPackage(package_);
+        package_.setOrder(order);
         entityManager.merge(order);
     }
 

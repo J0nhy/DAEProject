@@ -42,7 +42,7 @@ public class PackageService {
                 packageInstance.getId(),
                 packageInstance.getPackageType(),
                 packageInstance.getPackageMaterial(),
-                packageInstance.getOrder(),
+                packageInstance.getOrderId(),
                 sensors
         );
     }
@@ -53,7 +53,7 @@ public class PackageService {
                 sensor.getSensorType(),
                 sensor.getValue(),
                 sensor.getDataType(),
-                sensor.getPackageRef()
+                null
         );
     }
 
