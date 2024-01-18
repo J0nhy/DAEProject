@@ -8,8 +8,12 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import pt.ipleiria.estg.dei.ei.dae.packages.dtos.CustomerDTO;
+import pt.ipleiria.estg.dei.ei.dae.packages.dtos.OrderDTO;
+import pt.ipleiria.estg.dei.ei.dae.packages.dtos.PackageDTO;
+import pt.ipleiria.estg.dei.ei.dae.packages.dtos.ProductDTO;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.CustomerBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Customer;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
@@ -31,6 +35,7 @@ public class CustomerService {
     private SecurityContext securityContext;
 
     private CustomerDTO toDTO(Customer customer){
+        List<OrderDTO> orders = toDTOsOrder(customer.getOrders());
         return new CustomerDTO(
                 customer.getUsername(),
                 customer.getPassword(),
@@ -38,12 +43,29 @@ public class CustomerService {
                 customer.getName(),
                 customer.getNif(),
                 customer.getPhone(),
-                customer.getAddress()
+                customer.getAddress(),
+                orders
+
         );
     }
 
     private List<CustomerDTO> toDTOs(List<Customer> customers){
         return customers.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    private OrderDTO toDTO(Order order) {
+        return new OrderDTO(
+                order.getId(),
+                order.getStatus(),
+                order.getLogisticsOperators(),
+                null,
+                null,
+                null
+        );
+
+    }
+    public List<OrderDTO> toDTOsOrder(List<Order> orders) {
+        return orders.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method

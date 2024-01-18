@@ -27,6 +27,7 @@ public class ProductService {
 
     private ProductDTO toDTO(Product product) {
         return new ProductDTO(
+                product.getId(),
                 product.getProductName(),
                 product.getProductDescription(),
                 product.getProductCategory(),

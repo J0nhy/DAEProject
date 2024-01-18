@@ -17,7 +17,8 @@ public class ProductDTO implements Serializable {
     private String productWeight; // shipping weight of the product
 
 
-    public ProductDTO( String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) {
+    public ProductDTO(long id, String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) {
+        this.id = id;
         this.productName = productName;
         this.productDescription = productDescription;
         this.productCategory = productCategory;
