@@ -31,11 +31,6 @@ Content-Type: application/json
   "address": "123 Main St"
 }
 
-#####Delete Manufacturer
-DELETE http://localhost:8080/packages/api/manufacturers/Manufacturer2
-Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
-
 #####Update Manufacturer
 PUT http://localhost:8080/packages/api/manufacturers/Manufacturer1
 Accept: application/json
@@ -46,3 +41,9 @@ Content-Type: application/json
   "email": "manufacturer1@mail.pt",
   "address": "123 Main St"
 }
+
+#####Delete Manufacturer
+DELETE http://localhost:8080/packages/api/manufacturers/Manufacturer2
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
+
