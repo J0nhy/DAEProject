@@ -1,15 +1,63 @@
 <template>
     <div>
-        <h1>Welcome to Order Managment</h1>
+        <h1>Welcome to Order Management</h1>
         Manage your resources:
         <div style="padding-left: 14px; margin-right: 800px;">
-            <nuxt-link to="/customers">Customers</nuxt-link><br>
-            <nuxt-link to="/logistics">Logistic Operators</nuxt-link><br>
-            <nuxt-link to="/manufactures">Manufactures</nuxt-link><br>
+            <template v-if="userRole === 'Customer'">
+                <nuxt-link to="/customers">Customers</nuxt-link><br>
+            </template>
+            <template v-if="userRole === 'LogisticsOperator'">
+                <nuxt-link to="/logistics">Logistic Operators</nuxt-link><br>
+            </template>
+            <template v-if="userRole === 'Manufacturer'">
+                <nuxt-link to="/manufacturers">Manufacturers</nuxt-link><br>
+            </template>
             <hr>
-            <nuxt-link to="/orderCustomer">Customer Orders</nuxt-link><br>
-            <nuxt-link to="/orderLogistic">Logistic Orders</nuxt-link><br>
-            <nuxt-link to="/orderManufacturer">Manufacturer Orders</nuxt-link><br>
+            <template v-if="userRole === 'Customer'">
+                <nuxt-link to="/orderCustomer">Customer Orders</nuxt-link><br>
+            </template>
+            <template v-if="userRole === 'LogisticsOperator'">
+                <nuxt-link to="/orderLogistic">Logistic Orders</nuxt-link><br>
+            </template>
+            <template v-if="userRole === 'Manufacturer'">
+
+                <nuxt-link to="/orderManufacturer">Manufacturer Orders</nuxt-link><br>
+            </template>
+
         </div>
     </div>
 </template>
+  
+<script setup>
+import { useAuthStore } from "~/store/auth-store.js";
+const router = useRouter()
+
+
+const authStore = useAuthStore()
+const {token, user} = storeToRefs(authStore)
+
+const userRole = ref(null)
+
+function logout() {
+  authStore.logout()
+  router.push('/')
+
+}
+
+onMounted(() => {
+    // check if token exists in local storage
+    const tokenLocal = localStorage.getItem('token')
+    const userLocal = localStorage.getItem('user')
+    if (userLocal) {
+        user.value = JSON.parse(userLocal)
+        userRole.value = user.value.role
+    }
+    if (tokenLocal) {
+        token.value = tokenLocal
+    }
+    if (!token.value) {
+        navigateTo('/auth/login')
+    }
+    console.log(user.value)
+  })
+</script>

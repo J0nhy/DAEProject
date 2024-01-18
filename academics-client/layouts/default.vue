@@ -1,12 +1,33 @@
 <script setup>
 import { useAuthStore } from "~/store/auth-store.js";
-const router = useRouter();
-const authStore = useAuthStore();
+const router = useRouter()
+
+
+const authStore = useAuthStore()
+const {token, user} = storeToRefs(authStore)
 
 function logout() {
-  authStore.logout();
-  router.push('/');
+  authStore.logout()
+  router.push('/')
+
 }
+
+onMounted(() => {
+    // check if token exists in local storage
+    const tokenLocal = localStorage.getItem('token')
+    const userLocal = localStorage.getItem('user')
+    if (userLocal) {
+        user.value = JSON.parse(userLocal)
+        
+    }
+    if (tokenLocal) {
+        token.value = tokenLocal
+    }
+    if (!token.value) {
+        navigateTo('/auth/login')
+    }
+    console.log(user.value)
+  })
 </script>
 
 <template>

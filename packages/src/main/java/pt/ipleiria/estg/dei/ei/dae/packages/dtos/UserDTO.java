@@ -7,7 +7,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserDTO {
+public class UserDTO implements java.io.Serializable {
     @NotNull
     private String username;
     @NotNull
@@ -36,4 +36,37 @@ public class UserDTO {
         return users.stream().map(UserDTO::from).collect(Collectors.toList());
     }
     // TODO: getters and setters
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }
