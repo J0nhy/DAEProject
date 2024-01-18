@@ -25,9 +25,11 @@ public class LogisticsOperatorBean {
 
     public void create (String username, String password, String name, String email, String company)
             throws MyEntityExistsException, MyConstraintViolationException {
-        LogisticsOperator logistics = null;
-       if (entityManager.find(LogisticsOperator.class, username) != null){
-           throw new MyEntityExistsException("Logistics Operator with username: " + username + " already exists");
+        LogisticsOperator logistics = entityManager.find(LogisticsOperator.class, username);
+       if ( logistics != null){
+           if (!logistics.isDeleted())
+               throw new MyEntityExistsException("Logistics Operator with username: " + username + " already exists");
+           throw new MyEntityExistsException("Account with username: " + username + " was deleted.");
         }
         try{
             logistics = new LogisticsOperator(username, hasher.hash(password), name, email, company);

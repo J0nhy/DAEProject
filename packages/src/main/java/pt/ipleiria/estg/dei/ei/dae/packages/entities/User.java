@@ -21,6 +21,8 @@ public class User extends Versionable{
     @NotNull
     private String email;
 
+    private boolean deleted;
+
     public User() {}
 
     public User(String username, String password, String name, String email) {
@@ -60,5 +62,13 @@ public class User extends Versionable{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

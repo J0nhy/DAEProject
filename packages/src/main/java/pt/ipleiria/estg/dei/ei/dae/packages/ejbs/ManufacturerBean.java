@@ -23,9 +23,11 @@ public class ManufacturerBean {
 
     public void create (String username, String password, String name, String email, int nif, int phone, String  address)
             throws MyEntityExistsException, MyConstraintViolationException {
-        Manufacturer manufacturer = null;
-        if (entityManager.find(Customer.class, username) != null){
-            throw new MyEntityExistsException("Customer with username: " + username + " already exists");
+        Manufacturer manufacturer = entityManager.find(Manufacturer.class, username);
+        if ( manufacturer != null){
+            if (!manufacturer.isDeleted())
+                throw new MyEntityExistsException("Manufacturer with username: " + username + " already exists");
+            throw new MyEntityExistsException("Account with username: " + username + " was deleted.");
         }
         try{
             manufacturer = new Manufacturer(username, hasher.hash(password), name, email, nif, phone, address);

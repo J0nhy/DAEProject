@@ -18,6 +18,7 @@ public class LogisticsOperator extends User implements Serializable {
 
     @NotNull
     private String company;
+
     public LogisticsOperator(){}
 
     public LogisticsOperator(String username, String password, String name, String email,String company){
