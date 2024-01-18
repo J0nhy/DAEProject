@@ -18,16 +18,17 @@ public class SensorBean {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
-        Sensor sensor_ = new Sensor( sensorType, value, dataType, maxValue, minValue, timestamp, packageRef);
+    public Sensor create(SensorType sensorType, String value, String dataType, Package packageRef) {
+        Sensor sensor_ = new Sensor( sensorType, value, dataType, packageRef);
         entityManager.persist(sensor_);
+        return sensor_;
     }
 
     public List<Sensor> all() {
         return entityManager.createNamedQuery("getAllSensors", Sensor.class).getResultList();
     }
 
-    public Sensor find(Long SensorId) throws Exception {
+    public Sensor find(long SensorId) throws Exception {
 
         Sensor sensor_ = entityManager.find(Sensor.class, SensorId);
         if (sensor_ == null) {
@@ -36,7 +37,7 @@ public class SensorBean {
         return entityManager.find(Sensor.class, SensorId);
     }
 
-    public void update(long id, SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) throws Exception {
+    public void update(long id, SensorType sensorType, String value, String dataType, Package packageRef) throws Exception {
         
         Sensor sensor_ = find(id);
 
@@ -46,9 +47,6 @@ public class SensorBean {
             sensor_.setSensorType(sensorType);
             sensor_.setValue(value);
             sensor_.setDataType(dataType);
-            sensor_.setMaxValue(maxValue);
-            sensor_.setMinValue(minValue);
-            sensor_.setTimestamp(timestamp);
             sensor_.setPackageRef(packageRef);
             
             entityManager.merge(sensor_);
@@ -58,7 +56,7 @@ public class SensorBean {
         }
     }
 
-    public void remove(Long id) throws Exception {
+    public void remove(long id) throws Exception {
         Sensor sensor = find(id);
 
         if (sensor != null) {

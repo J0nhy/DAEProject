@@ -50,7 +50,7 @@ public class ProductService {
 
     @GET
     @Path("{id}")
-    public Response getProductDetails(@PathParam("id") Long id) throws Exception {
+    public Response getProductDetails(@PathParam("id") long id) throws Exception {
         return Response.status(Response.Status.OK).entity(toDTO(productBean.find(id))).build();
     }
 
@@ -73,7 +73,7 @@ public class ProductService {
 
     @PUT
     @Path("{id}")
-    public Response updateProduct(@PathParam("id") Long id, ProductDTO productDTO) throws Exception {
+    public Response updateProduct(@PathParam("id") long id, ProductDTO productDTO) throws Exception {
         Product product = productBean.find(id);
 
         productBean.update(
@@ -94,7 +94,7 @@ public class ProductService {
 
     @DELETE
     @Path("{id}")
-    public Response deleteProduct(@PathParam("id") Long id) throws Exception {
+    public Response deleteProduct(@PathParam("id") long id) throws Exception {
         productBean.remove(id);
         return Response.status(Response.Status.OK).build();
     }

@@ -29,10 +29,10 @@ public class OrderBean {
     @EJB LogisticsOperatorBean logisticsOperatorBean;
 
 
-    public void create(String status, Customer customer, LogisticsOperator logisticsOperator, List<Package> packages, List<Product> products)
+    public long create(String status, Customer customer, List<Product> products)
         throws MyEntityNotFoundException{
-        Order order = new Order(status, customer, logisticsOperator);
-        for (Package p : packages) {
+        Order order = new Order(status, customer);
+        /*for (Package p : packages) {
             try {
                 Package package_ = packageBean.find(p.getId());
                 order.addPackage(package_);
@@ -40,7 +40,7 @@ public class OrderBean {
             } catch (MyEntityNotFoundException e) {
                 throw new MyEntityNotFoundException("Package with id: " + p.getId() + " not found");
             }
-        }
+        }*/
         for (Product p : products) {
             try {
                 Product product = productBean.find(p.getId());
@@ -50,29 +50,30 @@ public class OrderBean {
             }
         }
         entityManager.persist(order);
+        return order.getId();
     }
 
     public List<Order> all() {
         return entityManager.createNamedQuery("getAllOrders", Order.class).getResultList();
     }
 
-    public List<Order> allByCustomer(Long customerId) {
+    public List<Order> allByCustomer(long customerId) {
         return entityManager
                 .createNamedQuery("getAllOrdersByCustomer", Order.class)
                 .setParameter("customer", customerId)  // Assuming "customer" is the parameter name in the named query
                 .getResultList();
     }
 
-    public Order find(Long id) throws MyEntityNotFoundException {
+    public Order find(long id) throws MyEntityNotFoundException {
 
         Order order = entityManager.find(Order.class, id);
         if (order == null) {
             throw new MyEntityNotFoundException("Order '" + id + "' not found");
         }
-        return entityManager.find(Order.class, order);
+        return order;
     }
 
-    public void update(Long id, String status, Customer customer, LogisticsOperator logisticsOperator) throws Exception {
+    public void update(long id, String status, Customer customer, LogisticsOperator logisticsOperator) throws Exception {
         
         Order order = find(id);
 
@@ -91,7 +92,7 @@ public class OrderBean {
         }
     }
 
-    public void updateStatus(Long id, String status) throws Exception {
+    public void updateStatus(long id, String status) throws Exception {
 
         Order order = find(id);
 
@@ -108,7 +109,7 @@ public class OrderBean {
         }
     }
 
-    public void addPackageToOrder(Long id, Long packageId) throws Exception {
+    public void addPackageToOrder(long id, long packageId) throws Exception {
         Order order = find(id);
 
         Package package_ = packageBean.find(packageId);
@@ -121,7 +122,7 @@ public class OrderBean {
         entityManager.merge(order);
     }
 
-    public void addProductToOrder(Long id, Long productId) throws Exception {
+    public void addProductToOrder(long id, long productId) throws Exception {
         Order order = find(id);
 
         Product product = productBean.find(productId);
@@ -134,7 +135,7 @@ public class OrderBean {
         entityManager.merge(order);
     }
 
-    public void removePackageFromOrder(Long id, Long packageId) throws Exception {
+    public void removePackageFromOrder(long id, long packageId) throws Exception {
         Order order = find(id);
 
         Package package_ = packageBean.find(packageId);
@@ -147,7 +148,7 @@ public class OrderBean {
         entityManager.merge(order);
     }
 
-    public void removeProductFromOrder(Long id, Long productId) throws Exception {
+    public void removeProductFromOrder(long id, long productId) throws Exception {
         Order order = find(id);
 
         Product product = productBean.find(productId);
@@ -160,11 +161,24 @@ public class OrderBean {
         entityManager.merge(order);
     }
 
-    public void remove(Long id) throws Exception {
+    public void remove(long id) throws Exception {
         Order order = find(id);
 
         if (order != null) {
             entityManager.remove(order);
         }
+    }
+
+    public void setLogisticsOperator(long id, String logisticsOperatorId) throws Exception {
+        Order order = find(id);
+
+        LogisticsOperator logisticsOperator = logisticsOperatorBean.find(logisticsOperatorId);
+
+        if (logisticsOperator == null) {
+            throw new Exception("LogisticsOperator '" + logisticsOperatorId + "' not found");
+        }
+
+        order.setLogisticsOperators(logisticsOperator);
+        entityManager.merge(order);
     }
 }

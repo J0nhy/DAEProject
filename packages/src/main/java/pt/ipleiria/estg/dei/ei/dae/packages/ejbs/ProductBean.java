@@ -58,7 +58,7 @@ public class ProductBean {
         }
     }
 
-    public void remove(Long id) throws Exception {
+    public void remove(long id) throws Exception {
         Product product = find(id);
 
         if (product != null) {

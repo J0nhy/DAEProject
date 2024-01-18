@@ -30,8 +30,7 @@ public class OrderService {
     private OrderDTO toDTO(Order order) {
         return new OrderDTO(
                 order.getStatus(),
-                order.getCustomerName(),
-                order.getLogisticsOperators()
+                order.getCustomer()
         );
     }
 
@@ -47,13 +46,13 @@ public class OrderService {
 
     @GET
     @Path("/customer/{customer}")
-    public List<OrderDTO> getAllOrdersByCustomer(@PathParam("customer") Long customer) {
+    public List<OrderDTO> getAllOrdersByCustomer(@PathParam("customer") long customer) {
         return toDTOs(orderBean.allByCustomer(customer));
     }
 
     @GET
     @Path("{id}")
-    public Response getOrderDetails(@PathParam("id") Long id) throws Exception {
+    public Response getOrderDetails(@PathParam("id") long id) throws Exception {
         return Response.status(Response.Status.OK).entity(toDTO(orderBean.find(id))).build();
     }
 
@@ -63,8 +62,6 @@ public class OrderService {
         orderBean.create(
                 orderDTO.getStatus(),
                 orderDTO.getCustomer(),
-                orderDTO.getLogisticsOperators(),
-                orderDTO.getPackages(),
                 orderDTO.getProducts()
 
         );
@@ -74,7 +71,7 @@ public class OrderService {
 
     @PUT
     @Path("{id}")
-    public Response updateOrder(@PathParam("id") Long id, OrderDTO orderDTO) throws Exception {
+    public Response updateOrder(@PathParam("id") long id, OrderDTO orderDTO) throws Exception {
         Order order = orderBean.find(id);
 
         orderBean.update(
@@ -90,7 +87,7 @@ public class OrderService {
 
     @PUT
     @Path("{id}/{status}")
-    public Response updateOrderStatus(@PathParam("id") Long id, @PathParam("status") String status) throws Exception {
+    public Response updateOrderStatus(@PathParam("id") long id, @PathParam("status") String status) throws Exception {
         Order order = orderBean.find(id);
 
         orderBean.updateStatus(
@@ -104,7 +101,7 @@ public class OrderService {
 
     @PUT
     @Path("{id}/addpackage/{package}")
-    public Response addPackageToOrder(@PathParam("id") Long id, @PathParam("package") Long packageId) throws Exception {
+    public Response addPackageToOrder(@PathParam("id") long id, @PathParam("package") long packageId) throws Exception {
         Order order = orderBean.find(id);
 
         orderBean.addPackageToOrder(
@@ -117,7 +114,7 @@ public class OrderService {
 
     @PUT
     @Path("{id}/addproduct/{product}")
-    public Response addProductToOrder(@PathParam("id") Long id, @PathParam("product") Long productId) throws Exception {
+    public Response addProductToOrder(@PathParam("id") long id, @PathParam("product") long productId) throws Exception {
         Order order = orderBean.find(id);
 
         orderBean.addProductToOrder(
@@ -130,7 +127,7 @@ public class OrderService {
 
     @PUT
     @Path("{id}/removepackage/{package}")
-    public Response removePackageFromOrder(@PathParam("id") Long id, @PathParam("package") Long packageId) throws Exception {
+    public Response removePackageFromOrder(@PathParam("id") long id, @PathParam("package") long packageId) throws Exception {
         Order order = orderBean.find(id);
 
         orderBean.removePackageFromOrder(
@@ -143,7 +140,7 @@ public class OrderService {
 
     @PUT
     @Path("{id}/removeproduct/{product}")
-    public Response removeProductFromOrder(@PathParam("id") Long id, @PathParam("product") Long productId) throws Exception {
+    public Response removeProductFromOrder(@PathParam("id") long id, @PathParam("product") long productId) throws Exception {
         Order order = orderBean.find(id);
 
         orderBean.removeProductFromOrder(
@@ -156,7 +153,7 @@ public class OrderService {
 
     @DELETE
     @Path("{id}")
-    public Response deleteOrder(@PathParam("id") Long id) throws Exception {
+    public Response deleteOrder(@PathParam("id") long id) throws Exception {
         orderBean.remove(id);
         return Response.status(Response.Status.OK).build();
     }

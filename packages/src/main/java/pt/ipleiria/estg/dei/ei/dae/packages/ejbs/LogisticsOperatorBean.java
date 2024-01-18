@@ -46,4 +46,13 @@ public class LogisticsOperatorBean {
         //Hibernate.initialize(logisticsOperator.getOrders());
         return logisticsOperator;
     }
+
+    public LogisticsOperator find(String username) throws MyEntityNotFoundException {
+        LogisticsOperator logisticsOperator = entityManager.find(LogisticsOperator.class, username);
+        if (logisticsOperator == null) {
+            throw new MyEntityNotFoundException("Logistic Operator with username: " + username + " not found");
+        }
+
+        return logisticsOperator;
+    }
 }
