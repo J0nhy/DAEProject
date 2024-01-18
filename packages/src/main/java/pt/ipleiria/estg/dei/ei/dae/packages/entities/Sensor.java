@@ -2,13 +2,20 @@ package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.jboss.resteasy.spi.touri.MappedBy;
 
 import java.io.Serializable;
 
 
 @Entity
 @Table(name = "sensors")
-@NamedQuery(name = "getAllSensors", query = "select s from Sensor s order by s.id")
+//@NamedQuery(name = "getAllSensors", query = "select s from Sensor s order by s.id")
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllSensors",
+                query = "SELECT s FROM Sensor s ORDER BY s.packageRef.packageMaterial, s.sensorType" //JPQL
+        )
+})
 public class Sensor implements Serializable {
 
     @Id
@@ -24,25 +31,15 @@ public class Sensor implements Serializable {
     @NotNull
     private String dataType;  // unidade em que é medido (ºC, %, cord., true/false)
 
-    private int maxValue;     // valor máximo 
-    
-    private int minValue;     // valor mínimo
-
-    @NotNull
-    private long timestamp; // data e hora em que foi lido
-
-    @OneToOne
-    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "package_id")
     private Package packageRef; // embalagem a que se refere esta leitura
 
 
-    public Sensor( SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
+    public Sensor( SensorType sensorType, String value, String dataType, Package packageRef) {
         this.sensorType = sensorType;
         this.value = value;
         this.dataType = dataType;
-        this.maxValue = maxValue;
-        this.minValue = minValue;
-        this.timestamp = timestamp;
         this.packageRef = packageRef;
     }
 
@@ -61,18 +58,6 @@ public class Sensor implements Serializable {
         return dataType;
     }
 
-    public int getMaxValue() {
-        return maxValue;
-    }
-
-    public int getMinValue() {
-        return minValue;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
     public Package getPackageRef() {
         return packageRef;
     }
@@ -89,18 +74,6 @@ public class Sensor implements Serializable {
         this.dataType = dataType;
     }
 
-    public void setMaxValue(int maxValue) {
-        this.maxValue = maxValue;
-    }
-
-    public void setMinValue(int minValue) {
-        this.minValue = minValue;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public void setPackageRef(Package packageRef) {
         this.packageRef = packageRef;
     }
@@ -112,9 +85,6 @@ public class Sensor implements Serializable {
                 ", sensorType='" + sensorType + '\'' +
                 ", value='" + value + '\'' +
                 ", dataType='" + dataType + '\'' +
-                ", maxValue=" + maxValue +
-                ", minValue=" + minValue +
-                ", timestamp=" + timestamp +
                 ", packageRef=" + packageRef +
                 '}';
     }

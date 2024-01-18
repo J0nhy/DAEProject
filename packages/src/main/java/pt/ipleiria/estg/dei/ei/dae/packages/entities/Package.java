@@ -22,12 +22,9 @@ public class Package implements Serializable {
     @NotNull
     private String packageMaterial; // material of the package
 
-    @OneToMany
-    private List<Sensor> values; // values watched by sensors
+    @OneToMany(mappedBy = "packageRef", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Sensor> sensors; // values watched by sensors
 
-    @NotNull
-    @OneToMany
-    private List<Product> products; // products inside the package
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order; // referencia da encomenda
@@ -36,13 +33,11 @@ public class Package implements Serializable {
     public Package( PackageType packageType, String packageMaterial) {
         this.packageType = packageType;
         this.packageMaterial = packageMaterial;
-        this.products = new ArrayList<>();
-        this.values =  new ArrayList<>();
+        this.sensors =  new ArrayList<>();
     }
 
     public Package() {
-        this.products = new ArrayList<>();
-        this.values =  new ArrayList<>();
+        this.sensors =  new ArrayList<>();
     }
 
     public long getId() {
@@ -57,12 +52,8 @@ public class Package implements Serializable {
         return packageMaterial;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public List<Sensor> getValues() {
-        return values;
+    public List<Sensor> getSensors() {
+        return sensors;
     }
 
     public void setId(long id) {
@@ -77,12 +68,8 @@ public class Package implements Serializable {
         this.packageMaterial = packageMaterial;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
-    public void setValues(List<Sensor> values) {
-        this.values = values;
+    public void setSensors(List<Sensor> sensors) {
+        this.sensors = sensors;
     }
 
     public Order getOrder() {
@@ -99,25 +86,16 @@ public class Package implements Serializable {
                 "id=" + id +
                 ", packageType=" + packageType +
                 ", packageMaterial='" + packageMaterial + '\'' +
-                ", product=" + products +
-                ", values=" + values +
+                ", values=" + sensors +
                 '}';
     }
 
-    public void addProduct(Product product) {
-        this.products.add(product);
+    public void removeSensor(Sensor sensor) {
+        this.sensors.remove(sensor);
     }
 
-    public void removeProduct(Product product) {
-        this.products.remove(product);
-    }
-
-    public void removeValue(Sensor value) {
-        this.values.remove(value);
-    }
-
-    public void addValue(Sensor value) {
-        this.values.add(value);
+    public void addSensor(Sensor sensor) {
+        this.sensors.add(sensor);
     }
     
 }

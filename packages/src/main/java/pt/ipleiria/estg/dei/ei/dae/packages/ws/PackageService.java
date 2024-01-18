@@ -54,7 +54,7 @@ public class PackageService {
 
     @GET
     @Path("{id}")
-    public Response getPackageDetails(@PathParam("id") Long id) throws Exception {
+    public Response getPackageDetails(@PathParam("id") long id) throws Exception {
         return Response.status(Response.Status.OK).entity(toDTO(packageBean.find(id))).build();
     }
 
@@ -71,7 +71,7 @@ public class PackageService {
 
     @PUT
     @Path("{id}")
-    public Response updatePackage(@PathParam("id") Long id, PackageDTO packageDTO) throws Exception {
+    public Response updatePackage(@PathParam("id") long id, PackageDTO packageDTO) throws Exception {
         Package package_ = packageBean.find(id);
 
         packageBean.update(
@@ -85,7 +85,7 @@ public class PackageService {
 
     @PUT
     @Path("{id}/add/{value}")
-    public Response addValueToPackage(@PathParam("id") Long id, @PathParam("value") Long valueId) throws Exception {
+    public Response addValueToPackage(@PathParam("id") long id, @PathParam("value") long valueId) throws Exception {
         Package package_ = packageBean.find(id);
 
         packageBean.addValueToPackage(
@@ -98,7 +98,7 @@ public class PackageService {
 
     @PUT
     @Path("{id}/remove/{value}")
-    public Response removeValueFromPackage(@PathParam("id") Long id, @PathParam("value") Long valueId) throws Exception {
+    public Response removeValueFromPackage(@PathParam("id") long id, @PathParam("value") long valueId) throws Exception {
         Package package_ = packageBean.find(id);
 
         packageBean.removeValueFromPackage(
@@ -111,7 +111,7 @@ public class PackageService {
 
     @DELETE
     @Path("{id}")
-    public Response deletePackage(@PathParam("id") Long id) throws Exception {
+    public Response deletePackage(@PathParam("id") long id) throws Exception {
         packageBean.removePackage(id);
         return Response.status(Response.Status.OK).build();
     }

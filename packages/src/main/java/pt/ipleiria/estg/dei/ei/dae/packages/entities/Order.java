@@ -28,8 +28,6 @@ public class Order implements Serializable {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    private String customerName;
-
     @ManyToOne
     @JoinColumn(name = "logisticsOperator_id")
     private LogisticsOperator logisticsOperators;
@@ -37,13 +35,14 @@ public class Order implements Serializable {
     @OneToMany // uma encomenda pode ter várias embalagens
     private List<Package> packages;
 
+    @OneToMany // uma encomenda pode ter várias embalagens
+    private List<Product> products;
 
-
-    public Order(String status, Customer customer, LogisticsOperator logisticsOperator) {
+    public Order(String status, Customer customer) {
         this.status = status;
         this.customer = customer;
-        this.logisticsOperators = logisticsOperator;
         this.packages = new ArrayList<>();
+        this.products = new ArrayList<>();
     }
 
     public Order() {
@@ -61,15 +60,6 @@ public class Order implements Serializable {
     public Customer getCustomer() {
         return customer;
     }
-
-    public String getCustomerName(){
-        return customer.getName();
-    }
-
-    public Long getPackageId(){
-        return 1L;
-    }
-
     public LogisticsOperator getLogisticsOperators() {
         return logisticsOperators;
     }
@@ -112,7 +102,18 @@ public class Order implements Serializable {
         this.packages.remove(p);
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void addProduct(Product p) {
+        if (this.products == null) {
+            this.products = new ArrayList<>();
+        }
+        this.products.add(p);
     }
+
+    public void removeProduct(Product p) {
+        if (this.products == null) {
+            this.products = new ArrayList<>();
+        }
+        this.products.remove(p);
+    }
+
 }

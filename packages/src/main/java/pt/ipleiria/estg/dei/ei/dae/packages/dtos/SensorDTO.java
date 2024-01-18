@@ -12,18 +12,12 @@ public class SensorDTO implements Serializable {
     private SensorType sensorType;
     private String value;
     private String dataType;
-    private int maxValue;
-    private int minValue;
-    private long timestamp;
     private Package packageRef;
     
-    public SensorDTO( SensorType sensorType, String value, String dataType, int maxValue, int minValue, long timestamp, Package packageRef) {
+    public SensorDTO( SensorType sensorType, String value, String dataType, Package packageRef) {
         this.sensorType = sensorType;
         this.value = value;
         this.dataType = dataType;
-        this.maxValue = maxValue;
-        this.minValue = minValue;
-        this.timestamp = timestamp;
         this.packageRef = packageRef;
     }
 
@@ -50,18 +44,6 @@ public class SensorDTO implements Serializable {
         return dataType;
     }
 
-    public int getMaxValue() {
-        return maxValue;
-    }
-
-    public int getMinValue() {
-        return minValue;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
     public Package getPackageRef() {
         return packageRef;
     }
@@ -76,18 +58,6 @@ public class SensorDTO implements Serializable {
 
     public void setDataType(String dataType) {
         this.dataType = dataType;
-    }
-
-    public void setMaxValue(int maxValue) {
-        this.maxValue = maxValue;
-    }
-
-    public void setMinValue(int minValue) {
-        this.minValue = minValue;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
     }
 
     public void setPackageRef(Package packageRef) {
