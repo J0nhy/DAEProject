@@ -44,29 +44,35 @@ async function login() {
     body: loginFormData.value
   })
 
+  // Store the token in session storage
+  localStorage.setItem('token', data.value)
+  token.value = data.value
+  await getUser()
   if (error.value) {
     messages.value.push({ tokenError: error.value.message })
     return
   }
 
-  // Store the token in session storage
-  sessionStorage.setItem('token', data.value)
+  //redirect to home page
+  navigateTo('/')
 
-  token.value = data.value
+}
 
-  const { data: userData, error: userError } = await useFetch(`${api}/auth/user`, {
-    method: 'get',
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ' + token.value
+async function getUser() {
+    const { data, error } = await useFetch(`${api}/auth/user`, {
+        method: 'get',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + token.value
+        }
+    })
+    if (error.value) {
+        messages.value.push({ error: error.value.message })
     }
-  })
-
-  if (userError.value) {
-    messages.value.push({ userDataError: userError.value.message })
-    return
-  }
-
-  user.value = userData.value
+    if (data.value) {
+        messages.value.push({ payload: data.value })
+        user.value = data.value;
+        localStorage.setItem('user', JSON.stringify(user.value))
+    }
 }
 </script>

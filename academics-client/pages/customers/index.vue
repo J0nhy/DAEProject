@@ -29,11 +29,7 @@
 </template>
 <script setup>
 
-    const token = sessionStorage.getItem('token');
-
-    
-
-
+    const token = localStorage.getItem('token');
     const config = useRuntimeConfig()
     const api = config.public.API_URL
     const { data: students, error, refresh } = await useFetch(`${api}/customers`, {
