@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.ejbs;
 
+import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 
 import jakarta.ejb.EJB;
@@ -52,6 +53,9 @@ public class PackageBean {
         if (package_ == null) {
             throw new MyEntityNotFoundException("Package '" + packageId + "' not found");
         }
+
+        Hibernate.initialize(package_.getSensors());
+
         return package_;
     }
 

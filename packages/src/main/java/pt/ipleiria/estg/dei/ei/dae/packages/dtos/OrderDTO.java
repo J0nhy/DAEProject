@@ -9,21 +9,31 @@ import java.util.List;
 public class OrderDTO implements Serializable {
     private long id;
     private String status;
-    private Customer customer;
-
-    private String customerName;
+    private String customerUsername;
     private LogisticsOperator logisticsOperators;
-    private List<Package> packages;
-    private List<Product> products;
+    private List<PackageDTO> packages;
+    private List<ProductDTO> products;
 
-    public OrderDTO(String status, Customer customer) {
+    public OrderDTO(long id, String status, LogisticsOperator logisticsOperators, List<PackageDTO> packages, List<ProductDTO> products, String customerUsername) {
+        this.id = id;
         this.status = status;
-        this.customer = customer;
+        this.logisticsOperators = logisticsOperators;
+        this.packages = packages;
+        this.products = products;
+        this.customerUsername = customerUsername;
     }
 
     public OrderDTO() {
         this.packages = new ArrayList<>();
         this.products = new ArrayList<>();
+    }
+
+    public String getCustomerUsername() {
+        return customerUsername;
+    }
+
+    public void setCustomerUsername(String customerUsername) {
+        this.customerUsername = customerUsername;
     }
 
     public long getId() {
@@ -34,7 +44,7 @@ public class OrderDTO implements Serializable {
         this.id = id;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<ProductDTO> products) {
         this.products = products;
     }
 
@@ -42,19 +52,15 @@ public class OrderDTO implements Serializable {
         return status;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
     public LogisticsOperator getLogisticsOperators() {
         return logisticsOperators;
     }
 
-    public List<Package> getPackages() {
+    public List<PackageDTO> getPackages() {
         return packages;
     }
 
-    public List<Product> getProducts() {
+    public List<ProductDTO> getProducts() {
         return products;
     }
 
@@ -62,28 +68,16 @@ public class OrderDTO implements Serializable {
         this.status = status;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
     public void setLogisticsOperators(LogisticsOperator logisticsOperators) {
         this.logisticsOperators = logisticsOperators;
     }
 
-    public void setPackages(List<Package> packages) {
+    public void setPackages(List<PackageDTO> packages) {
         this.packages = packages;
     }
 
-    public void setProduct(List<Product> products) {
+    public void setProduct(List<ProductDTO> products) {
         this.products = products;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
     }
 
 }

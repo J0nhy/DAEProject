@@ -7,12 +7,14 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
-import pt.ipleiria.estg.dei.ei.dae.packages.dtos.OrderDTO;
+import pt.ipleiria.estg.dei.ei.dae.packages.dtos.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.OrderBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.OrderBean;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Order;
+import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.ProductBean;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,30 +26,125 @@ public class OrderService {
     @EJB
     private OrderBean orderBean;
 
+    @EJB
+    private ProductBean productBean;
+
     @Context
     private SecurityContext securityContext;
 
-    private OrderDTO toDTO(Order order) {
+    private OrderDTO toDTO(Order order) { // get com listas
+        List<PackageDTO> packages = toDTOsPackagesNoSensor(order.getPackages());
+        List<ProductDTO> products = toDTOsProducts(order.getProducts());
         return new OrderDTO(
+                order.getId(),
                 order.getStatus(),
-                order.getCustomer()
+                order.getLogisticsOperators(),
+                packages,
+                products,
+                order.getCustomerUsername()
         );
-    }
 
-    public List<OrderDTO> toDTOs(List<Order> orders) {
+    }
+    public List<OrderDTO> toDTOs(List<Order> orders) { // conversao dos DTOs
         return orders.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+    private OrderDTO toDTONoPackagesandProducts(Order order) { // get sem as listas
+        return new OrderDTO(
+                order.getId(),
+                order.getStatus(),
+                order.getLogisticsOperators(),
+                null,
+                null,
+                order.getCustomerUsername()
+        );
+
+    }
+    public List<OrderDTO> toDTOsNoPackageandProducts(List<Order> orders) { // conversao dos DTOs
+        return orders.stream().map(this::toDTONoPackagesandProducts).collect(Collectors.toList());
+    }
+
+    private PackageDTO toDTO(Package pack) {
+        List<SensorDTO> sensors = toDTOsSensors(pack.getSensors());
+        return new PackageDTO(
+                pack.getId(),
+                pack.getPackageType(),
+                pack.getPackageMaterial(),
+                pack.getOrderId(),
+                sensors
+        );
+    }
+
+    public List<PackageDTO> toDTOsPackages (List<Package> packages) {
+        return packages.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    private PackageDTO toDTONoSensor(Package pack) {
+        return new PackageDTO(
+                pack.getId(),
+                pack.getPackageType(),
+                pack.getPackageMaterial(),
+                pack.getOrderId(),
+                null
+        );
+    }
+
+    public List<PackageDTO> toDTOsPackagesNoSensor (List<Package> packages) {
+        return packages.stream().map(this::toDTONoSensor).collect(Collectors.toList());
+    }
+
+    private SensorDTO toDTO(Sensor sensor) {
+        return new SensorDTO(
+                sensor.getId(),
+                sensor.getSensorType(),
+                sensor.getValue(),
+                sensor.getDataType(),
+                sensor.getPackageRef()
+        );
+    }
+
+    public List<SensorDTO> toDTOsSensors (List<Sensor> sensors) {
+        return sensors.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    public ProductDTO toDTO(Product product) {
+        return new ProductDTO(
+                product.getId(),
+                product.getProductName(),
+                product.getProductDescription(),
+                product.getProductCategory(),
+                product.getProductManufacturer(),
+                product.getProductBrand(),
+                product.getProductImage(),
+                product.getProductPrice(),
+                product.getProductWeight()
+        );
+    }
+    public List<ProductDTO> toDTOsProducts (List<Product> products) {
+        return products.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+    /*
+    public CustomerDTO toDTONoOrders(Customer customer){
+        return new CustomerDTO(
+                customer.getUsername(),
+                customer.getPassword(),
+                customer.getEmail(),
+                customer.getName(),
+                customer.getNif(),
+                customer.getPhone(),
+                customer.getAddress(),
+                null
+        );
+    }
+
+    public List<CustomerDTO> toDTOsNoOrders(List<Customer> customers) {
+        return customers.stream().map(this::toDTONoOrders).collect(Collectors.toList());
+    }
+    */
     @GET
     @Path("/")
     public List<OrderDTO> getAllOrders() {
-        return toDTOs(orderBean.all());
-    }
-
-    @GET
-    @Path("/customer/{customer}")
-    public List<OrderDTO> getAllOrdersByCustomer(@PathParam("customer") long customer) {
-        return toDTOs(orderBean.allByCustomer(customer));
+        return toDTOsNoPackageandProducts(orderBean.all());
     }
 
     @GET
@@ -56,13 +153,24 @@ public class OrderService {
         return Response.status(Response.Status.OK).entity(toDTO(orderBean.find(id))).build();
     }
 
+    @GET
+    @Path("/customer/{customer}")
+    public List<OrderDTO> getAllOrdersByCustomer(@PathParam("customer") long customer) {
+        return toDTOs(orderBean.allByCustomer(customer));
+    }
+    /*
     @POST
     @Path("/")
     public Response createNewOrder(OrderDTO orderDTO) throws Exception {
+        List<Product> products = new ArrayList<>();
+        List<ProductDTO> productDTOS = orderDTO.getProducts();
+        for (ProductDTO productDTO : productDTOS) {
+            products.add(productBean.find(productDTO.getId()));
+        }
         orderBean.create(
                 orderDTO.getStatus(),
                 orderDTO.getCustomer(),
-                orderDTO.getProducts()
+                products
 
         );
         Order order = orderBean.find(orderDTO.getId());
@@ -73,6 +181,7 @@ public class OrderService {
     @Path("{id}")
     public Response updateOrder(@PathParam("id") long id, OrderDTO orderDTO) throws Exception {
         Order order = orderBean.find(id);
+        Customer customer = customerBean
 
         orderBean.update(
                 id,
@@ -84,7 +193,7 @@ public class OrderService {
         order = orderBean.find(id);
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();
     }
-
+    */
     @PUT
     @Path("{id}/{status}")
     public Response updateOrderStatus(@PathParam("id") long id, @PathParam("status") String status) throws Exception {

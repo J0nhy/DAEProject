@@ -33,6 +33,7 @@ public class SensorService {
 
     private SensorDTO toDTO(Sensor sensor) {
         return new SensorDTO(
+                sensor.getId(),
                 sensor.getSensorType(),
                 sensor.getValue(),
                 sensor.getDataType(),

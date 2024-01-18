@@ -1,6 +1,10 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.dtos;
 
+import org.w3c.dom.stylesheets.LinkStyle;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerDTO implements Serializable {
     private String username;
@@ -11,11 +15,14 @@ public class CustomerDTO implements Serializable {
     private int phone;
     private String address;
 
+    private List<OrderDTO> orders;
+
 
     public CustomerDTO(){
+        this.orders = new ArrayList<>();
     }
 
-    public CustomerDTO(String username, String password,String email, String name, int nif, int phone, String address){
+    public CustomerDTO(String username, String password,String email, String name, int nif, int phone, String address, List<OrderDTO> orders){
         this.username = username;
         this.password = password;
         this.email = email;
@@ -23,6 +30,15 @@ public class CustomerDTO implements Serializable {
         this.nif = nif;
         this.phone = phone;
         this.address = address;
+        this.orders = orders;
+    }
+
+    public List<OrderDTO> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderDTO> orders) {
+        this.orders = orders;
     }
 
     public String getUsername() {

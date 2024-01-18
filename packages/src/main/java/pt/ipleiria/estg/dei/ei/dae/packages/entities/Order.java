@@ -49,6 +49,14 @@ public class Order implements Serializable {
         this.packages = new ArrayList<>();
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
     public long getId() {
         return id;
     }
@@ -116,4 +124,7 @@ public class Order implements Serializable {
         this.products.remove(p);
     }
 
+    public String getCustomerUsername(){
+        return customer.getUsername();
+    }
 }

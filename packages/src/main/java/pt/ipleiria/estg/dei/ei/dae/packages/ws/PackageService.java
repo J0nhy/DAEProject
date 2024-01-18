@@ -13,9 +13,11 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.packages.dtos.PackageDTO;
+import pt.ipleiria.estg.dei.ei.dae.packages.dtos.SensorDTO;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.PackageBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.SensorBean;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
@@ -35,15 +37,32 @@ public class PackageService {
     private SecurityContext securityContext;
 
     private PackageDTO toDTO(Package packageInstance) {
+        List<SensorDTO> sensors = toDTOsSensors(packageInstance.getSensors());
         return new PackageDTO(
+                packageInstance.getId(),
                 packageInstance.getPackageType(),
                 packageInstance.getPackageMaterial(),
-                packageInstance.getOrder()
+                packageInstance.getOrderId(),
+                sensors
+        );
+    }
+
+    private SensorDTO toDTO(Sensor sensor) {
+        return new SensorDTO(
+                sensor.getId(),
+                sensor.getSensorType(),
+                sensor.getValue(),
+                sensor.getDataType(),
+                null
         );
     }
 
     public List<PackageDTO> toDTOs(List<Package> packages) {
         return packages.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    public List<SensorDTO> toDTOsSensors (List<Sensor> sensors) {
+        return sensors.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     @GET

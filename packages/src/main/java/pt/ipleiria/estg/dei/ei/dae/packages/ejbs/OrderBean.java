@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
+import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
@@ -70,6 +71,8 @@ public class OrderBean {
         if (order == null) {
             throw new MyEntityNotFoundException("Order '" + id + "' not found");
         }
+        Hibernate.initialize(order.getProducts());
+        Hibernate.initialize(order.getPackages());
         return order;
     }
 
@@ -119,6 +122,7 @@ public class OrderBean {
         }
 
         order.addPackage(package_);
+        package_.setOrder(order);
         entityManager.merge(order);
     }
 
