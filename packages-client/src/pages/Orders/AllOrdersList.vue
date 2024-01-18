@@ -5,7 +5,7 @@
   
       <div class="container-fluid">
         <button class="btn btn-success btn-fill float-top" @click.prevent="$router.push({ name: 'logisticsoperator Add' })">
-        Create Logistics Operator
+        Create Order?
         </button>
         <br><br>
         <div class="row">
@@ -15,8 +15,8 @@
                   body-classes="table-full-width table-responsive"
             >
               <template slot="header">
-                <h4 class="card-title">Logistics Operator</h4>
-                <p class="card-category">List of Logistics Operators</p>
+                <h4 class="card-title">All Orders</h4>
+                <p class="card-category">List of All orders from all users</p>
               </template>
   
               <l-table class="table-hover table-striped"
@@ -36,7 +36,7 @@
   import Card from 'src/components/Cards/Card.vue'
   
   
-  const tableColumns = ['Id', 'Username','Name', 'Email','Company']
+  const tableColumns = ['id', 'status','customerName']
   
   export default {
     components: {
@@ -59,7 +59,7 @@
         try {
           //const token = 'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjU1ODAyLCJleHAiOjE3MDUyNTk0MDJ9.XrpDtNfxdL5xAJY4otd_XiowfCaBwgpX_YOj4ruloYOvgwa0mv-JBHUqOmK_uNxH'; // Substitua com o seu token real
           const apiUrl = process.env.VUE_APP_API_URL
-          const response = await fetch(`${apiUrl}/logisticsoperators`, {
+          const response = await fetch(`${apiUrl}/orders`, {
             method: 'GET',
             //mode: 'no-cors',
   

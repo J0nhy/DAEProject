@@ -66,6 +66,13 @@ export default {
             }
         }
     },
+    computed: {
+        isFormValid() {
+            // Check if all required fields are not empty
+            return Object.values(this.user).every(value => value !== "");
+        },
+    },
+
     methods: {
         async create() {
             const apiEndpoint = 'packages/api/logisticsoperators'; // Replace with your actual API endpoint
@@ -73,7 +80,8 @@ export default {
             try {
                 if (this.isFormValid) {
                     this.errorMessage = "";
-                    const response = await fetch(apiEndpoint, {
+                    const apiUrl = process.env.VUE_APP_API_URL
+          const response = await fetch(`${apiUrl}/logisticsoperators`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -85,6 +93,9 @@ export default {
                         throw new Error('Failed to create logistics operator');
                     }
 
+                }
+                else {
+                    this.errorMessage = "Please fill in all required fields.";
                 }
 
             } catch (error) {
