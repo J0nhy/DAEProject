@@ -25,13 +25,13 @@ public class LogisticsOperatorBean {
 
     public void create (String username, String password, String name, String email, String company)
             throws MyEntityExistsException, MyConstraintViolationException {
-        LogisticsOperator logisticsOperator = null;
-       if (entityManager.find(Customer.class, username) != null){
-           throw new MyEntityExistsException("Customer with username: " + username + " already exists");
+        LogisticsOperator logistics = null;
+       if (entityManager.find(LogisticsOperator.class, username) != null){
+           throw new MyEntityExistsException("Logistics Operator with username: " + username + " already exists");
         }
         try{
-            logisticsOperator = new LogisticsOperator(username, hasher.hash(password), name, email, company);
-            entityManager.persist(logisticsOperator);
+            logistics = new LogisticsOperator(username, hasher.hash(password), name, email, company);
+            entityManager.persist(logistics);
         }catch (ConstraintViolationException e){
             throw new MyConstraintViolationException(e);
         }

@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Path("/logisticsoperators")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
-
+//@Authenticated
 public class LogisticsOperatorService {
     @EJB
     private LogisticsOperatorBean logisticsOperatorBean;
@@ -59,42 +59,44 @@ public class LogisticsOperatorService {
     @GET
     @Path("{username}")
     public Response getLogisticsOperatorDetails(@PathParam("username") String username) throws MyEntityNotFoundException{
-        var principal = securityContext.getUserPrincipal();
+        /*var principal = securityContext.getUserPrincipal();
 
         if(!principal.getName().equals(username)) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-
+        */
         return Response.status(Response.Status.OK).entity(toDTO(logisticsOperatorBean.findLogisticOperator(username))).build();
     }
 
     @POST
     @Path("/")
-    public Response createNewManufacturer(LogisticsOperatorDTO logisticsOperatorDTO) throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException {
-        logisticsOperatorBean.create(logisticsOperatorDTO.getUsername(),
-                logisticsOperatorDTO.getPassword(),
-                logisticsOperatorDTO.getName(),
-                logisticsOperatorDTO.getEmail(),
-                logisticsOperatorDTO.getCompany()
-        );
-        LogisticsOperator logistics = logisticsOperatorBean.findLogisticOperator(logisticsOperatorDTO.getUsername());
-        return Response.status(Response.Status.CREATED).entity(toDTO(logistics)).build();
+    public Response createNewManufacturer(LogisticsOperatorDTO logisticsOperatorDTO)
+        throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException {
+            logisticsOperatorBean.create(
+                    logisticsOperatorDTO.getUsername(),
+                    logisticsOperatorDTO.getPassword(),
+                    logisticsOperatorDTO.getName(),
+                    logisticsOperatorDTO.getEmail(),
+                    logisticsOperatorDTO.getCompany()
+            );
+            LogisticsOperator logistics = logisticsOperatorBean.findLogisticOperator(logisticsOperatorDTO.getUsername());
+            return Response.status(Response.Status.CREATED).entity(toDTO(logistics)).build();
     }
 
     @PUT
     @Path("{username}")
     public Response updateLogisticsOperator(@PathParam("username") String username, LogisticsOperatorDTO logisticsOperatorDTO)
             throws MyEntityNotFoundException, MyConstraintViolationException{
-        LogisticsOperator logisticsOperator = logisticsOperatorBean.findLogisticOperator(username);
+        LogisticsOperator logistics = logisticsOperatorBean.findLogisticOperator(username);
 
-        logisticsOperator = logisticsOperatorBean.update(
+        logistics = logisticsOperatorBean.update(
                 username,
-                LogisticsOperatorDTO.getPassword() != null ? logisticsOperatorDTO.getPassword() : logisticsOperatorDTO.getPassword(),
-                LogisticsOperatorDTO.getName() != null ? logisticsOperatorDTO.getName() : logisticsOperatorDTO.getName(),
-                LogisticsOperatorDTO.getEmail() != null ? logisticsOperatorDTO.getEmail() : logisticsOperatorDTO.getEmail(),
-                LogisticsOperatorDTO.getCompany() != null ? logisticsOperatorDTO.getCompany() : logisticsOperatorDTO.getCompany()
+                logisticsOperatorDTO.getPassword() != null ? logisticsOperatorDTO.getPassword() : logistics.getPassword(),
+                logisticsOperatorDTO.getName() != null ? logisticsOperatorDTO.getName() : logistics.getName(),
+                logisticsOperatorDTO.getEmail() != null ? logisticsOperatorDTO.getEmail() : logistics.getEmail(),
+                logisticsOperatorDTO.getCompany() != null ? logisticsOperatorDTO.getCompany() : logistics.getCompany()
         );
-        return Response.status(Response.Status.OK).entity(toDTO(logisticsOperator)).build();
+        return Response.status(Response.Status.OK).entity(toDTO(logistics)).build();
     }
 
     @DELETE
