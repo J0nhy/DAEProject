@@ -27,10 +27,15 @@
             </span>
             
           </td>
-          <td>  
-            <button v-if="order.status='Pending'" class="btn btn-xs btn-light" >
+          <td class="d-flex gap-2">  
+            <button v-if="order.status='Pending'" class="btn btn-success" >
+              Completar
                         <i class="bi bi-search"></i>
-                    </button>           
+                    </button>   
+                    <button v-if="order.status='Pending'" class="btn btn-danger" >
+              Cancelar
+                        <i class="bi bi-search"></i>
+                    </button>            
           </td>
         </tr>
       </tbody>
