@@ -37,7 +37,7 @@ public class SensorService {
                 sensor.getSensorType(),
                 sensor.getValue(),
                 sensor.getDataType(),
-                sensor.getPackageRef()
+                sensor.getPackageId()
         );
     }
 
@@ -63,8 +63,7 @@ public class SensorService {
         sensorBean.create(
                 sensorDTO.getSensorType(),
                 sensorDTO.getValue(),
-                sensorDTO.getDataType(),
-                sensorDTO.getPackageRef()
+                sensorDTO.getDataType()
         );
         Sensor sensor = sensorBean.find(sensorDTO.getId());
         return Response.status(Response.Status.CREATED).entity(toDTO(sensor)).build();
@@ -79,8 +78,8 @@ public class SensorService {
                 id,
                 sensorDTO.getSensorType() != null ? sensorDTO.getSensorType() : sensor.getSensorType(),
                 sensorDTO.getValue() != null ? sensorDTO.getValue() : sensor.getValue(),
-                sensorDTO.getDataType() != null ? sensorDTO.getDataType() : sensor.getDataType(),
-                sensorDTO.getPackageRef() != null ? sensorDTO.getPackageRef() : sensor.getPackageRef()
+                sensorDTO.getDataType() != null ? sensorDTO.getDataType() : sensor.getDataType()
+                //sensorDTO.getPackageRef() != 0 ? sensorDTO.getPackageRef() : sensor.getPackageRef()
         );
         sensor = sensorBean.find(id);
         return Response.status(Response.Status.OK).entity(toDTO(sensor)).build();

@@ -1,3 +1,48 @@
-#####
-GET http://localhost:8080/packages/api/testes
+##### LOGIN LOGISTICS OPERATOR
+POST http://localhost:8080/packages/api/auth/login
 Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "logistics1",
+  "password": "123"
+}
+
+##### Get Logistics Operators
+GET http://localhost:8080/packages/api/logisticsoperators
+Accept: application/json
+
+
+##### Get Single Logistics Operator
+GET http://localhost:8080/packages/api/logisticsoperators/logistics1
+Accept: application/json
+
+##### Create Manufacturer
+POST http://localhost:8080/packages/api/manufacturers
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
+Content-Type: application/json
+
+{
+  "username": "Manufacturer2",
+  "password": "password",
+  "name": "Worten",
+  "email": "anufacturer2@mail.pt",
+  "address": "123 Main St"
+}
+
+#####Delete Manufacturer
+DELETE http://localhost:8080/packages/api/manufacturers/Manufacturer2
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
+
+#####Update Manufacturer
+PUT http://localhost:8080/packages/api/manufacturers/Manufacturer1
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQzODMxLCJleHAiOjE3MDUyNDc0MzF9.szl4DOW4CqA0ricYweqoh3RVhWmDC6wAcXvIQRGyT12TQKB5dITEKCWFLjmcIQHf
+Content-Type: application/json
+
+{
+  "email": "manufacturer1@mail.pt",
+  "address": "123 Main St"
+}

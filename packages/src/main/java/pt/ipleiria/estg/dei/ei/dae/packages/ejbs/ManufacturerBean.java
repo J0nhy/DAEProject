@@ -49,6 +49,7 @@ public class ManufacturerBean {
 
     public Manufacturer update(String username, String password, String name, String email, int nif, int phone, String address)
             throws MyEntityNotFoundException, MyConstraintViolationException {
+
         Manufacturer manufacturer = findManufacturer(username);
         try {
             entityManager.lock(manufacturer, LockModeType.OPTIMISTIC);

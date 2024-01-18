@@ -99,7 +99,7 @@ public class OrderService {
                 sensor.getSensorType(),
                 sensor.getValue(),
                 sensor.getDataType(),
-                sensor.getPackageRef()
+                0
         );
     }
 

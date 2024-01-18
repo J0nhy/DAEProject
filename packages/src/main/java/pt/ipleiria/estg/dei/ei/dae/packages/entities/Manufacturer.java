@@ -12,7 +12,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllManufacturers",
-                query = "SELECT m FROM Manufacturer m ORDER BY m.name" //JPQL
+                query = "SELECT m FROM Manufacturer m ORDER BY m.username" //JPQL
         )
 })
 public class Manufacturer extends User implements Serializable {

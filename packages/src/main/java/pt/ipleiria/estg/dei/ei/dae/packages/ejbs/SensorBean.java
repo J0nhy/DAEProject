@@ -18,8 +18,8 @@ public class SensorBean {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Sensor create(SensorType sensorType, String value, String dataType, Package packageRef) {
-        Sensor sensor_ = new Sensor( sensorType, value, dataType, packageRef);
+    public Sensor create(SensorType sensorType, String value, String dataType) {
+        Sensor sensor_ = new Sensor( sensorType, value, dataType);
         entityManager.persist(sensor_);
         return sensor_;
     }
@@ -37,7 +37,7 @@ public class SensorBean {
         return entityManager.find(Sensor.class, SensorId);
     }
 
-    public void update(long id, SensorType sensorType, String value, String dataType, Package packageRef) throws Exception {
+    public void update(long id, SensorType sensorType, String value, String dataType) throws Exception {
         
         Sensor sensor_ = find(id);
 
@@ -47,7 +47,7 @@ public class SensorBean {
             sensor_.setSensorType(sensorType);
             sensor_.setValue(value);
             sensor_.setDataType(dataType);
-            sensor_.setPackageRef(packageRef);
+            //sensor_.setPackageRef(packageRef);
             
             entityManager.merge(sensor_);
             
