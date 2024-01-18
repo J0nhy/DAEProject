@@ -101,5 +101,8 @@ public class Package implements Serializable {
     public void addSensor(Sensor sensor) {
         this.sensors.add(sensor);
     }
-    
+
+    public void removeOrder(Order order) {
+        this.order = null;
+    }
 }
