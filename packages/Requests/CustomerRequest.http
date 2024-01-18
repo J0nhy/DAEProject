@@ -1,0 +1,54 @@
+#####Customer
+##### TOKEN
+POST http://localhost:8080/packages/api/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "Customer1",
+  "password": "123"
+}
+
+##### Get ALL
+GET http://localhost:8080/packages/api/customers
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1NTk4NTM2LCJleHAiOjE3MDU2MDIxMzZ9.YEjEnt_ySnrtucLFPkkm4uXUhZzhwDvgvtPtxR9q2-t0ljDndMKsBdcE9t92-6wB
+
+
+##### Get Single Customer
+GET http://localhost:8080/packages/api/customers/Customer1
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1NTk4NTM2LCJleHAiOjE3MDU2MDIxMzZ9.YEjEnt_ySnrtucLFPkkm4uXUhZzhwDvgvtPtxR9q2-t0ljDndMKsBdcE9t92-6wB
+
+
+##### Create Customer
+POST http://localhost:8080/packages/api/customers
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1NTk4NTM2LCJleHAiOjE3MDU2MDIxMzZ9.YEjEnt_ySnrtucLFPkkm4uXUhZzhwDvgvtPtxR9q2-t0ljDndMKsBdcE9t92-6wB
+Content-Type: application/json
+
+{
+  "username": "Customer6",
+  "password": "123",
+  "email": "Customer3@mail.pt",
+  "name": "Customer1",
+  "nif": 123456789,
+  "phone": 123456789,
+  "address": "Customer1 address"
+}
+
+#####Update Customer
+PUT http://localhost:8080/packages/api/customers/Customer6
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQzODMxLCJleHAiOjE3MDUyNDc0MzF9.szl4DOW4CqA0ricYweqoh3RVhWmDC6wAcXvIQRGyT12TQKB5dITEKCWFLjmcIQHf
+Content-Type: application/json
+
+{
+  "email": "manufacturer1@mail.pt"
+}
+
+#####Delete Customer
+DELETE http://localhost:8080/packages/api/customers/Customer6
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
+

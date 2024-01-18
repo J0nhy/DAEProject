@@ -32,7 +32,7 @@ public class OrderService {
     @Context
     private SecurityContext securityContext;
 
-    private OrderDTO toDTO(Order order) {
+    private OrderDTO toDTO(Order order) { // get com listas
         List<PackageDTO> packages = toDTOsPackagesNoSensor(order.getPackages());
         List<ProductDTO> products = toDTOsProducts(order.getProducts());
         return new OrderDTO(
@@ -45,11 +45,11 @@ public class OrderService {
         );
 
     }
-    public List<OrderDTO> toDTOs(List<Order> orders) {
+    public List<OrderDTO> toDTOs(List<Order> orders) { // conversao dos DTOs
         return orders.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    private OrderDTO toDTONoPackagesandProducts(Order order) {
+    private OrderDTO toDTONoPackagesandProducts(Order order) { // get sem as listas
         return new OrderDTO(
                 order.getId(),
                 order.getStatus(),
@@ -60,7 +60,7 @@ public class OrderService {
         );
 
     }
-    public List<OrderDTO> toDTOsNoPackageandProducts(List<Order> orders) {
+    public List<OrderDTO> toDTOsNoPackageandProducts(List<Order> orders) { // conversao dos DTOs
         return orders.stream().map(this::toDTONoPackagesandProducts).collect(Collectors.toList());
     }
 
@@ -70,7 +70,7 @@ public class OrderService {
                 pack.getId(),
                 pack.getPackageType(),
                 pack.getPackageMaterial(),
-                pack.getOrder(),
+                pack.getOrderId(),
                 sensors
         );
     }
@@ -84,7 +84,7 @@ public class OrderService {
                 pack.getId(),
                 pack.getPackageType(),
                 pack.getPackageMaterial(),
-                pack.getOrder(),
+                pack.getOrderId(),
                 null
         );
     }
@@ -99,7 +99,7 @@ public class OrderService {
                 sensor.getSensorType(),
                 sensor.getValue(),
                 sensor.getDataType(),
-                sensor.getPackageRef()
+                0
         );
     }
 

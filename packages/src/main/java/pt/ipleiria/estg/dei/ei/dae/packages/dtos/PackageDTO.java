@@ -13,14 +13,14 @@ public class PackageDTO implements Serializable{
     private long id;
     private PackageType PackageType;
     private String packageMaterial;
-    private Order order;
+    private long orderId;
     private List<SensorDTO> sensors;
 
-    public PackageDTO(long id, PackageType PackageType, String packageMaterial, Order order, List<SensorDTO> sensors) {
+    public PackageDTO(long id, PackageType PackageType, String packageMaterial, long orderId, List<SensorDTO> sensors) {
         this.id = id;
         this.PackageType = PackageType;
         this.packageMaterial = packageMaterial;
-        this.order = order;
+        this.orderId = orderId;
         this.sensors = sensors;
     }
 
@@ -44,8 +44,8 @@ public class PackageDTO implements Serializable{
         return packageMaterial;
     }
 
-    public Order getOrder() {
-        return order;
+    public long getOrderId() {
+        return orderId;
     }
 
     public void setPackageType(PackageType PackageType) {
@@ -56,8 +56,8 @@ public class PackageDTO implements Serializable{
         this.packageMaterial = packageMaterial;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
     }
 
     public List<SensorDTO> getSensors() {

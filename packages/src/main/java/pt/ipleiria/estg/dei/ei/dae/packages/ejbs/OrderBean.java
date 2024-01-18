@@ -122,6 +122,7 @@ public class OrderBean {
         }
 
         order.addPackage(package_);
+        package_.setOrder(order);
         entityManager.merge(order);
     }
 
@@ -175,7 +176,7 @@ public class OrderBean {
     public void setLogisticsOperator(long id, String logisticsOperatorId) throws Exception {
         Order order = find(id);
 
-        LogisticsOperator logisticsOperator = logisticsOperatorBean.find(logisticsOperatorId);
+        LogisticsOperator logisticsOperator = logisticsOperatorBean.findLogisticOperator(logisticsOperatorId);
 
         if (logisticsOperator == null) {
             throw new Exception("LogisticsOperator '" + logisticsOperatorId + "' not found");
