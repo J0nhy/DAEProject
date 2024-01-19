@@ -175,11 +175,11 @@ public class ConfigBean {
             packages5.add(packageBean.find((long) 14));
             packages5.add(packageBean.find((long) 15));
 
-            Order order1 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"));
-            Order order2 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer2"));
-            Order order3 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer3"));
-            Order order4 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"));
-            Order order5 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"));
+            Order order1 = orderBean.create(StatusMessage.ENVIADA, customerBean.findCustomer("Customer1"));
+            Order order2 = orderBean.create(StatusMessage.PENDENTE, customerBean.findCustomer("Customer2"));
+            Order order3 = orderBean.create(StatusMessage.PENDENTE, customerBean.findCustomer("Customer3"));
+            Order order4 = orderBean.create(StatusMessage.PENDENTE, customerBean.findCustomer("Customer1"));
+            Order order5 = orderBean.create(StatusMessage.PENDENTE, customerBean.findCustomer("Customer1"));
 
             orderBean.addPackageToOrder(order1.getId(), 1);
             orderBean.addPackageToOrder(order1.getId(), 2);
