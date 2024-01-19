@@ -10,9 +10,11 @@ import org.hibernate.validator.internal.util.logging.Log;
 
 @Entity
 @Table(name = "orders")
-@NamedQuery(name = "getAllOrders", query = "select o from Order o order by o.id")
-@NamedQuery(name = "getAllOrdersByCustomer", query = "select o from Order o WHERE o.customer = :customer order by o.id"
-)
+@NamedQueries({
+        @NamedQuery(name = "getAllOrders", query = "select o from Order o order by o.id"),
+        @NamedQuery(name = "getAllOrdersByCustomer", query = "select o from Order o WHERE o.customer.username = :customer order by o.id"),
+        @NamedQuery(name = "getAllOrdersByLogisticsOperator", query = "select o from Order o WHERE o.logisticsOperators.username = :logisticsoperator order by o.id")
+})
 public class Order implements Serializable {
 
     @Id
@@ -126,5 +128,8 @@ public class Order implements Serializable {
 
     public String getCustomerUsername(){
         return customer.getUsername();
+    }
+    public String getLogisticsOperatorsUsername(){
+        return logisticsOperators.getUsername();
     }
 }

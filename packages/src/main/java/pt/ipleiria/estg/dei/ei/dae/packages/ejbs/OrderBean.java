@@ -58,10 +58,17 @@ public class OrderBean {
         return entityManager.createNamedQuery("getAllOrders", Order.class).getResultList();
     }
 
-    public List<Order> allByCustomer(long customerId) {
+    public List<Order> allByCustomer(String customerId) {
         return entityManager
                 .createNamedQuery("getAllOrdersByCustomer", Order.class)
                 .setParameter("customer", customerId)  // Assuming "customer" is the parameter name in the named query
+                .getResultList();
+    }
+
+    public List<Order> allByLogisticsOperator(String logisticsOperatorId) {
+        return entityManager
+                .createNamedQuery("getAllOrdersByLogisticsOperator", Order.class)
+                .setParameter("logisticsoperator", logisticsOperatorId)  // Assuming "logisticsOperatorId" is the parameter name in the named query
                 .getResultList();
     }
 

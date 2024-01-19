@@ -75,7 +75,7 @@ public class CustomerService {
         return new OrderDTO(
                 order.getId(),
                 order.getStatus(),
-                order.getLogisticsOperators(),
+                null,
                 null,
                 null,
                 null

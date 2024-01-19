@@ -38,7 +38,7 @@ public class OrderService {
         return new OrderDTO(
                 order.getId(),
                 order.getStatus(),
-                order.getLogisticsOperators(),
+                order.getLogisticsOperatorsUsername(),
                 packages,
                 products,
                 order.getCustomerUsername()
@@ -53,7 +53,7 @@ public class OrderService {
         return new OrderDTO(
                 order.getId(),
                 order.getStatus(),
-                order.getLogisticsOperators(),
+                order.getLogisticsOperatorsUsername(),
                 null,
                 null,
                 order.getCustomerUsername()
@@ -155,8 +155,14 @@ public class OrderService {
 
     @GET
     @Path("/customer/{customer}")
-    public List<OrderDTO> getAllOrdersByCustomer(@PathParam("customer") long customer) {
+    public List<OrderDTO> getAllOrdersByCustomer(@PathParam("customer") String customer) {
         return toDTOs(orderBean.allByCustomer(customer));
+    }
+
+    @GET
+    @Path("/logistics-operator/{logistics-operator}")
+    public List<OrderDTO> getAllOrdersByLogisticsOperator(@PathParam("logistics-operator") String logisticsOperator) {
+        return toDTOs(orderBean.allByLogisticsOperator(logisticsOperator));
     }
     /*
     @POST
