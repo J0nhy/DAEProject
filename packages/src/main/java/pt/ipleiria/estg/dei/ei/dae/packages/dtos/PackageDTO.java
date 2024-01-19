@@ -1,9 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.dtos;
 
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Product;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Order;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,11 +9,11 @@ import java.util.List;
 public class PackageDTO implements Serializable{
     private long id;
     private PackageType PackageType;
-    private String packageMaterial;
+    private PackageMaterials packageMaterial;
     private long orderId;
     private List<SensorDTO> sensors;
 
-    public PackageDTO(long id, PackageType PackageType, String packageMaterial, long orderId, List<SensorDTO> sensors) {
+    public PackageDTO(long id, PackageType PackageType, PackageMaterials packageMaterial, long orderId, List<SensorDTO> sensors) {
         this.id = id;
         this.PackageType = PackageType;
         this.packageMaterial = packageMaterial;
@@ -40,7 +37,7 @@ public class PackageDTO implements Serializable{
         return PackageType;
     }
 
-    public String getPackageMaterial() {
+    public PackageMaterials getPackageMaterial() {
         return packageMaterial;
     }
 
@@ -52,7 +49,7 @@ public class PackageDTO implements Serializable{
         this.PackageType = PackageType;
     }
 
-    public void setPackageMaterial(String packageMaterial) {
+    public void setPackageMaterial(PackageMaterials packageMaterial) {
         this.packageMaterial = packageMaterial;
     }
 

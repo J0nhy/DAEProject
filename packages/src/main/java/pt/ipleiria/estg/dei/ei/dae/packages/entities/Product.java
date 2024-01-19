@@ -30,15 +30,15 @@ public class Product implements Serializable {
     private String productImage; // image of the product
 
     @NotNull
-    private String productPrice; // price of the product
+    private double productPrice; // price of the product
 
-    private String productWeight; // shipping weight of the product
+    private double productWeight; // shipping weight of the product
 
 
     public Product() {
     }
 
-    public Product( String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) {
+    public Product( String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, double productPrice, double productWeight) {
         this.productName = productName;
         this.productDescription = productDescription;
         this.productCategory = productCategory;
@@ -77,11 +77,11 @@ public class Product implements Serializable {
         return productImage;
     }
 
-    public String getProductPrice() {
+    public double getProductPrice() {
         return productPrice;
     }
 
-    public String getProductWeight() {
+    public double getProductWeight() {
         return productWeight;
     }
 
@@ -113,11 +113,11 @@ public class Product implements Serializable {
         this.productImage = productImage;
     }
 
-    public void setProductPrice(String productPrice) {
+    public void setProductPrice(double productPrice) {
         this.productPrice = productPrice;
     }
 
-    public void setProductWeight(String productWeight) {
+    public void setProductWeight(double productWeight) {
         this.productWeight = productWeight;
     }
 

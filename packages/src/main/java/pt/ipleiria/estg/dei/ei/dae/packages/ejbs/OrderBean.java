@@ -31,7 +31,7 @@ public class OrderBean {
     @EJB LogisticsOperatorBean logisticsOperatorBean;
 
 
-    public Order create(String status, Customer customer)
+    public Order create(StatusMessage status, Customer customer)
         throws MyEntityNotFoundException{
         Order order = new Order(status, customer);
 
@@ -39,7 +39,7 @@ public class OrderBean {
         int i = rand.nextInt(6);
         Product product = null;
         for (int count = 0; count < i; count++) {
-            product = productBean.create("Product" + count, "Product" + count + " Description", "Product" + count + " Category", "Manufacturer" + count, "Brand" + count, "Image" + count, "Price" + count, "Weight" + count);
+            product = productBean.create("Product" + count, "Product" + count + " Description", "Product" + count + " Category", "Manufacturer" + count, "Brand" + count, "Image" + count, 1.01 + count, 1 + count);
             order.addProduct(product);
         }
         entityManager.persist(order);
@@ -50,10 +50,19 @@ public class OrderBean {
         return entityManager.createNamedQuery("getAllOrders", Order.class).getResultList();
     }
 
+
     public List<Order> allByCustomer(String username) {
         return entityManager
                 .createNamedQuery("getAllOrdersByCustomer", Order.class)
                 .setParameter("username", username)  // Assuming "customer" is the parameter name in the named query
+                .getResultList();
+    }
+
+    public List<Order> allByLogisticsOperator(String username) {
+        return entityManager
+                .createNamedQuery("getAllOrdersByLogisticsOperator", Order.class)
+                .setParameter("username", username)  // Assuming "logisticsOperatorId" is the parameter name in the named query
+                .setParameter("status", StatusMessage.PENDENTE)
                 .getResultList();
     }
 
@@ -68,7 +77,7 @@ public class OrderBean {
         return order;
     }
 
-    public void update(long id, String status, Customer customer, LogisticsOperator logisticsOperator) throws Exception {
+    public void update(long id, StatusMessage status, Customer customer, LogisticsOperator logisticsOperator) throws Exception {
         
         Order order = find(id);
 
@@ -87,7 +96,7 @@ public class OrderBean {
         }
     }
 
-    public void updateStatus(long id, String status) throws Exception {
+    public void updateStatus(long id, StatusMessage status) throws Exception {
 
         Order order = find(id);
 

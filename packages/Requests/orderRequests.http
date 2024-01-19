@@ -21,6 +21,12 @@ Accept: application/json
 GET http://localhost:8080/packages/api/orders/customer/Customer1
 Accept: application/json
 
+##### Get Orders By Logistics Operator
+GET http://localhost:8080/packages/api/orders/logistics-operator/logistics1
+Accept: application/json
+
+##### Create Manufacturer
+POST http://localhost:8080/packages/api/manufacturers
 
 ##### Create Order
 POST http://localhost:8080/packages/api/orders

@@ -16,7 +16,9 @@ public class ProductBean {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Product create(String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) {
+
+    public Product create(String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, double productPrice, double productWeight) {
+
         Product product = new Product(productName, productDescription, productCategory, productManufacturer, productBrand, productImage, productPrice, productWeight);
         entityManager.persist(product);
         return product;
@@ -35,7 +37,7 @@ public class ProductBean {
         return entityManager.find(Product.class, id);
     }
 
-    public void update(long id, String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, String productPrice, String productWeight) throws Exception {
+    public void update(long id, String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, double productPrice, double productWeight) throws Exception {
 
         Product product = find(id);
 

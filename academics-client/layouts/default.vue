@@ -26,7 +26,7 @@ onMounted(() => {
     if (!token.value) {
         navigateTo('/auth/login')
     }
-    console.log(user.value)
+    //console.log(user.value)
   })
 </script>
 

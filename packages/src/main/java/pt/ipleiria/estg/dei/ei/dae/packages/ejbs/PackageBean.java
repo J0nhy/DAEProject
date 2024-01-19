@@ -27,18 +27,18 @@ public class PackageBean {
     @EJB
     private SensorBean sensorBean;
 
-    public void create( PackageType packageType, String packageMaterial){
+    public void create( PackageType packageType, PackageMaterials packageMaterial){
             Package package_ = new Package(packageType, packageMaterial);
             entityManager.persist(package_);
 
             if (packageType == PackageType.Primary){
-                Sensor sensor = sensorBean.create(SensorType.Location, "Armazem Lisboa","local");
+                Sensor sensor = sensorBean.create(SensorType.LOCALIZACAO, "Armazem Lisboa","local");
                 package_.addSensor(sensor);
                 sensor.setPackageRef(package_);
 
             } else if (packageType == PackageType.Secondary){
-                Sensor sensor = sensorBean.create(SensorType.Location, "Armazem Lisboa","local");
-                Sensor sensor2 =sensorBean.create(SensorType.Temperature, "10","ºC");
+                Sensor sensor = sensorBean.create(SensorType.LOCALIZACAO, "Armazem Lisboa","local");
+                Sensor sensor2 =sensorBean.create(SensorType.TEMPERATURA, "10","ºC");
 
                 package_.addSensor(sensor);
                 package_.addSensor(sensor2);
@@ -46,10 +46,10 @@ public class PackageBean {
                 sensor2.setPackageRef(package_);
 
             } else if (packageType == PackageType.Tertiary){
-                Sensor sensor = sensorBean.create(SensorType.Location, "Armazem Lisboa","local");
-                Sensor sensor2 = sensorBean.create(SensorType.Temperature, "10","ºC");
-                Sensor sensor3 = sensorBean.create(SensorType.Humidity, "15","%");
-                Sensor sensor4 = sensorBean.create(SensorType.Opened, "NO","YES/NO");
+                Sensor sensor = sensorBean.create(SensorType.LOCALIZACAO, "Armazem Lisboa","local");
+                Sensor sensor2 = sensorBean.create(SensorType.TEMPERATURA, "10","ºC");
+                Sensor sensor3 = sensorBean.create(SensorType.HUMIDADE, "15","%");
+                Sensor sensor4 = sensorBean.create(SensorType.ABERTO, "NO","YES/NO");
 
                 package_.addSensor(sensor);
                 package_.addSensor(sensor2);
@@ -77,7 +77,7 @@ public class PackageBean {
         return package_;
     }
 
-    public void update(long id, PackageType type, String material) throws Exception {
+    public void update(long id, PackageType type, PackageMaterials material) throws Exception {
         Package package_ = find(id);
 
         entityManager.lock(package_, LockModeType.OPTIMISTIC);

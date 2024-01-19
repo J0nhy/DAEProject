@@ -10,9 +10,11 @@ import org.hibernate.validator.internal.util.logging.Log;
 
 @Entity
 @Table(name = "orders")
-@NamedQuery(name = "getAllOrders", query = "select o from Order o order by o.id")
-@NamedQuery(name = "getAllOrdersByCustomer", query = "select o from Order o WHERE o.customer.username = :username order by o.id"
-)
+@NamedQueries({
+        @NamedQuery(name = "getAllOrders", query = "select o from Order o order by o.id"),
+        @NamedQuery(name = "getAllOrdersByCustomer", query = "select o from Order o WHERE o.customer.username = :username order by o.id"),
+        @NamedQuery(name = "getAllOrdersByLogisticsOperator", query = "select o from Order o WHERE o.logisticsOperators.username = :username AND o.status != :status order by o.id")
+})
 public class Order extends Versionable implements Serializable  {
 
     @Id
@@ -21,7 +23,7 @@ public class Order extends Versionable implements Serializable  {
     private long id;
 
     @NotNull
-    private String status;
+    private StatusMessage status;
     
     @NotNull
     @ManyToOne
@@ -38,7 +40,7 @@ public class Order extends Versionable implements Serializable  {
     @OneToMany // uma encomenda pode ter várias embalagens
     private List<Product> products;
 
-    public Order(String status, Customer customer) {
+    public Order(StatusMessage status, Customer customer) {
         this.status = status;
         this.customer = customer;
         this.packages = new ArrayList<>();
@@ -61,7 +63,7 @@ public class Order extends Versionable implements Serializable  {
         return id;
     }
 
-    public String getStatus() {
+    public StatusMessage getStatus() {
         return status;
     }
 
@@ -80,7 +82,7 @@ public class Order extends Versionable implements Serializable  {
         this.id = id;
     }
     
-    public void setStatus(String status) {
+    public void setStatus(StatusMessage status) {
         this.status = status;
     }
 
@@ -128,13 +130,7 @@ public class Order extends Versionable implements Serializable  {
         return customer.getUsername();
     }
 
-    public long[] getProductsIds(){
-        long[] ids = new long[products.size()];
-        int i = 0;
-        for (Product p : products) {
-            ids[i] = p.getId();
-            i++;
-        }
-        return ids;
+    public String getLogisticsOperatorsUsername() {
+        return logisticsOperators.getUsername();
     }
 }
