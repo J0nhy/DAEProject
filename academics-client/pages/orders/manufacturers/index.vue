@@ -1,5 +1,5 @@
 <template>
-  <div v-if="error" class="alert alert-danger">Error: {{ error.message }}</div>
+  <div v-if="error!='0'" class="alert alert-danger">Error: {{ error.message }}</div>
   <div v-else>
     <h2 class="mb-4">Orders</h2>
     <table class="table table-bordered table-hover">
@@ -57,6 +57,8 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const authStore = useAuthStore()
 let orders = ref([]);
+let error = ref([]);
+error.value='0'
 
 const { token, user } = storeToRefs(authStore)
 
@@ -106,7 +108,7 @@ watch(user, () => {
 
 const loadOrders = async () => {
   token.value = localStorage.getItem('token')
-  const { data: orderss, error, refresh } = await useFetch(`${api}/orders`, {
+  const { data: orderss, errors, refresh } = await useFetch(`${api}/orders`, {
   headers: {
     'Authorization': `Bearer ${token.value}`
   },
@@ -128,7 +130,7 @@ const cancelOrder = async (id) => {
     }),
     
   });
-  refresh()
+  loadOrders()
 }
 
 const goBack = () => {
