@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.ejbs;
 
+import org.glassfish.jaxb.runtime.v2.runtime.reflect.Lister;
 import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 
@@ -93,20 +94,6 @@ public class PackageBean {
         entityManager.remove(package_);
     }
 
-    public void addValueToPackage(long packageId, long valueId) throws Exception {
-        Package package_ = find(packageId);
-        SensorBean valueBean = new SensorBean();
-
-        Sensor sensor = valueBean.find(valueId);
-
-        if (sensor == null) {
-            throw new Exception("Sensor '" + valueId + "' not found");
-        }
-
-        package_.addSensor(sensor);
-        entityManager.merge(package_);
-    }
-
     public void removeValueFromPackage(long packageId, long valueId) throws Exception {
         Package package_ = find(packageId);
         SensorBean valueBean = new SensorBean();
@@ -122,5 +109,9 @@ public class PackageBean {
 
     public List<Package> packagesWithOrders() {
         return entityManager.createNamedQuery("getPackagesWithOrders", Package.class).getResultList();
+    }
+
+    public List<Package> packagesWithoutOrders() {
+        return entityManager.createNamedQuery("getPackagesWithoutOrders", Package.class).getResultList();
     }
 }

@@ -12,9 +12,16 @@ GET http://localhost:8080/packages/api/packages
 Accept: application/json
 
 ##### GET PACKAGE 1
-GET http://localhost:8080/packages/api/packages/2
+GET http://localhost:8080/packages/api/packages/1
 Accept: application/json
 
+##### GET PACKAGE with orders
+GET http://localhost:8080/packages/api/packages/packagesWithOrders
+Accept: application/json
+
+##### GET PACKAGE without orders
+GET http://localhost:8080/packages/api/packages/packagesWithoutOrders
+Accept: application/json
 
 ##### GET CUSTOMERS
 GET http://localhost:8080/packages/api/customers

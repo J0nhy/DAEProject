@@ -55,7 +55,8 @@ public class PackageService {
         return new PackageDTO(
                 packageInstance.getId(),
                 packageInstance.getPackageType(),
-                packageInstance.getPackageMaterial()
+                packageInstance.getPackageMaterial(),
+                packageInstance.getOrderId()
         );
     }
 
@@ -86,7 +87,13 @@ public class PackageService {
     @GET
     @Path("/packagesWithOrders")
     public List<PackageDTO> getAllPackagesWithOrders() {
-        return toDTOs(packageBean.packagesWithOrders());
+        return toDTOsNoSensors(packageBean.packagesWithOrders());
+    }
+
+    @GET
+    @Path("/packagesWithoutOrders")
+    public List<PackageDTO> getAllPackagesWithoutOrders() {
+        return toDTOsNoSensors(packageBean.packagesWithoutOrders());
     }
 
     @GET
@@ -120,32 +127,7 @@ public class PackageService {
         return Response.status(Response.Status.OK).entity(toDTO(package_)).build();
     }
 
-    @PUT
-    @Path("{id}/add/{value}")
-    public Response addValueToPackage(@PathParam("id") long id, @PathParam("value") long valueId) throws Exception {
-        Package package_ = packageBean.find(id);
-
-        packageBean.addValueToPackage(
-                id,
-                valueId
-        );
-        package_ = packageBean.find(id);
-        return Response.status(Response.Status.OK).entity(toDTO(package_)).build();
-    }
-
-    @PUT
-    @Path("{id}/remove/{value}")
-    public Response removeValueFromPackage(@PathParam("id") long id, @PathParam("value") long valueId) throws Exception {
-        Package package_ = packageBean.find(id);
-
-        packageBean.removeValueFromPackage(
-                id,
-                valueId
-        );
-        package_ = packageBean.find(id);
-        return Response.status(Response.Status.OK).entity(toDTO(package_)).build();
-    }
-
+    //Acho que n se aplica
     @DELETE
     @Path("{id}")
     public Response deletePackage(@PathParam("id") long id) throws Exception {

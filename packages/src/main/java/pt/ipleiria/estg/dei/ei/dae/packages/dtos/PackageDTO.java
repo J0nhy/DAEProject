@@ -23,10 +23,11 @@ public class PackageDTO implements Serializable{
         this.sensors = sensors;
     }
 
-    public PackageDTO(long id, PackageType PackageType, PackageMaterials packageMaterial) {
+    public PackageDTO(long id, PackageType PackageType, PackageMaterials packageMaterial, long orderId) {
         this.id = id;
         this.PackageType = PackageType;
         this.packageMaterial = packageMaterial;
+        this.orderId = orderId;
         this.sensors =  new ArrayList<>();
     }
 

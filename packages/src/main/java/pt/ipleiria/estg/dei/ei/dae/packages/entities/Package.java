@@ -11,7 +11,8 @@ import java.util.List;
 @Table(name = "packages")
 @NamedQueries({
         @NamedQuery(name = "getAllPackages", query = "select p from Package p order by p.id"),
-        @NamedQuery(name = "getPackagesWithOrders", query = "select p from Package p where p.order.id = :id order by p.id")
+        @NamedQuery(name = "getPackagesWithOrders", query = "select p from Package p where p.order.id IS NOT NULL order by p.id"),
+        @NamedQuery(name = "getPackagesWithoutOrders", query = "select p from Package p where p.order.id IS NULL order by p.id")
 })
 
 public class Package implements Serializable {
@@ -85,6 +86,8 @@ public class Package implements Serializable {
     }
 
     public long getOrderId() {
+        if (order == null)
+            return -1;
         return order.getId();
     }
 
