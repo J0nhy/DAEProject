@@ -39,7 +39,7 @@ public class OrderBean {
         int i = rand.nextInt(6);
         Product product = null;
         for (int count = 0; count < i; count++) {
-            product = productBean.create("Product" + count, "Product" + count + " Description", "Product" + count + " Category", "Manufacturer" + count, "Brand" + count, "Image" + count, "Price" + count, "Weight" + count);
+            product = productBean.create("Product" + count, "Product" + count + " Description", "Product" + count + " Category", "Manufacturer" + count, "Brand" + count, "Image" + count, 1.01 + count, 1 + count);
             order.addProduct(product);
         }
         entityManager.persist(order);
@@ -58,10 +58,10 @@ public class OrderBean {
                 .getResultList();
     }
 
-    public List<Order> allByLogisticsOperator(String logisticsOperatorId) {
+    public List<Order> allByLogisticsOperator(String username) {
         return entityManager
                 .createNamedQuery("getAllOrdersByLogisticsOperator", Order.class)
-                .setParameter("logisticsoperator", logisticsOperatorId)  // Assuming "logisticsOperatorId" is the parameter name in the named query
+                .setParameter("username", username)  // Assuming "logisticsOperatorId" is the parameter name in the named query
                 .getResultList();
     }
 

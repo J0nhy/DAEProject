@@ -183,7 +183,7 @@ public class OrderService {
     @GET
     @Path("/logistics-operator/{username}")
     public List<OrderDTO> getAllOrdersByLogisticsOperator(@PathParam("username") String logisticsOperator) {
-        return toDTOs(orderBean.allByLogisticsOperator(logisticsOperator));
+        return toDTOsNoPackageandProducts(orderBean.allByLogisticsOperator(logisticsOperator));
     }
 
     @POST
