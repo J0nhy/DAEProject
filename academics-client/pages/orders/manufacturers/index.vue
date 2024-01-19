@@ -8,7 +8,7 @@
             <th>ID</th>
             <th>Status</th>
             <th>Customer Username</th>
-            <th>Logistics Operator</th>
+            <th>Logistics Operator Company</th>
             <th>Actions</th>
   
           </tr>
@@ -20,7 +20,7 @@
             <td>{{ order.customerUsername }}</td>
             <td>
               <span v-if="order.logisticsOperators">
-                {{ order.logisticsOperators.username }}
+                {{ order.logisticsOperators.company }}
   
               </span>
               <span v-else class="text-muted">None
@@ -28,12 +28,15 @@
   
             </td>
             <td class="d-flex gap-2">
-              <nuxt-link :to="`/manufacturers/${order.id}`">
-                <button v-if="order.status = 'Pending'" class="btn btn-success"><i
+                <nuxt-link v-if="(order.status = 'Pending')  && (!order.logisticsOperators)" :to="`manufacturers/${order.id}`">
+                <button class="btn btn-success"><i
                     class="bi bi-check"></i>Completar</button>
+
+
+                    <button  class="btn btn-danger"><i class="bi bi-x"></i>Cancelar</button>
+
               </nuxt-link>
   
-              <button v-if="order.status = 'Pending'" class="btn btn-danger"><i class="bi bi-x"></i>Cancelar</button>
             </td>
           </tr>
         </tbody>

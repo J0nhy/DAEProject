@@ -16,9 +16,12 @@ public class ProductBean {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, double productPrice, double productWeight) {
+
+    public Product create(String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, double productPrice, double productWeight) {
+
         Product product = new Product(productName, productDescription, productCategory, productManufacturer, productBrand, productImage, productPrice, productWeight);
         entityManager.persist(product);
+        return product;
     }
 
     public List<Product> all() {

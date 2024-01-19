@@ -8,11 +8,11 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import pt.ipleiria.estg.dei.ei.dae.packages.dtos.*;
+import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.OrderBean;
-import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.OrderBean;
-import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.ProductBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,12 @@ public class OrderService {
 
     @EJB
     private ProductBean productBean;
+
+    @EJB
+    private CustomerBean customerBean;
+
+    @EJB
+    private LogisticsOperatorBean logisticsBean;
 
     @Context
     private SecurityContext securityContext;
@@ -62,6 +68,21 @@ public class OrderService {
     }
     public List<OrderDTO> toDTOsNoPackageandProducts(List<Order> orders) { // conversao dos DTOs
         return orders.stream().map(this::toDTONoPackagesandProducts).collect(Collectors.toList());
+    }
+
+    private OrderDTO toDTOCreateOrder(Order order) { // get sem as listas
+        return new OrderDTO(
+                order.getId(),
+                order.getStatus(),
+                null,
+                null,
+                null,
+                order.getCustomerUsername()
+        );
+    }
+
+    public List<OrderDTO> toDTOsCreateOrder(List<Order> orders) { // conversao dos DTOs
+        return orders.stream().map(this::toDTOCreateOrder).collect(Collectors.toList());
     }
 
     private PackageDTO toDTO(Package pack) {
@@ -154,94 +175,66 @@ public class OrderService {
     }
 
     @GET
-    @Path("/customer/{customer}")
-    public List<OrderDTO> getAllOrdersByCustomer(@PathParam("customer") String customer) {
-        return toDTOs(orderBean.allByCustomer(customer));
+    @Path("/customer/{username}")
+    public List<OrderDTO> getAllOrdersByCustomer(@PathParam("username") String customer) {
+        return toDTOsNoPackageandProducts(orderBean.allByCustomer(customer));
     }
 
     @GET
-    @Path("/logistics-operator/{logistics-operator}")
-    public List<OrderDTO> getAllOrdersByLogisticsOperator(@PathParam("logistics-operator") String logisticsOperator) {
+    @Path("/logistics-operator/{username}")
+    public List<OrderDTO> getAllOrdersByLogisticsOperator(@PathParam("username") String logisticsOperator) {
         return toDTOs(orderBean.allByLogisticsOperator(logisticsOperator));
     }
-    /*
+
     @POST
     @Path("/")
-    public Response createNewOrder(OrderDTO orderDTO) throws Exception {
-        List<Product> products = new ArrayList<>();
-        List<ProductDTO> productDTOS = orderDTO.getProducts();
-        for (ProductDTO productDTO : productDTOS) {
-            products.add(productBean.find(productDTO.getId()));
+    public Response createNewOrder(OrderDTO orderDTO) throws MyEntityNotFoundException {
+        try {
+            Customer customer = customerBean.findCustomer(orderDTO.getCustomerUsername());
+            Order order = orderBean.create(
+                    orderDTO.getStatus(),
+                    customer
+            );
+            return Response.status(Response.Status.CREATED).entity(toDTO(order)).build();
+        }catch (MyEntityNotFoundException e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR_FINDING_PRODUCT").build();
         }
-        orderBean.create(
-                orderDTO.getStatus(),
-                orderDTO.getCustomer(),
-                products
 
-        );
-        Order order = orderBean.find(orderDTO.getId());
-        return Response.status(Response.Status.CREATED).entity(toDTO(order)).build();
     }
 
     @PUT
     @Path("{id}")
     public Response updateOrder(@PathParam("id") long id, OrderDTO orderDTO) throws Exception {
         Order order = orderBean.find(id);
-        Customer customer = customerBean
-
+        Customer customer = customerBean.findCustomer(order.getCustomerUsername());
+        if (orderDTO.getCustomerUsername() != null)
+            customer = customerBean.findCustomer(orderDTO.getCustomerUsername());
+        LogisticsOperator logisticsOperator = logisticsBean.findLogisticOperator(order.getLogisticsOperatorsUsername());
+        if (orderDTO.getLogisticsOperatorsUsername() != null)
+            logisticsOperator = logisticsBean.findLogisticOperator(orderDTO.getLogisticsOperatorsUsername());
         orderBean.update(
                 id,
                 orderDTO.getStatus() != null ? orderDTO.getStatus() : order.getStatus(),
-                orderDTO.getCustomer() != null ? orderDTO.getCustomer() : order.getCustomer(),
-                orderDTO.getLogisticsOperators() != null ? orderDTO.getLogisticsOperators() : order.getLogisticsOperators()
+                customer,
+                logisticsOperator
         );
-
-        order = orderBean.find(id);
-        return Response.status(Response.Status.OK).entity(toDTO(order)).build();
-    }
-    */
-    @PUT
-    @Path("{id}/{status}")
-    public Response updateOrderStatus(@PathParam("id") long id, @PathParam("status") String status) throws Exception {
-        Order order = orderBean.find(id);
-
-        orderBean.updateStatus(
-                id,
-                status
-        );
-
         order = orderBean.find(id);
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();
     }
 
     @PUT
-    @Path("{id}/addpackage/{package}")
+    @Path("{id}/addPackage/{package}")
     public Response addPackageToOrder(@PathParam("id") long id, @PathParam("package") long packageId) throws Exception {
-        Order order = orderBean.find(id);
-
         orderBean.addPackageToOrder(
                 id,
                 packageId
         );
-        order = orderBean.find(id);
-        return Response.status(Response.Status.OK).entity(toDTO(order)).build();
-    }
-
-    @PUT
-    @Path("{id}/addproduct/{product}")
-    public Response addProductToOrder(@PathParam("id") long id, @PathParam("product") long productId) throws Exception {
         Order order = orderBean.find(id);
-
-        orderBean.addProductToOrder(
-                id,
-                productId
-        );
-        order = orderBean.find(id);
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();
     }
 
     @PUT
-    @Path("{id}/removepackage/{package}")
+    @Path("{id}/removePackage/{package}")
     public Response removePackageFromOrder(@PathParam("id") long id, @PathParam("package") long packageId) throws Exception {
         Order order = orderBean.find(id);
 
@@ -266,10 +259,13 @@ public class OrderService {
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();
     }
 
+    /*
+    Não faz sentido apagar uma encomenda no nosso contexto
     @DELETE
     @Path("{id}")
     public Response deleteOrder(@PathParam("id") long id) throws Exception {
         orderBean.remove(id);
         return Response.status(Response.Status.OK).build();
     }
+     */
 }

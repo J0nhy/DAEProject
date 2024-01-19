@@ -4,10 +4,8 @@ import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.LogisticsOperator;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.PackageType;
-import pt.ipleiria.estg.dei.ei.dae.packages.entities.Product;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
 import java.util.ArrayList;
@@ -76,6 +74,13 @@ public class ConfigBean {
             packageBean.create(PackageType.Primary, "Foil");
             packageBean.create(PackageType.Secondary, "Bamboo");
             packageBean.create(PackageType.Tertiary, "Nylon");
+
+            //Packages não atribuidas a nenhum order
+            packageBean.create(PackageType.Primary, "Wood");
+            packageBean.create(PackageType.Secondary, "Metal");
+            packageBean.create(PackageType.Tertiary, "Glass");
+            packageBean.create(PackageType.Primary, "Paper");
+            packageBean.create(PackageType.Secondary, "Fabric");
 
 
             System.out.println("Package Created");
@@ -150,12 +155,6 @@ public class ConfigBean {
             List<Package> packages4 = new ArrayList<>();
             List<Package> packages5 = new ArrayList<>();
 
-            List<Product> products1 = new ArrayList<>();
-            List<Product> products2 = new ArrayList<>();
-            List<Product> products3 = new ArrayList<>();
-            List<Product> products4 = new ArrayList<>();
-            List<Product> products5 = new ArrayList<>();
-
             packages1.add(packageBean.find((long) 1));
             packages1.add(packageBean.find((long) 2));
             packages1.add(packageBean.find((long) 3));
@@ -176,50 +175,30 @@ public class ConfigBean {
             packages5.add(packageBean.find((long) 14));
             packages5.add(packageBean.find((long) 15));
 
-            products1.add(productBean.find((long) 1));
-            products1.add(productBean.find((long) 2));
-            products1.add(productBean.find((long) 3));
+            Order order1 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"));
+            Order order2 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer2"));
+            Order order3 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer3"));
+            Order order4 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"));
+            Order order5 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"));
 
-            products2.add(productBean.find((long) 4));
-            products2.add(productBean.find((long) 5));
-            products2.add(productBean.find((long) 6));
+            orderBean.addPackageToOrder(order1.getId(), 1);
+            orderBean.addPackageToOrder(order1.getId(), 2);
+            orderBean.addPackageToOrder(order2.getId(), 3);
+            orderBean.addPackageToOrder(order2.getId(), 4);
+            orderBean.addPackageToOrder(order2.getId(), 5);
+            orderBean.addPackageToOrder(order3.getId(), 6);
+            orderBean.addPackageToOrder(order4.getId(), 7);
+            orderBean.addPackageToOrder(order4.getId(), 8);
+            orderBean.addPackageToOrder(order5.getId(), 9);
+            orderBean.addPackageToOrder(order5.getId(), 10);
+            orderBean.addPackageToOrder(order5.getId(), 11);
+            orderBean.addPackageToOrder(order5.getId(), 12);
+            orderBean.addPackageToOrder(order5.getId(), 13);
+            orderBean.addPackageToOrder(order5.getId(), 14);
+            orderBean.addPackageToOrder(order5.getId(), 15);
 
-            products3.add(productBean.find((long) 7));
-            products3.add(productBean.find((long) 8));
-            products3.add(productBean.find((long) 9));
-
-            products4.add(productBean.find((long) 10));
-            products4.add(productBean.find((long) 11));
-            products4.add(productBean.find((long) 12));
-
-            products5.add(productBean.find((long) 13));
-            products5.add(productBean.find((long) 14));
-            products5.add(productBean.find((long) 15));
-
-            long order1 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"), products1);
-            long order2 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer2"), products2);
-            long order3 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer3"), products3);
-            long order4 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"), products4);
-            long order5 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"), products5);
-
-            orderBean.addPackageToOrder(order1, 1);
-            orderBean.addPackageToOrder(order1, 2);
-            orderBean.addPackageToOrder(order2, 3);
-            orderBean.addPackageToOrder(order2, 4);
-            orderBean.addPackageToOrder(order2, 5);
-            orderBean.addPackageToOrder(order3, 6);
-            orderBean.addPackageToOrder(order4, 7);
-            orderBean.addPackageToOrder(order4, 8);
-            orderBean.addPackageToOrder(order5, 9);
-            orderBean.addPackageToOrder(order5, 10);
-            orderBean.addPackageToOrder(order5, 11);
-            orderBean.addPackageToOrder(order5, 12);
-            orderBean.addPackageToOrder(order5, 13);
-            orderBean.addPackageToOrder(order5, 14);
-            orderBean.addPackageToOrder(order5, 15);
-
-            orderBean.setLogisticsOperator(order1, "logistics1");
-            orderBean.setLogisticsOperator(order2, "logistics1");
+            orderBean.setLogisticsOperator(order1.getId(), "logistics1");
+            orderBean.setLogisticsOperator(order2.getId(), "logistics1");
 
 
         }catch (Exception e){

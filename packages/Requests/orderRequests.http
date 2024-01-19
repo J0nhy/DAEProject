@@ -12,12 +12,13 @@ Content-Type: application/json
 GET http://localhost:8080/packages/api/orders
 Accept: application/json
 //Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1NDI5NTg0LCJleHAiOjE3MDU0MzMxODR9.awEt47NmNxk8M4CP3JHqdKkk7j1ZEYX4pudUvJjIhRVlHL3GFEvvk40pLcANEXww
-###
+
+##### Get Single Order
 GET http://localhost:8080/packages/api/orders/1
 Accept: application/json
 
-##### Get Single Manufacturer
-GET http://localhost:8080/packages/api/manufacturers/Manufacturer1
+##### Get Order By Customer
+GET http://localhost:8080/packages/api/orders/customer/Customer1
 Accept: application/json
 
 ##### Get Orders By Logistics Operator
@@ -26,30 +27,37 @@ Accept: application/json
 
 ##### Create Manufacturer
 POST http://localhost:8080/packages/api/manufacturers
+
+##### Create Order
+POST http://localhost:8080/packages/api/orders
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
+//Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
 Content-Type: application/json
 
 {
-  "username": "Manufacturer2",
-  "password": "password",
-  "name": "Worten",
-  "email": "anufacturer2@mail.pt",
-  "address": "123 Main St"
+  "status": "Teste",
+  "customerUsername": "Customer1"
 }
 
 #####Delete Manufacturer
-DELETE http://localhost:8080/packages/api/manufacturers/Manufacturer2
+DELETE http://localhost:8080/packages/api/orders/1
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
+//Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
 
-#####Update Manufacturer
-PUT http://localhost:8080/packages/api/manufacturers/Manufacturer1
+#####Update Order
+PUT http://localhost:8080/packages/api/orders/1
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQzODMxLCJleHAiOjE3MDUyNDc0MzF9.szl4DOW4CqA0ricYweqoh3RVhWmDC6wAcXvIQRGyT12TQKB5dITEKCWFLjmcIQHf
+//Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQzODMxLCJleHAiOjE3MDUyNDc0MzF9.szl4DOW4CqA0ricYweqoh3RVhWmDC6wAcXvIQRGyT12TQKB5dITEKCWFLjmcIQHf
 Content-Type: application/json
 
 {
-  "email": "manufacturer1@mail.pt",
-  "address": "123 Main St"
+  "status": "Alterar teste"
 }
+
+#####Add Package to Order
+PUT http://localhost:8080/packages/api/orders/1/addPackage/16
+Accept: application/json
+
+#####Remove Package from Order
+PUT http://localhost:8080/packages/api/orders/1/removePackage/16
+Accept: application/json

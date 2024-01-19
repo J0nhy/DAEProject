@@ -12,10 +12,10 @@ import org.hibernate.validator.internal.util.logging.Log;
 @Table(name = "orders")
 @NamedQueries({
         @NamedQuery(name = "getAllOrders", query = "select o from Order o order by o.id"),
-        @NamedQuery(name = "getAllOrdersByCustomer", query = "select o from Order o WHERE o.customer.username = :customer order by o.id"),
-        @NamedQuery(name = "getAllOrdersByLogisticsOperator", query = "select o from Order o WHERE o.logisticsOperators.username = :logisticsoperator order by o.id")
+        @NamedQuery(name = "getAllOrdersByCustomer", query = "select o from Order o WHERE o.customer.username = :username order by o.id"),
+        @NamedQuery(name = "getAllOrdersByLogisticsOperator", query = "select o from Order o WHERE o.logisticsOperators.username = :username order by o.id")
 })
-public class Order implements Serializable {
+public class Order extends Versionable implements Serializable  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "TBL_METADATA_ID_SEQ")
@@ -129,7 +129,8 @@ public class Order implements Serializable {
     public String getCustomerUsername(){
         return customer.getUsername();
     }
-    public String getLogisticsOperatorsUsername(){
+
+    public String getLogisticsOperatorsUsername() {
         return logisticsOperators.getUsername();
     }
 }
