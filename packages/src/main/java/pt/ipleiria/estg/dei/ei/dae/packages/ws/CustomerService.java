@@ -101,6 +101,13 @@ public class CustomerService {
         return Response.status(Response.Status.OK).entity(toDTO(customerBean.findCustomer(username))).build();
     }
 
+    @GET
+    @Path("{username}/email")
+    @RolesAllowed({"LogisticsOperator", "Manufacturer"})
+    public Response getCustomerEmail(@PathParam("username") String username) throws MyEntityNotFoundException{
+        return Response.status(Response.Status.OK).entity(customerBean.findCustomer(username).getEmail()).build();
+    }
+
     /*
     @POST
     @Path("/")

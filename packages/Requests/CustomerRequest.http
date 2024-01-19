@@ -5,7 +5,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "username": "Customer1",
+  "username": "logistics1",
   "password": "123"
 }
 
@@ -19,6 +19,12 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxN
 GET http://localhost:8080/packages/api/customers/Customer1
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1NTk4NTM2LCJleHAiOjE3MDU2MDIxMzZ9.YEjEnt_ySnrtucLFPkkm4uXUhZzhwDvgvtPtxR9q2-t0ljDndMKsBdcE9t92-6wB
+
+
+##### GET customer email
+GET http://localhost:8080/packages/api/customers/Customer1/email
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1NjkyNzY2LCJleHAiOjE3MDU2OTYzNjZ9.qeRELrZLeU_eJZKGVTn7ckcgdlsasKyAD1ghEidzPKGkb9pQVDIazYrgBFMxKmux
 
 
 ##### Create Customer
