@@ -177,18 +177,22 @@ public class ConfigBean {
 
             Order order1 = orderBean.create(StatusMessage.ENVIADA, customerBean.findCustomer("Customer1"));
             Order order2 = orderBean.create(StatusMessage.PENDENTE, customerBean.findCustomer("Customer2"));
-            Order order3 = orderBean.create(StatusMessage.PENDENTE, customerBean.findCustomer("Customer3"));
+            Order order3 = orderBean.create(StatusMessage.ENTREGUE, customerBean.findCustomer("Customer3"));
             Order order4 = orderBean.create(StatusMessage.PENDENTE, customerBean.findCustomer("Customer1"));
-            Order order5 = orderBean.create(StatusMessage.PENDENTE, customerBean.findCustomer("Customer1"));
+            Order order5 = orderBean.create(StatusMessage.ENVIADA, customerBean.findCustomer("Customer1"));
 
             orderBean.addPackageToOrder(order1.getId(), 1);
             orderBean.addPackageToOrder(order1.getId(), 2);
+
             orderBean.addPackageToOrder(order2.getId(), 3);
             orderBean.addPackageToOrder(order2.getId(), 4);
             orderBean.addPackageToOrder(order2.getId(), 5);
+
             orderBean.addPackageToOrder(order3.getId(), 6);
+
             orderBean.addPackageToOrder(order4.getId(), 7);
             orderBean.addPackageToOrder(order4.getId(), 8);
+
             orderBean.addPackageToOrder(order5.getId(), 9);
             orderBean.addPackageToOrder(order5.getId(), 10);
             orderBean.addPackageToOrder(order5.getId(), 11);
@@ -198,6 +202,9 @@ public class ConfigBean {
             orderBean.addPackageToOrder(order5.getId(), 15);
 
             orderBean.setLogisticsOperator(order1.getId(), "logistics1");
+            orderBean.setLogisticsOperator(order3.getId(), "logistics1");
+            orderBean.setLogisticsOperator(order5.getId(), "logistics1");
+
             orderBean.setLogisticsOperator(order2.getId(), "logistics1");
 
 

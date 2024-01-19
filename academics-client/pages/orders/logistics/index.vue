@@ -14,6 +14,7 @@
         </tr>
       </thead>
       <tbody>
+        
         <tr v-for="order in orders" :key="order.id">
           <td>{{ order.id }}</td>
           <td>{{ order.status }}</td>
@@ -29,8 +30,10 @@
                   class="bi bi-check-lg"></i>Entregue</button>
             </nuxt-link>
             <nuxt-link @click.prevent="cancelOrder(order.id)">
-              <button v-if="order.status === 'EM_TRANSITO'" class="btn btn-danger"><i class="bi bi-x"></i>Cancelar</button>
-            </nuxt-link>
+  <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA'" class="btn btn-danger">
+    <i class="bi bi-x"></i>Cancelar
+  </button>
+</nuxt-link>
             <nuxt-link :to="`logistics/${order.id}`">
               <button  class="btn btn-Dark"><i class="bi bi-search"></i></button>
             </nuxt-link>
@@ -39,15 +42,20 @@
       </tbody>
     </table>
   </div>
-  <button @click.prevent="refresh" class="btn btn-primary">Refresh Data</button>
+    <button @click.prevent="goBack" class="btn btn-secondary" style="margin-right: 5px;">Voltar</button>
+    <button @click.prevent="refresh" class="btn btn-primary">Refresh Data</button>
 </template>
 
 <script setup>
 import { useAuthStore } from "~/store/auth-store.js";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const authStore = useAuthStore()
 
 const { token, user } = storeToRefs(authStore)
 
+const isLoading = ref(true);
 
 const config = useRuntimeConfig()
 const api = config.public.API_URL
@@ -67,8 +75,36 @@ onMounted(() => {
   }
   //console.log(user.value)
 
+  if (user.value) {
+    isLoading.value = false;
+    
+  }
+
 })
-const { data: orders, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`)
+
+watch(user, () => {
+  if (user.value) {
+    isLoading.value = false;
+    loadOrders()
+    //refresh()
+
+  }
+}
+)
+const orders = ref([]);
+
+//F5 e nao dar erro
+const loadOrders = async () => {
+    const { data: order, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`);
+    orders.value = order._value;
+    return order._value  ;
+  }
+
+const refresh = async () => {
+  const { data: order, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`);
+  orders.value = order._value;
+  return order._value  ;
+}
 
 
 
@@ -130,5 +166,10 @@ const calculateTotalWeightForOrder = (order) => {
     return 0;
   }
 };
+
+const goBack = () => {
+  router.go(-1); // Isso voltará uma página na história do navegador
+};
+
 </script>
     
