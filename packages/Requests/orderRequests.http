@@ -39,9 +39,9 @@ Content-Type: application/json
   "customerUsername": "Customer1"
 }
 
-#####Delete Manufacturer
-DELETE http://localhost:8080/packages/api/orders/1
-Accept: application/json
+//#####Delete Manufacturer
+//DELETE http://localhost:8080/packages/api/orders/6
+//Accept: application/json
 //Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
 
 #####Update Order
@@ -51,16 +51,16 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "status": "Alterar teste"
+  "status": "ENVIADA"
 }
 
-#####Add Package to Order
-PUT http://localhost:8080/packages/api/orders/1/addPackage/16
-Accept: application/json
+//#####Add Package to Order
+//PUT http://localhost:8080/packages/api/orders/1/addPackage/16
+//Accept: application/json
 
-#####Remove Package from Order
-PUT http://localhost:8080/packages/api/orders/1/removePackage/16
-Accept: application/json
+//#####Remove Package from Order
+//PUT http://localhost:8080/packages/api/orders/1/removePackage/16
+//Accept: application/json
 
 #####Complete Order
 PUT http://localhost:8080/packages/api/orders/6/completeOrder

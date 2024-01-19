@@ -1,11 +1,11 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NamedQueries({
@@ -19,11 +19,17 @@ public class LogisticsOperator extends User implements Serializable {
     @NotNull
     private String company;
 
-    public LogisticsOperator(){}
+    @OneToMany(mappedBy = "logisticsOperators", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Order> orders;
+
+    public LogisticsOperator(){
+        this.orders = new ArrayList<>();
+    }
 
     public LogisticsOperator(String username, String password, String name, String email,String company){
         super(username, password, name, email);
         this.company=company;
+        this.orders = new ArrayList<>();
     }
 
     public void setCompany(String company) {
@@ -33,5 +39,11 @@ public class LogisticsOperator extends User implements Serializable {
         return company;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
 
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 }

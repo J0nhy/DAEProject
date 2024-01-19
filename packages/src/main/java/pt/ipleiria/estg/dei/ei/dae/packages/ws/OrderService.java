@@ -92,7 +92,7 @@ public class OrderService {
         return new OrderDTO(
                 order.getId(),
                 order.getStatus(),
-                null,
+                order.getLogisticsOperatorsUsername(),
                 null,
                 null,
                 order.getCustomerUsername()
@@ -206,14 +206,7 @@ public class OrderService {
     @GET
     @Path("{id}")
     public Response getOrderDetails(@PathParam("id") long id) throws Exception {
-        Order order = orderBean.find(id);
-        try {
-            return Response.status(Response.Status.OK).entity(toDTO(orderBean.find(id))).build();
-        }catch (Exception e){
-            return Response.status(Response.Status.OK).entity(toDTONoListsNoLogisticsOperator(order)).build();
-        }
-
-
+        return Response.status(Response.Status.OK).entity(toDTO(orderBean.find(id))).build();
     }
 
     @GET
@@ -294,13 +287,15 @@ public class OrderService {
                     orderDTO.getLogisticsOperatorsUsername()
             );
 
-            return Response.status(Response.Status.OK).entity("Packages e operador logisticos associados").build();
+            return Response.status(Response.Status.OK).entity(toDTO(order)).build();
 
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR_COMPLETING_ORDER").build();
         }
     }
 
+    /*
+    Estão a ser adicionadas em cima
     @PUT
     @Path("{id}/addPackage/{package}")
     public Response addPackageToOrder(@PathParam("id") long id, @PathParam("package") long packageId) throws Exception {
@@ -312,6 +307,7 @@ public class OrderService {
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();
     }
 
+    N faz sentido remover packages??
     @PUT
     @Path("{id}/removePackage/{package}")
     public Response removePackageFromOrder(@PathParam("id") long id, @PathParam("package") long packageId) throws Exception {
@@ -325,6 +321,7 @@ public class OrderService {
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();
     }
 
+    // N faz sentido remover produtos
     @PUT
     @Path("{id}/removeproduct/{product}")
     public Response removeProductFromOrder(@PathParam("id") long id, @PathParam("product") long productId) throws Exception {
@@ -338,7 +335,6 @@ public class OrderService {
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();
     }
 
-    /*
     Não faz sentido apagar uma encomenda no nosso contexto
     @DELETE
     @Path("{id}")
