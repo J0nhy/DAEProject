@@ -26,8 +26,7 @@ import java.util.stream.Collectors;
 @Path("/customers")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
-//@Authenticated
-//@RolesAllowed({}) //TODO: add roles, em principio só os proprios clientes podem aceder aos seus dados
+@Authenticated
 public class CustomerService {
     @EJB
     private CustomerBean customerBean;
@@ -89,6 +88,7 @@ public class CustomerService {
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/") // means: the relative url path is “/api/students/”
+    @RolesAllowed({"Manufacturer"})
     public List<CustomerDTO> getAllCustomers() {
         return toDTOsWithoutOrders(customerBean.getAll());
     }
@@ -96,17 +96,12 @@ public class CustomerService {
 
     @GET
     @Path("{username}")
+    @RolesAllowed({"Customer"})
     public Response getCustomerDetails(@PathParam("username") String username) throws MyEntityNotFoundException{
-        /*
-        var principal = securityContext.getUserPrincipal();
-
-        if(!principal.getName().equals(username)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-        */
         return Response.status(Response.Status.OK).entity(toDTO(customerBean.findCustomer(username))).build();
     }
 
+    /*
     @POST
     @Path("/")
     public Response createNewCustomer(CustomerDTO customerDTO) throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException, MyIncorrectDataType {
@@ -121,9 +116,12 @@ public class CustomerService {
         Customer customer = customerBean.findCustomer(customerDTO.getUsername());
         return Response.status(Response.Status.CREATED).entity(toDTO(customer)).build();
     }
+    */
+
 
     @PUT
     @Path("{username}")
+    @RolesAllowed({"Customer"})
     public Response updateCustomer(@PathParam("username") String username, CustomerDTO customerDTO)
             throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType {
         Customer customer = customerBean.findCustomer(username);
@@ -142,6 +140,7 @@ public class CustomerService {
 
     @DELETE
     @Path("{username}")
+    @RolesAllowed({"Customer", "Manufacturer"})
     public Response deleteCustomer(@PathParam("username") String username) throws MyEntityNotFoundException{
         customerBean.delete(username);
         return Response.status(Response.Status.OK).build();

@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 @Path("/logisticsoperators")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
-//@Authenticated
 public class LogisticsOperatorService {
     @EJB
     private LogisticsOperatorBean logisticsOperatorBean;
@@ -53,12 +52,16 @@ public class LogisticsOperatorService {
 
     @GET
     @Path("/")
+    @Authenticated
+    @RolesAllowed({"Manufacturer"})
     public List<LogisticsOperatorDTO> getAllLogisticsOperators() {
         return toDTOs(logisticsOperatorBean.getAll());
     }
 
     @GET
     @Path("{username}")
+    @Authenticated
+    @RolesAllowed({"Manufacturer", "LogisticsOperator"})
     public Response getLogisticsOperatorDetails(@PathParam("username") String username) throws MyEntityNotFoundException{
         /*var principal = securityContext.getUserPrincipal();
 
@@ -71,7 +74,7 @@ public class LogisticsOperatorService {
 
     @POST
     @Path("/")
-    public Response createNewManufacturer(LogisticsOperatorDTO logisticsOperatorDTO)
+    public Response createNewLogisticsOperator(LogisticsOperatorDTO logisticsOperatorDTO)
             throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException, MyIncorrectDataType {
             logisticsOperatorBean.create(
                     logisticsOperatorDTO.getUsername(),
@@ -86,6 +89,8 @@ public class LogisticsOperatorService {
 
     @PUT
     @Path("{username}")
+    @Authenticated
+    @RolesAllowed({"LogisticsOperator"})
     public Response updateLogisticsOperator(@PathParam("username") String username, LogisticsOperatorDTO logisticsOperatorDTO)
             throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType {
         LogisticsOperator logistics = logisticsOperatorBean.findLogisticOperator(username);
@@ -102,7 +107,9 @@ public class LogisticsOperatorService {
 
     @DELETE
     @Path("{username}")
-    public Response deleteManufacturer(@PathParam("username") String username)throws MyEntityNotFoundException{
+    @Authenticated
+    @RolesAllowed({"LogisticsOperator", "Manufacturer"})
+    public Response deleteLogisticsOperator(@PathParam("username") String username)throws MyEntityNotFoundException{
         logisticsOperatorBean.removeLogisticsOperator(username);
         return Response.status(Response.Status.OK).build();
     }

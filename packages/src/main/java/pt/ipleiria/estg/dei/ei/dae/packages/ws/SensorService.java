@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.ws;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -13,6 +14,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.SensorBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @Path("/sensors")
 @Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
 @Consumes({MediaType.APPLICATION_JSON}) // injects header “Accept: application/json”
+@Authenticated
 public class SensorService {
 
     @EJB
@@ -47,12 +50,14 @@ public class SensorService {
 
     @GET
     @Path("/")
+    @RolesAllowed({ "Manufacturer"})
     public List<SensorDTO> getAllSensors() {
         return toDTOs(sensorBean.all());
     }
+
     @GET
     @Path("/package/{id}")
-    public List<SensorDTO> getAllSensorsBy(@PathParam("id") long id) {
+    public List<SensorDTO> getAllSensorsByPackage(@PathParam("id") long id) {
         return toDTOs(sensorBean.allByPackage(id));
     }
 
@@ -64,6 +69,7 @@ public class SensorService {
 
     @PUT
     @Path("{id}")
+    @RolesAllowed({"LogisticsOperator"})
     public Response updateSensor(@PathParam("id") long id, SensorDTO sensorDTO) throws Exception {
         Sensor sensor = sensorBean.find(id);
 
@@ -77,10 +83,13 @@ public class SensorService {
         return Response.status(Response.Status.OK).entity(toDTO(sensor)).build();
     }
 
+    /*
+    Não estamos a apagar sensores no front end
     @DELETE
     @Path("{id}")
     public Response deleteSensor(@PathParam("id") long id) throws Exception {
         sensorBean.remove(id);
         return Response.status(Response.Status.OK).build();
     }
+    */
 }

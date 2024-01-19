@@ -12,7 +12,7 @@ Content-Type: application/json
 ##### Get ALL
 GET http://localhost:8080/packages/api/logisticsoperators
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1NTk4NTM2LCJleHAiOjE3MDU2MDIxMzZ9.YEjEnt_ySnrtucLFPkkm4uXUhZzhwDvgvtPtxR9q2-t0ljDndMKsBdcE9t92-6wB
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1NjkwMTMxLCJleHAiOjE3MDU2OTM3MzF9.bpBTrTGuiT-ZyEBIJma1ilL-CiKvXh4bf_OCiSeaUdSDzAy_d8dC3xzFMtU8NywX
 
 
 ##### Get Single Logistics Operator
@@ -24,7 +24,7 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxN
 ##### Create Logistics Operator
 POST http://localhost:8080/packages/api/logisticsoperators
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1NTk4NTM2LCJleHAiOjE3MDU2MDIxMzZ9.YEjEnt_ySnrtucLFPkkm4uXUhZzhwDvgvtPtxR9q2-t0ljDndMKsBdcE9t92-6wB
+//Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1NTk4NTM2LCJleHAiOjE3MDU2MDIxMzZ9.YEjEnt_ySnrtucLFPkkm4uXUhZzhwDvgvtPtxR9q2-t0ljDndMKsBdcE9t92-6wB
 Content-Type: application/json
 
 {
