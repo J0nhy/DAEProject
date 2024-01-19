@@ -1,9 +1,9 @@
 <template>
-    {{ order }}
+  <!-- {{ order }} --> 
     <div v-if="error" class="alert alert-danger">Error: {{ error.message }}</div>
     <div v-else>
-        <h2 class="mb-4">Order {{ order.id }}</h2>
-
+        <h2 class="mb-4">Details of Order {{ order.id }}</h2>
+        
         <div class="container">
             <div class="row">
                 <div class="col-8">
@@ -22,7 +22,7 @@
 
                                 <tr>
                                     <th scope="row">Order Status</th>
-                                    <td style="text-align: center;" v-if="order.logisticsOperators">
+                                    <td style="text-align: center;">
                                         <select name="Status" id="status" v-model="selectedStatus">
                                             <option value="PENDENTE">PENDENTE</option>
                                             <option value="ENVIADA">ENVIADA</option>
