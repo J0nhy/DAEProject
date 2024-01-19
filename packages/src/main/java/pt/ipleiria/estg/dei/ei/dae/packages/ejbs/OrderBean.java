@@ -172,4 +172,10 @@ public class OrderBean {
         order.setLogisticsOperators(logisticsOperator);
         entityManager.persist(order);
     }
+
+    public void setStatusEnviado(long id) {
+        Order order = entityManager.find(Order.class, id);
+        order.setStatus(StatusMessage.ENVIADA);
+        entityManager.merge(order);
+    }
 }

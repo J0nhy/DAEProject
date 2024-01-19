@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.ws;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -15,6 +16,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
+import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 @Path("/orders")
 @Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
 @Consumes({MediaType.APPLICATION_JSON}) // injects header “Accept: application/json”
+@Authenticated
 public class OrderService {
 
     @EJB
@@ -200,6 +203,7 @@ public class OrderService {
     */
     @GET
     @Path("/")
+    @RolesAllowed({"Manufacturer"})
     public List<OrderDTO> getAllOrders() {
         return toDTOsCreateOrder(orderBean.all());
     }
@@ -207,7 +211,13 @@ public class OrderService {
     @GET
     @Path("{id}")
     public Response getOrderDetails(@PathParam("id") long id) throws Exception {
-        return Response.status(Response.Status.OK).entity(toDTO(orderBean.find(id))).build();
+        Order order = orderBean.find(id);
+        var principal = securityContext.getUserPrincipal();
+
+        if(!principal.getName().equals(order.getLogisticsOperatorsUsername()) || !principal.getName().equals(order.getCustomerUsername())) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        return Response.status(Response.Status.OK).entity(toDTO(order)).build();
     }
 
     @GET
@@ -265,31 +275,25 @@ public class OrderService {
     @Path("{id}/completeOrder")
     public Response completeOrder(@PathParam("id") long id, OrderDTO orderDTO) throws Exception {
         try {
-            System.out.println("Dentro do request");
             Order order = orderBean.find(id);
-            System.out.println("Encontrou a encomenda");
             List<PackageDTO> packList = orderDTO.getPackages();
-            System.out.println(packList);
             int quantidade = -1;
             Package pack = null;
+
             for (PackageDTO p : packList) {
                 quantidade = p.getQuantity();
-                System.out.println(quantidade);
-                System.out.println(p.getPackageType());
-                System.out.println(p.getPackageMaterial());
                 if (quantidade > 0)
                     for (int i = 0; i < quantidade; i++) {
-                        System.out.println("entrou");
                         pack = packageBean.create(p.getPackageType(), p.getPackageMaterial());
-                        System.out.println("criou");
                         orderBean.addPackageToOrder(id, pack.getId());
-                        System.out.println("adicionou");
                     }
             }
             orderBean.setLogisticsOperator(
                     id,
                     orderDTO.getLogisticsOperatorsUsername()
             );
+            System.out.println("Anted de setar Status");
+            orderBean.setStatusEnviado(id);
 
             return Response.status(Response.Status.OK).entity(toDTO(order)).build();
 
