@@ -47,7 +47,7 @@
   </div>
   <button @click.prevent="goBack" class="btn btn-secondary" style="margin-right: 5px;">Voltar</button>
 
-  <button @click.prevent="refresh" class="btn btn-primary">Refresh Data</button>
+  <button @click.prevent="loadOrders" class="btn btn-primary">Refresh Data</button>
 </template>
     
 <script setup>
@@ -56,6 +56,7 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const authStore = useAuthStore()
+let orders = ref([]);
 
 const { token, user } = storeToRefs(authStore)
 
@@ -83,37 +84,55 @@ onMounted(() => {
     isLoading.value = false;
     
   }
-
+  loadOrders()
 })
 
 
 
+watch(user, () => {
+  if (user.value) {
+    isLoading.value = false;
+    
+    loadOrders()
+    //refresh()
 
-const { data: orders, error, refresh } = await useFetch(`${api}/orders`, {
+  }else{
+    router.push('/auth/login');
+  }
+
+
+}
+)
+
+const loadOrders = async () => {
+  token.value = localStorage.getItem('token')
+  const { data: orderss, error, refresh } = await useFetch(`${api}/orders`, {
   headers: {
     'Authorization': `Bearer ${token.value}`
   },
+  
 });
-
+orders.value=orderss.value
+}
 
 const cancelOrder = async (id) => {
   const response = await useFetch(`${api}/orders/${id}`, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
+      'Content-Type': 'application/json', 
       'Authorization': `Bearer ${token.value}`
 
     },
     body: JSON.stringify({
       status: "CANCELADA",
     }),
-    // Adicione qualquer outro cabeçalho ou configuração necessário para a sua API
+    
   });
   refresh()
 }
 
 const goBack = () => {
-  router.go(-1); // Isso voltará uma página na história do navegador
+  router.go(-1); 
 };
 </script>
     
