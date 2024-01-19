@@ -266,6 +266,9 @@ public class OrderService {
     @RolesAllowed({"Manufacturer", "LogisticsOperator"})
     public Response updateOrder(@PathParam("id") long id, OrderDTO orderDTO) throws Exception {
         Order order = orderBean.find(id);
+        if (order.getStatus().equals(StatusMessage.ENTREGUE) || order.getStatus().equals(StatusMessage.CANCELADA)){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Order has already been delivered or canceled").build();
+        }
         Customer customer = customerBean.findCustomer(order.getCustomerUsername());
         if (orderDTO.getCustomerUsername() != null)
             customer = customerBean.findCustomer(orderDTO.getCustomerUsername());
