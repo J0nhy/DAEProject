@@ -4,7 +4,7 @@
     
     <div v-if="error" class="alert alert-danger">Error: {{ error.message }}</div>
     <div v-else>
-        <h2 class="mb-4">Sensors of Order {{ order.id }}</h2>
+        <h2 class="mb-4" >Sensors of Order {{ id }}</h2>
 
         <div class="container">
             <div class="row">
@@ -28,7 +28,7 @@
             </td>
             <td style="text-align: center;">{{ sensor.dataType }}</td>
             <td style="text-align: center;">
-                <button @click.prevent="updateOrderStatus(sensor.id, sensor.value)" class="btn btn-success">Atualizar</button>
+                <button @click.prevent="updateSensor(sensor.id, sensor.value)" class="btn btn-success">Atualizar</button>
             </td>
         </tr>
     </tbody>
@@ -76,6 +76,7 @@ onMounted(() => {
     navigateTo('/auth/login')
   }
   //console.log(user.value)
+  
 
 })
 
@@ -83,17 +84,26 @@ onMounted(() => {
 
 const config = useRuntimeConfig()
 const api = config.public.API_URL
-const { data: order, error: orderErr } = await
-useFetch(`${api}/orders/${id}`)
+const { data: orderr, error: orderErr } = await
+useFetch(`${api}/orders/logistics-operator/${id}`, {
+  headers: {
+    'Authorization': `Bearer ${token.value}`
+  }
+})
+
+
 
 const { data: sensors, error: sensorsErr } = await
-useFetch(`${api}/packages/${id}/`)
-
+useFetch(`${api}/packages/${id}/`, {
+  headers: {
+    'Authorization': `Bearer ${token.value}`
+  }
+})
 
 const messages = ref([])
 if (orderErr.value) messages.value.push(orderErr.value)
 
-const updateOrderStatus = async (sensorId, sensorValue) => {
+const updateSensor = async (sensorId, sensorValue) => {
   const response = await fetch(`${api}/sensors/${sensorId}`, {
     method: 'PUT',
     headers: {

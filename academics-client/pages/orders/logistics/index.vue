@@ -16,6 +16,7 @@
       <tbody>
         
         <tr v-for="order in orders" :key="order.id">
+          
           <td>{{ order.id }}</td>
           <td>{{ order.status }}</td>
           <td>{{ order.customerUsername }}</td>
@@ -35,7 +36,7 @@
   </button>
 </nuxt-link>
             <nuxt-link :to="`logistics/${order.id}`">
-              <button  class="btn btn-Dark"><i class="bi bi-search"></i></button>
+              <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA'" class="btn btn-Dark"><i class="bi bi-search"></i></button>
             </nuxt-link>
           </td>
         </tr>
@@ -85,6 +86,7 @@ onMounted(() => {
 watch(user, () => {
   if (user.value) {
     isLoading.value = false;
+    
     loadOrders()
     //refresh()
 
@@ -93,15 +95,25 @@ watch(user, () => {
 )
 const orders = ref([]);
 
+
 //F5 e nao dar erro
 const loadOrders = async () => {
-    const { data: order, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`);
+    token.value = localStorage.getItem('token')
+    const { data: order, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`, {
+      headers: {
+    'Authorization': `Bearer ${token.value}`
+  }
+    });
     orders.value = order._value;
     return order._value  ;
   }
 
 const refresh = async () => {
-  const { data: order, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`);
+  const { data: order, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`, {
+    headers: {
+    'Authorization': `Bearer ${token.value}`
+  }
+  });
   orders.value = order._value;
   return order._value  ;
 }
@@ -115,6 +127,7 @@ const cancelOrder = async (id) => {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
+      'Authorization': `Bearer ${token.value}`
     },
     body: JSON.stringify({
       status: "CANCELADA",
@@ -130,6 +143,8 @@ const transportOrder = async (id) => {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
+      'Authorization': `Bearer ${token.value}`
+
     },
     body: JSON.stringify({
       status: "EM_TRANSITO",
@@ -146,6 +161,8 @@ const deliverOrder = async (id) => {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
+      'Authorization': `Bearer ${token.value}`
+
     },
     body: JSON.stringify({
       status: "ENTREGUE",
