@@ -108,6 +108,46 @@ public class ConfigBean {
             logger.severe(e.getMessage());
         }
 
+        //Create Products
+        try {
+
+            productBean.create("Product1", "Product1 description", "Product1 category", "Product1 manufacturer",
+                    "Product1 brand", "Product1 image", 1.0, 1.0);
+            productBean.create("Product2", "Product2 description", "Product2 category", "Product2 manufacturer",
+                    "Product2 brand", "Product2 image", 2.0, 2.0);
+            productBean.create("Product3", "Product3 description", "Product3 category", "Product3 manufacturer",
+                    "Product3 brand", "Product3 image", 3.0, 3.0);
+            productBean.create("Product4", "Product4 description", "Product4 category", "Product4 manufacturer",
+                    "Product4 brand", "Product4 image", 4.0, 4.0);
+            productBean.create("Product5", "Product5 description", "Product5 category", "Product5 manufacturer",
+                    "Product5 brand", "Product5 image", 5.0, 5.0);
+            productBean.create("Product6", "Product6 description", "Product6 category", "Product6 manufacturer",
+                    "Product6 brand", "Product6 image", 6.0, 6.0);
+            productBean.create("Product7", "Product7 description", "Product7 category", "Product7 manufacturer",
+                    "Product7 brand", "Product7 image", 7.0, 7.0);
+            productBean.create("Product8", "Product8 description", "Product8 category", "Product8 manufacturer",
+                    "Product8 brand", "Product8 image", 8.0, 8.0);
+            productBean.create("Product9", "Product9 description", "Product9 category", "Product9 manufacturer",
+                    "Product9 brand", "Product9 image", 9.0, 9.0);
+            productBean.create("Product10", "Product10 description", "Product10 category", "Product10 manufacturer",
+                    "Product10 brand", "Product10 image", 10.0, 10.0);
+            productBean.create("Product11", "Product11 description", "Product11 category", "Product11 manufacturer",
+                    "Product11 brand", "Product11 image", 11.0, 11.0);
+            productBean.create("Product12", "Product12 description", "Product12 category", "Product12 manufacturer",
+                    "Product12 brand", "Product12 image", 12.0, 12.0);
+            productBean.create("Product13", "Product13 description", "Product13 category", "Product13 manufacturer",
+                    "Product13 brand", "Product13 image", 13.0, 13.0);
+            productBean.create("Product14", "Product14 description", "Product14 category", "Product14 manufacturer",
+                    "Product14 brand", "Product14 image", 14.0, 14.0);
+            productBean.create("Product15", "Product15 description", "Product15 category", "Product15 manufacturer",
+                    "Product15 brand", "Product15 image", 15.0, 15.0);
+
+
+        }catch (Exception e){
+            logger.severe(e.getMessage());
+        }
+
+
         try {
             List<Package> packages1 = new ArrayList<>();
             List<Package> packages2 = new ArrayList<>();
@@ -135,11 +175,11 @@ public class ConfigBean {
             packages5.add(packageBean.find((long) 14));
             packages5.add(packageBean.find((long) 15));
 
-            Order order1 = orderBean.create("Pending", customerBean.findCustomer("Customer1"));
-            Order order2 = orderBean.create("Pending", customerBean.findCustomer("Customer2"));
-            Order order3 = orderBean.create("Pending", customerBean.findCustomer("Customer3"));
-            Order order4 = orderBean.create("Pending", customerBean.findCustomer("Customer1"));
-            Order order5 = orderBean.create("Pending", customerBean.findCustomer("Customer1"));
+            Order order1 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"));
+            Order order2 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer2"));
+            Order order3 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer3"));
+            Order order4 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"));
+            Order order5 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"));
 
             orderBean.addPackageToOrder(order1.getId(), 1);
             orderBean.addPackageToOrder(order1.getId(), 2);

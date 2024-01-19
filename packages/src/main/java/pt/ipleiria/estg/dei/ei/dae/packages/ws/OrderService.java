@@ -8,10 +8,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import pt.ipleiria.estg.dei.ei.dae.packages.dtos.*;
-import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.CustomerBean;
+import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.OrderBean;
-import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.OrderBean;
-import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.ProductBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
@@ -34,6 +32,9 @@ public class OrderService {
     @EJB
     private CustomerBean customerBean;
 
+    @EJB
+    private LogisticsOperatorBean logisticsBean;
+
     @Context
     private SecurityContext securityContext;
 
@@ -43,7 +44,7 @@ public class OrderService {
         return new OrderDTO(
                 order.getId(),
                 order.getStatus(),
-                order.getLogisticsOperators(),
+                order.getLogisticsOperatorsUsername(),
                 packages,
                 products,
                 order.getCustomerUsername()
@@ -58,7 +59,7 @@ public class OrderService {
         return new OrderDTO(
                 order.getId(),
                 order.getStatus(),
-                order.getLogisticsOperators(),
+                order.getLogisticsOperatorsUsername(),
                 null,
                 null,
                 order.getCustomerUsername()
@@ -179,6 +180,12 @@ public class OrderService {
         return toDTOsNoPackageandProducts(orderBean.allByCustomer(customer));
     }
 
+    @GET
+    @Path("/logistics-operator/{username}")
+    public List<OrderDTO> getAllOrdersByLogisticsOperator(@PathParam("username") String logisticsOperator) {
+        return toDTOsNoPackageandProducts(orderBean.allByLogisticsOperator(logisticsOperator));
+    }
+
     @POST
     @Path("/")
     public Response createNewOrder(OrderDTO orderDTO) throws MyEntityNotFoundException {
@@ -202,11 +209,14 @@ public class OrderService {
         Customer customer = customerBean.findCustomer(order.getCustomerUsername());
         if (orderDTO.getCustomerUsername() != null)
             customer = customerBean.findCustomer(orderDTO.getCustomerUsername());
+        LogisticsOperator logisticsOperator = logisticsBean.findLogisticOperator(order.getLogisticsOperatorsUsername());
+        if (orderDTO.getLogisticsOperatorsUsername() != null)
+            logisticsOperator = logisticsBean.findLogisticOperator(orderDTO.getLogisticsOperatorsUsername());
         orderBean.update(
                 id,
                 orderDTO.getStatus() != null ? orderDTO.getStatus() : order.getStatus(),
                 customer,
-                orderDTO.getLogisticsOperators() != null ? orderDTO.getLogisticsOperators() : order.getLogisticsOperators()
+                logisticsOperator
         );
         order = orderBean.find(id);
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();

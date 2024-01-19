@@ -85,8 +85,8 @@ public class ProductService {
                 productDTO.getProductManufacturer() != null ? productDTO.getProductManufacturer() : product.getProductManufacturer(),
                 productDTO.getProductBrand() != null ? productDTO.getProductBrand() : product.getProductBrand(),
                 productDTO.getProductImage() != null ? productDTO.getProductImage() : product.getProductImage(),
-                productDTO.getProductPrice() != null ? productDTO.getProductPrice() : product.getProductPrice(),
-                productDTO.getProductWeight() != null ? productDTO.getProductWeight() : product.getProductWeight()
+                productDTO.getProductPrice() != 0.0 ? productDTO.getProductPrice() : product.getProductPrice(),
+                productDTO.getProductWeight() != 0.0 ? productDTO.getProductWeight() : product.getProductWeight()
         );
 
         product = productBean.find(id);
