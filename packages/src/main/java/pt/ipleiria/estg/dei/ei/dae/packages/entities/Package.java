@@ -2,6 +2,8 @@ package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,7 +12,9 @@ import java.util.List;
 @Entity
 @Table(name = "packages")
 @NamedQuery(name = "getAllPackages", query = "select p from Package p order by p.packageType")
-public class Package implements Serializable {
+@SQLDelete(sql="UPDATE packages SET deleted = TRUE WHERE id = ? AND version = ? ")
+@Where(clause = "deleted IS FALSE")
+public class Package extends Versionable implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +32,8 @@ public class Package implements Serializable {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order; // referencia da encomenda
+
+    private boolean deleted;
 
 
     public Package( PackageType packageType, PackageMaterials packageMaterial) {

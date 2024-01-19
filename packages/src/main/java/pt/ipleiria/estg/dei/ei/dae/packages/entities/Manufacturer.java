@@ -3,6 +3,8 @@ package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ import java.util.List;
                 query = "SELECT m FROM Manufacturer m ORDER BY m.username" //JPQL
         )
 })
+@SQLDelete(sql="UPDATE users SET deleted = TRUE WHERE username = ? AND version = ? AND dtype = 'Manufacturer'")
+@Where(clause = "deleted IS FALSE")
 public class Manufacturer extends User implements Serializable {
     private int nif;
     private int phone;

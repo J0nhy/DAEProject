@@ -16,6 +16,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.Manufacturer;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 import java.util.List;
@@ -70,7 +71,7 @@ public class ManufacturerService {
 
     @POST
     @Path("/")
-    public Response createNewManufacturer(ManufacturerDTO manufacturerDTO) throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException {
+    public Response createNewManufacturer(ManufacturerDTO manufacturerDTO) throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException, MyIncorrectDataType {
         manufacturerBean.create(manufacturerDTO.getUsername(),
                 manufacturerDTO.getPassword(),
                 manufacturerDTO.getName(),
@@ -86,7 +87,7 @@ public class ManufacturerService {
     @PUT
     @Path("{username}")
     public Response updateManufacturer(@PathParam("username") String username, ManufacturerDTO manufacturerDTO)
-            throws MyEntityNotFoundException, MyConstraintViolationException{
+            throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType {
         Manufacturer manufacturer = manufacturerBean.findManufacturer(username);
 
         manufacturer = manufacturerBean.update(

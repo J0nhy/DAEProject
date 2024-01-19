@@ -9,6 +9,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.SensorType;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
 
 import java.util.List;
 
@@ -18,10 +19,16 @@ public class SensorBean {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Sensor create(SensorType sensorType, String value, String dataType) {
+    public Sensor create(SensorType sensorType, String value, String dataType) throws MyIncorrectDataType {
+        try {
+
         Sensor sensor_ = new Sensor( sensorType, value, dataType);
         entityManager.persist(sensor_);
         return sensor_;
+
+        } catch (ConstraintViolationException e) {
+            throw new MyIncorrectDataType("Data Type incorreto: " + e);
+        }
     }
 
     public List<Sensor> all() {
@@ -44,7 +51,7 @@ public class SensorBean {
         return entityManager.find(Sensor.class, SensorId);
     }
 
-    public void update(long id, SensorType sensorType, String value, String dataType) throws Exception {
+    public void update(long id, SensorType sensorType, String value, String dataType) throws Exception, MyIncorrectDataType {
         
         Sensor sensor_ = find(id);
 
@@ -58,7 +65,7 @@ public class SensorBean {
             entityManager.merge(sensor_);
             
         } catch (ConstraintViolationException e) {
-            throw new Exception(e);
+            throw new MyIncorrectDataType("Data Type incorreto: " + e);
         }
     }
 

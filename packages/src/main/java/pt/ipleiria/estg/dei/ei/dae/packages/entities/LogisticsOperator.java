@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
 
@@ -14,6 +16,8 @@ import java.io.Serializable;
                 query = "SELECT m FROM LogisticsOperator m ORDER BY m.name" //JPQL
         )
 })
+@SQLDelete(sql="UPDATE users SET deleted = TRUE WHERE username = ? AND version = ? AND dtype = 'LogisticsOperator'")
+@Where(clause = "deleted IS FALSE")
 public class LogisticsOperator extends User implements Serializable {
 
     @NotNull

@@ -17,6 +17,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 import java.util.List;
@@ -108,7 +109,7 @@ public class CustomerService {
 
     @POST
     @Path("/")
-    public Response createNewCustomer(CustomerDTO customerDTO) throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException {
+    public Response createNewCustomer(CustomerDTO customerDTO) throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException, MyIncorrectDataType {
         customerBean.create(customerDTO.getUsername(),
                 customerDTO.getPassword(),
                 customerDTO.getName(),
@@ -124,7 +125,7 @@ public class CustomerService {
     @PUT
     @Path("{username}")
     public Response updateCustomer(@PathParam("username") String username, CustomerDTO customerDTO)
-        throws MyEntityNotFoundException, MyConstraintViolationException{
+            throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType {
         Customer customer = customerBean.findCustomer(username);
 
         customer = customerBean.update(
@@ -141,8 +142,8 @@ public class CustomerService {
 
     @DELETE
     @Path("{username}")
-    public Response deleteCustomer(@PathParam("username") String username)throws MyEntityNotFoundException{
-        customerBean.removeStudent(username);
+    public Response deleteCustomer(@PathParam("username") String username) throws MyEntityNotFoundException{
+        customerBean.delete(username);
         return Response.status(Response.Status.OK).build();
     }
 

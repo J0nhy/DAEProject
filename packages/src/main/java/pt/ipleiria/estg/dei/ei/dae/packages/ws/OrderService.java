@@ -13,6 +13,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.OrderBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -211,7 +212,7 @@ public class OrderService {
                     customer
             );
             return Response.status(Response.Status.CREATED).entity(toDTO(order)).build();
-        }catch (MyEntityNotFoundException e){
+        }catch (MyEntityNotFoundException | MyIncorrectDataType e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR_FINDING_PRODUCT").build();
         }
 
@@ -227,6 +228,7 @@ public class OrderService {
         LogisticsOperator logisticsOperator = logisticsBean.findLogisticOperator(order.getLogisticsOperatorsUsername());
         if (orderDTO.getLogisticsOperatorsUsername() != null)
             logisticsOperator = logisticsBean.findLogisticOperator(orderDTO.getLogisticsOperatorsUsername());
+
         orderBean.update(
                 id,
                 orderDTO.getStatus() != null ? orderDTO.getStatus() : order.getStatus(),

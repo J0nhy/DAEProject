@@ -12,6 +12,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.Manufacturer;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Hasher;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class LogisticsOperatorBean {
     private Hasher hasher = new Hasher();
 
     public void create (String username, String password, String name, String email, String company)
-            throws MyEntityExistsException, MyConstraintViolationException {
+            throws MyEntityExistsException, MyConstraintViolationException, MyIncorrectDataType {
         LogisticsOperator logistics = entityManager.find(LogisticsOperator.class, username);
        if ( logistics != null){
            if (!logistics.isDeleted())
@@ -35,7 +36,7 @@ public class LogisticsOperatorBean {
             logistics = new LogisticsOperator(username, hasher.hash(password), name, email, company);
             entityManager.persist(logistics);
         }catch (ConstraintViolationException e){
-            throw new MyConstraintViolationException(e);
+            throw new MyIncorrectDataType("Data Type incorreto: " + e);
         }
     }
     public List<LogisticsOperator> getAll() {
@@ -52,7 +53,7 @@ public class LogisticsOperatorBean {
     }
 
     public LogisticsOperator update(String username, String password, String name, String email, String company)
-            throws MyEntityNotFoundException, MyConstraintViolationException {
+            throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType {
 
         LogisticsOperator logisticsOperator = findLogisticOperator(username);
         try {
@@ -61,8 +62,9 @@ public class LogisticsOperatorBean {
             logisticsOperator.setName(name);
             logisticsOperator.setEmail(email);
             logisticsOperator.setCompany(company);
+
         } catch (ConstraintViolationException e) {
-            throw new MyConstraintViolationException(e);
+            throw new MyIncorrectDataType("Data Type incorreto: " + e);
         }
         return logisticsOperator;
     }
