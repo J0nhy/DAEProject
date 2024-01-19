@@ -28,6 +28,13 @@ public class SensorBean {
         return entityManager.createNamedQuery("getAllSensors", Sensor.class).getResultList();
     }
 
+    public List<Sensor> allByPackage(long id) {
+        return entityManager
+                .createNamedQuery("getAllSensorsByPackage", Sensor.class)
+                .setParameter("id", id)  // Assuming "logisticsOperatorId" is the parameter name in the named query
+                .getResultList();
+    }
+
     public Sensor find(long SensorId) throws Exception {
 
         Sensor sensor_ = entityManager.find(Sensor.class, SensorId);
@@ -47,8 +54,7 @@ public class SensorBean {
             sensor_.setSensorType(sensorType);
             sensor_.setValue(value);
             sensor_.setDataType(dataType);
-            //sensor_.setPackageRef(packageRef);
-            
+
             entityManager.merge(sensor_);
             
         } catch (ConstraintViolationException e) {

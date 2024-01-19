@@ -9,8 +9,13 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "sensors")
-@NamedQuery(name = "getAllSensors", query = "select s from Sensor s order by s.sensorType")
-public class Sensor implements Serializable {
+@NamedQueries({
+        @NamedQuery(name = "getAllSensors", query = "select s from Sensor s order by s.sensorType"),
+        @NamedQuery(name = "getAllSensorsByPackage", query = "select s from Sensor s where s.packageRef.id = :id order by s.id")
+
+})
+
+public class Sensor extends Versionable implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

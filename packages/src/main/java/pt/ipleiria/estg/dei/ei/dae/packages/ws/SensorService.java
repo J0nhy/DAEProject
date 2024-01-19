@@ -50,23 +50,16 @@ public class SensorService {
     public List<SensorDTO> getAllSensors() {
         return toDTOs(sensorBean.all());
     }
+    @GET
+    @Path("/package/{id}")
+    public List<SensorDTO> getAllSensorsBy(@PathParam("id") long id) {
+        return toDTOs(sensorBean.allByPackage(id));
+    }
 
     @GET
     @Path("{id}")
     public Response getSensorDetails(@PathParam("id") long id) throws Exception {
         return Response.status(Response.Status.OK).entity(toDTO(sensorBean.find(id))).build();
-    }
-
-    @POST
-    @Path("/")
-    public Response createNewSensor(SensorDTO sensorDTO) throws Exception {
-        sensorBean.create(
-                sensorDTO.getSensorType(),
-                sensorDTO.getValue(),
-                sensorDTO.getDataType()
-        );
-        Sensor sensor = sensorBean.find(sensorDTO.getId());
-        return Response.status(Response.Status.CREATED).entity(toDTO(sensor)).build();
     }
 
     @PUT
@@ -79,7 +72,6 @@ public class SensorService {
                 sensorDTO.getSensorType() != null ? sensorDTO.getSensorType() : sensor.getSensorType(),
                 sensorDTO.getValue() != null ? sensorDTO.getValue() : sensor.getValue(),
                 sensorDTO.getDataType() != null ? sensorDTO.getDataType() : sensor.getDataType()
-                //sensorDTO.getPackageRef() != 0 ? sensorDTO.getPackageRef() : sensor.getPackageRef()
         );
         sensor = sensorBean.find(id);
         return Response.status(Response.Status.OK).entity(toDTO(sensor)).build();
