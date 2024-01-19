@@ -5,8 +5,12 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.Hibernate;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Manufacturer;
+import pt.ipleiria.estg.dei.ei.dae.packages.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.User;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Hasher;
+
+import java.security.Principal;
 
 @Stateless
 public class UserBean {
@@ -26,5 +30,12 @@ public class UserBean {
     public boolean canLogin(String username, String password) {
         var user = find(username);
         return user != null && user.getPassword().equals(hasher.hash(password));
+    }
+
+    public boolean isManufacturer(String username) {
+        Manufacturer user = em.createNamedQuery("isUserManufacturer", Manufacturer.class)
+                .setParameter("username", username)  // Assuming "customer" is the parameter name in the named query
+                 .getSingleResult();
+        return user != null;
     }
 }

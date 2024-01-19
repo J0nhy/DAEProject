@@ -44,6 +44,9 @@ public class OrderService {
     @EJB
     private PackageBean packageBean;
 
+    @EJB
+    private UserBean userBean;
+
     @Context
     private SecurityContext securityContext;
 
@@ -213,8 +216,13 @@ public class OrderService {
     public Response getOrderDetails(@PathParam("id") long id) throws Exception {
         Order order = orderBean.find(id);
         var principal = securityContext.getUserPrincipal();
+        System.out.println(principal.getName());
 
-        if(!principal.getName().equals(order.getLogisticsOperatorsUsername()) || !principal.getName().equals(order.getCustomerUsername())) {
+        if (userBean.isManufacturer(principal.getName())){
+            return Response.status(Response.Status.OK).entity(toDTO(order)).build();
+        }
+
+        if(!principal.getName().equals(order.getLogisticsOperatorsUsername()) && !principal.getName().equals(order.getCustomerUsername())) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();
@@ -222,18 +230,21 @@ public class OrderService {
 
     @GET
     @Path("/customer/{username}")
+    @RolesAllowed({"Customer", "Manufacturer"})
     public List<OrderDTO> getAllOrdersByCustomer(@PathParam("username") String customer) {
         return toDTOsCreateOrder(orderBean.allByCustomer(customer));
     }
 
     @GET
     @Path("/logistics-operator/{username}")
+    @RolesAllowed({"LogisticsOperator", "Manufacturer"})
     public List<OrderDTO> getAllOrdersByLogisticsOperator(@PathParam("username") String logisticsOperator) {
         return toDTOsNoPackageandProducts(orderBean.allByLogisticsOperator(logisticsOperator));
     }
 
     @POST
     @Path("/")
+    @RolesAllowed({"Manufacturer"})
     public Response createNewOrder(OrderDTO orderDTO) throws MyEntityNotFoundException {
         try {
             Customer customer = customerBean.findCustomer(orderDTO.getCustomerUsername());
@@ -252,6 +263,7 @@ public class OrderService {
 
     @PUT
     @Path("{id}")
+    @RolesAllowed({"Manufacturer", "LogisticsOperator"})
     public Response updateOrder(@PathParam("id") long id, OrderDTO orderDTO) throws Exception {
         Order order = orderBean.find(id);
         Customer customer = customerBean.findCustomer(order.getCustomerUsername());
@@ -273,6 +285,7 @@ public class OrderService {
 
     @PUT
     @Path("{id}/completeOrder")
+    @RolesAllowed({"Manufacturer"})
     public Response completeOrder(@PathParam("id") long id, OrderDTO orderDTO) throws Exception {
         try {
             Order order = orderBean.find(id);
@@ -292,7 +305,6 @@ public class OrderService {
                     id,
                     orderDTO.getLogisticsOperatorsUsername()
             );
-            System.out.println("Anted de setar Status");
             orderBean.setStatusEnviado(id);
 
             return Response.status(Response.Status.OK).entity(toDTO(order)).build();

@@ -15,6 +15,10 @@ import java.util.List;
         @NamedQuery(
                 name = "getAllManufacturers",
                 query = "SELECT m FROM Manufacturer m ORDER BY m.username" //JPQL
+        ),
+        @NamedQuery(
+                name = "isUserManufacturer",
+                query = "select m from Manufacturer m where m.username = :username" //JPQL
         )
 })
 @SQLDelete(sql="UPDATE users SET deleted = TRUE WHERE username = ? AND version = ? AND dtype = 'Manufacturer'")

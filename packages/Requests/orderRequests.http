@@ -4,18 +4,19 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "username": "Manufacturer1",
+  "username": "logistics1",
   "password": "123"
 }
 
 ##### Get Orders
 GET http://localhost:8080/packages/api/orders
 Accept: application/json
-//Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1NDI5NTg0LCJleHAiOjE3MDU0MzMxODR9.awEt47NmNxk8M4CP3JHqdKkk7j1ZEYX4pudUvJjIhRVlHL3GFEvvk40pLcANEXww
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1Njg5NjI3LCJleHAiOjE3MDU2OTMyMjd9.s_ImAOdxSKIdshQ3MUgtegC8H3oV0mDaTsUOrYtdGqAksKRHTg66IeOcf4DfYMRC
 
 ##### Get Single Order
-GET http://localhost:8080/packages/api/orders/5
+GET http://localhost:8080/packages/api/orders/6
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1Njg5NTIzLCJleHAiOjE3MDU2OTMxMjN9.XMzT5brqgXi9UfTsb1qTMpkLRiOZShUC2Sk_BjzgU92-jlr0PFrI8v9Q9fdu4IhG
 
 ##### Get Order By Customer
 GET http://localhost:8080/packages/api/orders/customer/Customer1
@@ -58,8 +59,9 @@ Content-Type: application/json
 //Accept: application/json
 
 #####Complete Order
-PUT http://localhost:8080/packages/api/orders/6/completeOrder
+PUT http://localhost:8080/packages/api/orders/2/completeOrder
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1NjgzOTY3LCJleHAiOjE3MDU2ODc1Njd9.jdRH_mnwBbt6RPF5IUnvraxCFHU20EOcmXZrVBzRVIMUwFj-VHrOEcVeXjdHHIuN
 Content-Type: application/json
 
 {
