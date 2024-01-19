@@ -170,6 +170,6 @@ public class OrderBean {
         }
 
         order.setLogisticsOperators(logisticsOperator);
-        entityManager.merge(order);
+        entityManager.persist(order);
     }
 }

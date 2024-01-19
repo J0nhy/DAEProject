@@ -7,6 +7,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
+import org.hibernate.type.descriptor.jdbc.ObjectNullResolvingJdbcType;
 import pt.ipleiria.estg.dei.ei.dae.packages.dtos.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.OrderBean;
@@ -15,6 +16,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +38,9 @@ public class OrderService {
     @EJB
     private LogisticsOperatorBean logisticsBean;
 
+    @EJB
+    private PackageBean packageBean;
+
     @Context
     private SecurityContext securityContext;
 
@@ -54,6 +59,19 @@ public class OrderService {
     }
     public List<OrderDTO> toDTOs(List<Order> orders) { // conversao dos DTOs
         return orders.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    private OrderDTO toDTOCompleteOrder(Order order) {
+        List<PackageDTO> packages = toDTOsPackagesNoSensor(order.getPackages());
+        return new OrderDTO(
+                order.getId(),
+                order.getLogisticsOperatorsUsername(),
+                packages
+        );
+    }
+
+    public List<OrderDTO> toDTOsCompleteOrder(List<Order> orders) {
+        return orders.stream().map(this::toDTOCompleteOrder).collect(Collectors.toList());
     }
 
     private OrderDTO toDTONoPackagesandProducts(Order order) { // get sem as listas
@@ -75,7 +93,7 @@ public class OrderService {
         return new OrderDTO(
                 order.getId(),
                 order.getStatus(),
-                null,
+                order.getLogisticsOperatorsUsername(),
                 null,
                 null,
                 order.getCustomerUsername()
@@ -116,12 +134,14 @@ public class OrderService {
     }
 
     private OrderDTO toDTONoListsNoLogisticsOperator(Order order) { // get sem as listas e sem operator
+        List<PackageDTO> packages = toDTOsPackagesNoSensor(order.getPackages());
+        List<ProductDTO> products = toDTOsProducts(order.getProducts());
         return new OrderDTO(
                 order.getId(),
                 order.getStatus(),
                 null,
-                null,
-                null,
+                packages,
+                products,
                 order.getCustomerUsername()
         );
 
@@ -181,7 +201,7 @@ public class OrderService {
     @GET
     @Path("/")
     public List<OrderDTO> getAllOrders() {
-        return toDTOsNoPackageandProducts(orderBean.all());
+        return toDTOsCreateOrder(orderBean.all());
     }
 
     @GET
@@ -193,7 +213,7 @@ public class OrderService {
     @GET
     @Path("/customer/{username}")
     public List<OrderDTO> getAllOrdersByCustomer(@PathParam("username") String customer) {
-        return toDTOsNoListsNoLogisticsOperator(orderBean.allByCustomer(customer));
+        return toDTOsCreateOrder(orderBean.allByCustomer(customer));
     }
 
     @GET
@@ -211,8 +231,10 @@ public class OrderService {
                     orderDTO.getStatus(),
                     customer
             );
-            return Response.status(Response.Status.CREATED).entity(toDTO(order)).build();
+
+            return Response.status(Response.Status.CREATED).entity(toDTOCreateOrder(order)).build();
         }catch (MyEntityNotFoundException | MyIncorrectDataType e){
+
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR_FINDING_PRODUCT").build();
         }
 
@@ -240,6 +262,45 @@ public class OrderService {
     }
 
     @PUT
+    @Path("{id}/completeOrder")
+    public Response completeOrder(@PathParam("id") long id, OrderDTO orderDTO) throws Exception {
+        try {
+            System.out.println("Dentro do request");
+            Order order = orderBean.find(id);
+            System.out.println("Encontrou a encomenda");
+            List<PackageDTO> packList = orderDTO.getPackages();
+            System.out.println(packList);
+            int quantidade = -1;
+            Package pack = null;
+            for (PackageDTO p : packList) {
+                quantidade = p.getQuantity();
+                System.out.println(quantidade);
+                System.out.println(p.getPackageType());
+                System.out.println(p.getPackageMaterial());
+                if (quantidade > 0)
+                    for (int i = 0; i < quantidade; i++) {
+                        System.out.println("entrou");
+                        pack = packageBean.create(p.getPackageType(), p.getPackageMaterial());
+                        System.out.println("criou");
+                        orderBean.addPackageToOrder(id, pack.getId());
+                        System.out.println("adicionou");
+                    }
+            }
+            orderBean.setLogisticsOperator(
+                    id,
+                    orderDTO.getLogisticsOperatorsUsername()
+            );
+
+            return Response.status(Response.Status.OK).entity(toDTO(order)).build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR_COMPLETING_ORDER").build();
+        }
+    }
+
+    /*
+    Estão a ser adicionadas em cima
+    @PUT
     @Path("{id}/addPackage/{package}")
     public Response addPackageToOrder(@PathParam("id") long id, @PathParam("package") long packageId) throws Exception {
         orderBean.addPackageToOrder(
@@ -250,6 +311,7 @@ public class OrderService {
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();
     }
 
+    N faz sentido remover packages??
     @PUT
     @Path("{id}/removePackage/{package}")
     public Response removePackageFromOrder(@PathParam("id") long id, @PathParam("package") long packageId) throws Exception {
@@ -263,6 +325,7 @@ public class OrderService {
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();
     }
 
+    // N faz sentido remover produtos
     @PUT
     @Path("{id}/removeproduct/{product}")
     public Response removeProductFromOrder(@PathParam("id") long id, @PathParam("product") long productId) throws Exception {
@@ -276,7 +339,6 @@ public class OrderService {
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();
     }
 
-    /*
     Não faz sentido apagar uma encomenda no nosso contexto
     @DELETE
     @Path("{id}")

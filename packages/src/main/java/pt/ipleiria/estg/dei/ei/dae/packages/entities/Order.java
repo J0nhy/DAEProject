@@ -131,6 +131,8 @@ public class Order extends Versionable implements Serializable  {
     }
 
     public String getLogisticsOperatorsUsername() {
+        if (logisticsOperators == null)
+            return "";
         return logisticsOperators.getUsername();
     }
 }
