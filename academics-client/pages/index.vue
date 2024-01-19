@@ -4,7 +4,7 @@
         Manage your resources:
         <div style="padding-left: 14px; margin-right: 800px;">
             <template v-if="userRole === 'Customer'">
-                <nuxt-link to="/customers">Customers</nuxt-link><br>
+                <nuxt-link to="orders/customers">Customers</nuxt-link><br>
             </template>
             <template v-if="p === 'LogisticsOperator'">
                 <nuxt-link to="/logistics">Logistic Operators</nuxt-link><br>
@@ -17,7 +17,7 @@
                 <nuxt-link to="/orderCustomer">Customer Orders</nuxt-link><br>
             </template>
             <template v-if="userRole === 'LogisticsOperator'">
-                <nuxt-link to="/orderLogistic">Logistic Orders</nuxt-link><br>
+                <nuxt-link to="orders/logistics">Logistic Orders</nuxt-link><br>
             </template>
         </div>
     </div>

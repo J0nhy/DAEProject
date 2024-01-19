@@ -1,29 +1,52 @@
 <template>
-    <div v-if="error">Error: {{ error.message }}</div>
+    <div v-if="error" class="alert alert-danger">Error: {{ error.message }}</div>
     <div v-else>
-        <nuxt-link to="/">Home</nuxt-link> | <nuxt-link to="/create">Create a New Subject</nuxt-link>
-        <h2>Subjects</h2>
-        <table>
-            <tr>
-                <th>Username</th>
-                <th>Name</th>
-                <th>E-mail</th>
-                <th>Office</th>
-                <th>actions</th>
-            </tr>
-            <tr v-for="subject in subjects">
-                <td>{{ subject.username }}</td>
-                <td>{{ subject.name }}</td>
-                <td>{{ subject.email }}</td>
-                <td>{{ subject.office }}</td>
-                <nuxt-link :to="`/students/${subject.username}`">Details</nuxt-link>
-            </tr>
-        </table>
+      <h2 class="mb-4">Orders</h2>
+      <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Customer Username</th>
+            <th>Logistics Operator</th>
+            <th>Actions</th>
+  
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="order in orders" :key="order.id">
+            <td>{{ order.id }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.customerUsername }}</td>
+            <td>
+              <span v-if="order.logisticsOperators">
+                {{ order.logisticsOperators.username }}
+  
+              </span>
+              <span v-else class="text-muted">None
+              </span>
+              
+            </td>
+            <td class="d-flex gap-2">  
+              <button v-if="order.status='Pending'" class="btn btn-success" >
+                Completar
+                          <i class="bi bi-search"></i>
+                      </button>   
+                      <button v-if="order.status='Pending'" class="btn btn-danger" >
+                Cancelar
+                          <i class="bi bi-search"></i>
+                      </button>            
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <button @click.prevent="refresh">Refresh Data</button>
-</template>
-<script setup>
-    const config = useRuntimeConfig()
-    const api = config.public.API_URL
-    const { data: subjects, error, refresh } = await useFetch(`${api}/subjects`)
-</script>
+    <button @click.prevent="refresh" class="btn btn-primary">Refresh Data</button>
+  </template>
+    
+  <script setup>
+  const config = useRuntimeConfig()
+  const api = config.public.API_URL
+  const { data: orders, error, refresh } = await useFetch(`${api}/orders`)
+  </script>
+    
