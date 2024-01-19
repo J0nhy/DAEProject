@@ -133,12 +133,14 @@ public class OrderService {
     }
 
     private OrderDTO toDTONoListsNoLogisticsOperator(Order order) { // get sem as listas e sem operator
+        List<PackageDTO> packages = toDTOsPackagesNoSensor(order.getPackages());
+        List<ProductDTO> products = toDTOsProducts(order.getProducts());
         return new OrderDTO(
                 order.getId(),
                 order.getStatus(),
                 null,
-                null,
-                null,
+                packages,
+                products,
                 order.getCustomerUsername()
         );
 
@@ -198,19 +200,26 @@ public class OrderService {
     @GET
     @Path("/")
     public List<OrderDTO> getAllOrders() {
-        return toDTOsNoPackageandProducts(orderBean.all());
+        return toDTOsCreateOrder(orderBean.all());
     }
 
     @GET
     @Path("{id}")
     public Response getOrderDetails(@PathParam("id") long id) throws Exception {
-        return Response.status(Response.Status.OK).entity(toDTO(orderBean.find(id))).build();
+        Order order = orderBean.find(id);
+        try {
+            return Response.status(Response.Status.OK).entity(toDTO(orderBean.find(id))).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.OK).entity(toDTONoListsNoLogisticsOperator(order)).build();
+        }
+
+
     }
 
     @GET
     @Path("/customer/{username}")
     public List<OrderDTO> getAllOrdersByCustomer(@PathParam("username") String customer) {
-        return toDTOsNoListsNoLogisticsOperator(orderBean.allByCustomer(customer));
+        return toDTOsCreateOrder(orderBean.allByCustomer(customer));
     }
 
     @GET
