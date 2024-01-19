@@ -13,12 +13,28 @@ public class PackageDTO implements Serializable{
     private long orderId;
     private List<SensorDTO> sensors;
 
+    private int quantity;
+
     public PackageDTO(long id, PackageType PackageType, PackageMaterials packageMaterial, long orderId, List<SensorDTO> sensors) {
         this.id = id;
         this.PackageType = PackageType;
         this.packageMaterial = packageMaterial;
         this.orderId = orderId;
         this.sensors = sensors;
+    }
+
+    public PackageDTO(long id, PackageType PackageType, PackageMaterials packageMaterial) {
+        this.id = id;
+        this.PackageType = PackageType;
+        this.packageMaterial = packageMaterial;
+        this.sensors =  new ArrayList<>();
+    }
+
+    public PackageDTO(long id, PackageType PackageType, PackageMaterials packageMaterial, int quantity) {
+        this.id = id;
+        this.PackageType = PackageType;
+        this.packageMaterial = packageMaterial;
+        this.quantity = quantity;
     }
 
     public PackageDTO() {
@@ -65,4 +81,11 @@ public class PackageDTO implements Serializable{
         this.sensors = sensors;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

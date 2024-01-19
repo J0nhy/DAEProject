@@ -47,6 +47,22 @@ public class PackageService {
         );
     }
 
+    public List<PackageDTO> toDTOs(List<Package> packages) {
+        return packages.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    private PackageDTO toDTONOSensors(Package packageInstance) {
+        return new PackageDTO(
+                packageInstance.getId(),
+                packageInstance.getPackageType(),
+                packageInstance.getPackageMaterial()
+        );
+    }
+
+    public List<PackageDTO> toDTOsNoSensors(List<Package> packages) {
+        return packages.stream().map(this::toDTONOSensors).collect(Collectors.toList());
+    }
+
     private SensorDTO toDTO(Sensor sensor) {
         return new SensorDTO(
                 sensor.getId(),
@@ -57,10 +73,6 @@ public class PackageService {
         );
     }
 
-    public List<PackageDTO> toDTOs(List<Package> packages) {
-        return packages.stream().map(this::toDTO).collect(Collectors.toList());
-    }
-
     public List<SensorDTO> toDTOsSensors (List<Sensor> sensors) {
         return sensors.stream().map(this::toDTO).collect(Collectors.toList());
     }
@@ -68,7 +80,13 @@ public class PackageService {
     @GET
     @Path("/")
     public List<PackageDTO> getAllPackages() {
-        return toDTOs(packageBean.all());
+        return toDTOsNoSensors(packageBean.all());
+    }
+
+    @GET
+    @Path("/packagesWithOrders")
+    public List<PackageDTO> getAllPackagesWithOrders() {
+        return toDTOs(packageBean.packagesWithOrders());
     }
 
     @GET

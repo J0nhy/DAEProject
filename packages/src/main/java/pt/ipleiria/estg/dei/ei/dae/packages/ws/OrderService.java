@@ -7,6 +7,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
+import org.hibernate.type.descriptor.jdbc.ObjectNullResolvingJdbcType;
 import pt.ipleiria.estg.dei.ei.dae.packages.dtos.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.OrderBean;
@@ -14,6 +15,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +37,9 @@ public class OrderService {
     @EJB
     private LogisticsOperatorBean logisticsBean;
 
+    @EJB
+    private PackageBean packageBean;
+
     @Context
     private SecurityContext securityContext;
 
@@ -53,6 +58,19 @@ public class OrderService {
     }
     public List<OrderDTO> toDTOs(List<Order> orders) { // conversao dos DTOs
         return orders.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    private OrderDTO toDTOCompleteOrder(Order order) {
+        List<PackageDTO> packages = toDTOsPackagesNoSensor(order.getPackages());
+        return new OrderDTO(
+                order.getId(),
+                order.getLogisticsOperatorsUsername(),
+                packages
+        );
+    }
+
+    public List<OrderDTO> toDTOsCompleteOrder(List<Order> orders) {
+        return orders.stream().map(this::toDTOCompleteOrder).collect(Collectors.toList());
     }
 
     private OrderDTO toDTONoPackagesandProducts(Order order) { // get sem as listas
@@ -210,7 +228,7 @@ public class OrderService {
                     orderDTO.getStatus(),
                     customer
             );
-            return Response.status(Response.Status.CREATED).entity(toDTO(order)).build();
+            return Response.status(Response.Status.CREATED).entity(toDTOCreateOrder(order)).build();
         }catch (MyEntityNotFoundException e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR_FINDING_PRODUCT").build();
         }
@@ -235,6 +253,43 @@ public class OrderService {
         );
         order = orderBean.find(id);
         return Response.status(Response.Status.OK).entity(toDTO(order)).build();
+    }
+
+    @PUT
+    @Path("{id}/completeOrder")
+    public Response completeOrder(@PathParam("id") long id, OrderDTO orderDTO) throws Exception {
+        try {
+            System.out.println("Dentro do request");
+            Order order = orderBean.find(id);
+            System.out.println("Encontrou a encomenda");
+            List<PackageDTO> packList = orderDTO.getPackages();
+            System.out.println(packList);
+            int quantidade = -1;
+            Package pack = null;
+            for (PackageDTO p : packList) {
+                quantidade = p.getQuantity();
+                System.out.println(quantidade);
+                System.out.println(p.getPackageType());
+                System.out.println(p.getPackageMaterial());
+                if (quantidade > 0)
+                    for (int i = 0; i < quantidade; i++) {
+                        System.out.println("entrou");
+                        pack = packageBean.create(p.getPackageType(), p.getPackageMaterial());
+                        System.out.println("criou");
+                        orderBean.addPackageToOrder(id, pack.getId());
+                        System.out.println("adicionou");
+                    }
+            }
+            orderBean.setLogisticsOperator(
+                    id,
+                    orderDTO.getLogisticsOperatorsUsername()
+            );
+
+            return Response.status(Response.Status.OK).entity("Packages e operador logisticos associados").build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR_COMPLETING_ORDER").build();
+        }
     }
 
     @PUT

@@ -27,7 +27,7 @@ public class PackageBean {
     @EJB
     private SensorBean sensorBean;
 
-    public void create( PackageType packageType, PackageMaterials packageMaterial){
+    public Package create( PackageType packageType, PackageMaterials packageMaterial){
             Package package_ = new Package(packageType, packageMaterial);
             entityManager.persist(package_);
 
@@ -60,6 +60,7 @@ public class PackageBean {
                 sensor3.setPackageRef(package_);
                 sensor4.setPackageRef(package_);
             }
+            return package_;
     }
 
     public List<Package> all() {
@@ -117,5 +118,9 @@ public class PackageBean {
         }
         package_.removeSensor(value);
         entityManager.merge(package_);
+    }
+
+    public List<Package> packagesWithOrders() {
+        return entityManager.createNamedQuery("getPackagesWithOrders", Package.class).getResultList();
     }
 }

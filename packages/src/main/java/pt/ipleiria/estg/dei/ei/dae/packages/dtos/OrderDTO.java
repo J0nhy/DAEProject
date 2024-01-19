@@ -23,12 +23,19 @@ public class OrderDTO implements Serializable {
         this.customerUsername = customerUsername;
     }
 
-    public OrderDTO(long id, StatusMessage status, List<PackageDTO> packages, List<ProductDTO> products) { //construtor sem logistics operator
+    public OrderDTO(long id, StatusMessage status, List<PackageDTO> packages, List<ProductDTO> products, String customerUsername) { //construtor sem logistics operator
         this.id = id;
         this.status = status;
         this.packages = packages;
         this.products = products;
         this.customerUsername = customerUsername;
+    }
+
+    public OrderDTO(long id, String logisticsOperatorsUsername, List<PackageDTO> packages) {
+        this.id = id;
+        this.logisticsOperatorsUsername = logisticsOperatorsUsername;
+        this.packages = packages;
+
     }
 
     public OrderDTO() {

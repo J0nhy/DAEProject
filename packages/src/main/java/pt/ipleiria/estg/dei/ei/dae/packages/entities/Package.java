@@ -9,7 +9,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "packages")
-@NamedQuery(name = "getAllPackages", query = "select p from Package p order by p.packageType")
+@NamedQueries({
+        @NamedQuery(name = "getAllPackages", query = "select p from Package p order by p.id"),
+        @NamedQuery(name = "getPackagesWithOrders", query = "select p from Package p where p.order.id = :id order by p.id")
+})
+
 public class Package implements Serializable {
 
     @Id

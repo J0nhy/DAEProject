@@ -14,7 +14,7 @@ Accept: application/json
 //Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1NDI5NTg0LCJleHAiOjE3MDU0MzMxODR9.awEt47NmNxk8M4CP3JHqdKkk7j1ZEYX4pudUvJjIhRVlHL3GFEvvk40pLcANEXww
 
 ##### Get Single Order
-GET http://localhost:8080/packages/api/orders/1
+GET http://localhost:8080/packages/api/orders/6
 Accept: application/json
 
 ##### Get Order By Customer
@@ -35,7 +35,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "status": "Teste",
+  "status": "PENDENTE",
   "customerUsername": "Customer1"
 }
 
@@ -61,3 +61,29 @@ Accept: application/json
 #####Remove Package from Order
 PUT http://localhost:8080/packages/api/orders/1/removePackage/16
 Accept: application/json
+
+#####Complete Order
+PUT http://localhost:8080/packages/api/orders/6/completeOrder
+Accept: application/json
+Content-Type: application/json
+
+{
+  "logisticsOperatorsUsername": "logistics1",
+  "packages": [
+    {
+      "quantity": 1,
+      "packageMaterial": "MADEIRA",
+      "packageType": "Primary"
+    },
+    {
+      "quantity": 0,
+      "packageMaterial": "PLASTICO",
+      "packageType": "Secondary"
+    },
+    {
+      "quantity": 3,
+      "packageMaterial": "OBSIDIAN",
+      "packageType": "Tertiary"
+    }
+    ]
+}
