@@ -10,10 +10,12 @@ import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.EmailBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.UserBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.User;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 @Path("users")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
+@Authenticated
 public class UserService {
 
     @EJB

@@ -21,10 +21,12 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 @Path("/packages")
 @Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
 @Consumes({MediaType.APPLICATION_JSON}) // injects header “Accept: application/json”
+@Authenticated
 public class PackageService {
 
     @EJB
@@ -80,18 +82,21 @@ public class PackageService {
 
     @GET
     @Path("/")
+    @RolesAllowed({"Manufacturer"})
     public List<PackageDTO> getAllPackages() {
         return toDTOsNoSensors(packageBean.all());
     }
 
     @GET
     @Path("/packagesWithOrders")
+    @RolesAllowed({"Manufacturer"})
     public List<PackageDTO> getAllPackagesWithOrders() {
         return toDTOsNoSensors(packageBean.packagesWithOrders());
     }
 
     @GET
     @Path("/packagesWithoutOrders")
+    @RolesAllowed({"Manufacturer"})
     public List<PackageDTO> getAllPackagesWithoutOrders() {
         return toDTOsNoSensors(packageBean.packagesWithoutOrders());
     }
@@ -102,6 +107,8 @@ public class PackageService {
         return Response.status(Response.Status.OK).entity(toDTO(packageBean.find(id))).build();
     }
 
+    /*
+    Não se cria packages através front end
     @POST
     @Path("/")
     public Response createNewPackage(PackageDTO packageDTO) throws Exception {
@@ -113,6 +120,7 @@ public class PackageService {
         return Response.status(Response.Status.CREATED).entity(toDTO(package_)).build();
     }
 
+    Não alteramos os pacotes associados a uma encomenda
     @PUT
     @Path("{id}")
     public Response updatePackage(@PathParam("id") long id, PackageDTO packageDTO) throws Exception {
@@ -127,11 +135,14 @@ public class PackageService {
         return Response.status(Response.Status.OK).entity(toDTO(package_)).build();
     }
 
-    //Acho que n se aplica
+
+    //Não eliminamos pacotes
     @DELETE
     @Path("{id}")
     public Response deletePackage(@PathParam("id") long id) throws Exception {
         packageBean.removePackage(id);
         return Response.status(Response.Status.OK).build();
     }
+    */
+
 }
