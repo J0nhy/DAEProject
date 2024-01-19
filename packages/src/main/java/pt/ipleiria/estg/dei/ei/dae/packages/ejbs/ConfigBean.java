@@ -184,14 +184,9 @@ public class ConfigBean {
             orderBean.addPackageToOrder(order1.getId(), 1);
             orderBean.addPackageToOrder(order1.getId(), 2);
 
-            orderBean.addPackageToOrder(order2.getId(), 3);
-            orderBean.addPackageToOrder(order2.getId(), 4);
-            orderBean.addPackageToOrder(order2.getId(), 5);
-
             orderBean.addPackageToOrder(order3.getId(), 6);
 
-            orderBean.addPackageToOrder(order4.getId(), 7);
-            orderBean.addPackageToOrder(order4.getId(), 8);
+
 
             orderBean.addPackageToOrder(order5.getId(), 9);
             orderBean.addPackageToOrder(order5.getId(), 10);
