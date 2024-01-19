@@ -4,33 +4,61 @@
     <div v-else>
         <h2 class="mb-4">Order {{ order.id }}</h2>
 
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <tbody>
 
-        <!--make text boxes-->
-        <div>Order Customer: {{ order.customerUsername }}</div>
-        <div>
-      Order Status:
-      <select name="Status" id="status" v-model="selectedStatus">
-        <option value="PENDENTE">PENDENTE</option>
-        <option value="ENVIADA">ENVIADA</option>
-        <option value="EM_TRANSITO">EM TRANSITO</option>
-        <option value="ENTREGUE">ENTREGUE</option>
-        <option value="CANCELADA">CANCELADA</option>
-      </select>
-    </div>
-        <div>Order Total Weight: {{ calculateTotalWeight() }} kg</div>
-        <div>Total of Products:{{ order.products.length }} </div>
-        <!-- Listagem de Produtos -->
-        <div>
-            <h3>Products of Order {{ order.id }}</h3>
-            <ul>
-                <li v-for="product in order.products" :key="product.id">
-                    {{ product.productName }}
-                </li>
-            </ul>
+                                <tr>
+                                    <th scope="row">Order ID</th>
+                                    <td style="text-align: center;">{{ order.id }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Customer Username</th>
+                                    <td style="text-align: center;">{{ order.customerUsername }}</td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row">Order Status</th>
+                                    <td style="text-align: center;" v-if="order.logisticsOperators">
+                                        <select name="Status" id="status" v-model="selectedStatus">
+                                            <option value="PENDENTE">PENDENTE</option>
+                                            <option value="ENVIADA">ENVIADA</option>
+                                            <option value="EM_TRANSITO">EM TRANSITO</option>
+                                            <option value="ENTREGUE">ENTREGUE</option>
+                                            <option value="CANCELADA">CANCELADA</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row">Order Total Weight</th>
+                                    <td style="text-align: center;">{{ calculateTotalWeight() }} kg</td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row">Total of Products</th>
+                                    <td style="text-align: center;">{{ order.products.length }} </td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row">List of Order Products</th>
+                                    <td style="text-align: center;">
+                                        <li v-for="product in order.products" :key="product.id">
+                                            {{ product.productName }}
+                                        </li>
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-
-
-
 
 
     </div>
@@ -69,22 +97,22 @@ const calculateTotalWeight = () => {
 };
 
 const updateOrderStatus = async () => {
-  const newStatus = selectedStatus.value;
-  console.log(newStatus);
+    const newStatus = selectedStatus.value;
+    console.log(newStatus);
 
-  const apiUrl = `${api}/orders/${id}`;
+    const apiUrl = `${api}/orders/${id}`;
 
-  // Atualize a ordem no servidor usando o método PUT
-  const response = await useFetch(apiUrl, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
-    },
-    body: JSON.stringify({
-      status: newStatus,
-    }),
-    // Adicione qualquer outro cabeçalho ou configuração necessário para a sua API
-  });
+    // Atualize a ordem no servidor usando o método PUT
+    const response = await useFetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
+        },
+        body: JSON.stringify({
+            status: newStatus,
+        }),
+        // Adicione qualquer outro cabeçalho ou configuração necessário para a sua API
+    });
 
 
 };
