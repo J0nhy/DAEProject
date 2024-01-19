@@ -20,7 +20,7 @@ public class Package implements Serializable {
     private PackageType packageType; // primary, secondary, tertiary
 
     @NotNull
-    private String packageMaterial; // material of the package
+    private PackageMaterials packageMaterial; // material of the package
 
     @OneToMany(mappedBy = "packageRef", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Sensor> sensors; // values watched by sensors
@@ -30,7 +30,7 @@ public class Package implements Serializable {
     private Order order; // referencia da encomenda
 
 
-    public Package( PackageType packageType, String packageMaterial) {
+    public Package( PackageType packageType, PackageMaterials packageMaterial) {
         this.packageType = packageType;
         this.packageMaterial = packageMaterial;
         this.sensors =  new ArrayList<>();
@@ -48,7 +48,7 @@ public class Package implements Serializable {
         return packageType;
     }
 
-    public String getPackageMaterial() {
+    public PackageMaterials getPackageMaterial() {
         return packageMaterial;
     }
 
@@ -64,7 +64,7 @@ public class Package implements Serializable {
         this.packageType = packageType;
     }
 
-    public void setPackageMaterial(String packageMaterial) {
+    public void setPackageMaterial(PackageMaterials packageMaterial) {
         this.packageMaterial = packageMaterial;
     }
 
