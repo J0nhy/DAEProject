@@ -12,6 +12,13 @@ function logout() {
  router.push('/auth/login');
 }
 
+watch(user, () => {
+  if (!user.value) {
+    router.push('/auth/login');
+  }
+}
+)
+
 onMounted(() => {
     // check if token exists in local storage
     const tokenLocal = localStorage.getItem('token')
@@ -28,6 +35,8 @@ onMounted(() => {
     }
     //console.log(user.value)
   })
+
+
 </script>
 
 <template>

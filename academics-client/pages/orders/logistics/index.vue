@@ -90,7 +90,11 @@ watch(user, () => {
     loadOrders()
     //refresh()
 
+  }else{
+    router.push('/auth/login');
   }
+
+
 }
 )
 const orders = ref([]);

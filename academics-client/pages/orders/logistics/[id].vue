@@ -79,7 +79,12 @@ onMounted(() => {
   
 
 })
-
+watch(user, () => {
+  if (!user.value) {
+    router.push('/auth/login');
+  }
+}
+)
 
 
 const config = useRuntimeConfig()
