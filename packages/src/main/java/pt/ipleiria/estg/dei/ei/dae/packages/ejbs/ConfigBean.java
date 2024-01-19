@@ -205,7 +205,7 @@ public class ConfigBean {
             orderBean.setLogisticsOperator(order3.getId(), "logistics1");
             orderBean.setLogisticsOperator(order5.getId(), "logistics1");
 
-            orderBean.setLogisticsOperator(order2.getId(), "logistics1");
+
 
 
         }catch (Exception e){

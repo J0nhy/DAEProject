@@ -2,6 +2,8 @@ package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.jboss.resteasy.spi.touri.MappedBy;
 
 import java.io.Serializable;
@@ -14,7 +16,8 @@ import java.io.Serializable;
         @NamedQuery(name = "getAllSensorsByPackage", query = "select s from Sensor s where s.packageRef.id = :id order by s.id")
 
 })
-
+@SQLDelete(sql="UPDATE sensors SET deleted = TRUE WHERE id = ? AND version = ?")
+@Where(clause = "deleted IS FALSE")
 public class Sensor extends Versionable implements Serializable {
 
     @Id
@@ -34,6 +37,7 @@ public class Sensor extends Versionable implements Serializable {
     @JoinColumn(name = "package_id")
     private Package packageRef; // embalagem a que se refere esta leitura
 
+    private boolean deleted;
 
     public Sensor( SensorType sensorType, String value, String dataType) {
         this.sensorType = sensorType;

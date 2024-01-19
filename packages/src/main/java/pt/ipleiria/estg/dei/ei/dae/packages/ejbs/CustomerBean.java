@@ -10,6 +10,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.Customer;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Hasher;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class CustomerBean {
     private Hasher hasher = new Hasher();
 
     public void create (String username, String password, String name, String email, int nif, int phone, String  address)
-        throws MyEntityExistsException, MyConstraintViolationException {
+        throws MyEntityExistsException, MyConstraintViolationException, MyIncorrectDataType {
         Customer customer = entityManager.find(Customer.class, username);
         if (customer != null){
             if (!customer.isDeleted()){
@@ -34,7 +35,7 @@ public class CustomerBean {
             customer = new Customer(username, hasher.hash(password), name, email, nif, phone, address);
             entityManager.persist(customer);
         }catch (ConstraintViolationException e){
-            throw new MyConstraintViolationException(e);
+            throw new MyIncorrectDataType("Data Type incorreto: " + e);
         }
     }
 
@@ -52,7 +53,7 @@ public class CustomerBean {
     }
 
     public Customer update(String username, String password, String name, String email, int nif, int phone, String address)
-        throws MyEntityNotFoundException, MyConstraintViolationException {
+        throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType {
         Customer customer = findCustomer(username);
         try {
             entityManager.lock(customer, LockModeType.OPTIMISTIC);
@@ -63,18 +64,13 @@ public class CustomerBean {
             customer.setPhone(phone);
             customer.setAddress(address);
         } catch (ConstraintViolationException e) {
-            throw new MyConstraintViolationException(e);
+            throw new MyIncorrectDataType("Data Type incorreto: " + e);
         }
         return customer;
     }
 
-    public void removeStudent(String username) throws MyEntityNotFoundException {
-        Customer customer = findCustomer(username);
-        entityManager.remove(customer);
-    }
-
-    public void delete(String username){
-        var customer = entityManager.find(Customer.class, username);
+    public void delete(String username) throws MyEntityNotFoundException {
+        Customer customer = entityManager.find(Customer.class, username);
         entityManager.remove(customer);
     }
 }

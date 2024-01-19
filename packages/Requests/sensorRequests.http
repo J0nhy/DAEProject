@@ -31,3 +31,7 @@ Content-Type: application/json
 {
   "value": "Armazem Leiria"
 }
+
+##### DELETE SENSOR 1
+DELETE http://localhost:8080/packages/api/sensors/45
+Accept: application/json

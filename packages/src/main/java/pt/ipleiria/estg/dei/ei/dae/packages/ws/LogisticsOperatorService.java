@@ -19,6 +19,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.Manufacturer;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 import java.util.List;
@@ -71,7 +72,7 @@ public class LogisticsOperatorService {
     @POST
     @Path("/")
     public Response createNewManufacturer(LogisticsOperatorDTO logisticsOperatorDTO)
-        throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException {
+            throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException, MyIncorrectDataType {
             logisticsOperatorBean.create(
                     logisticsOperatorDTO.getUsername(),
                     logisticsOperatorDTO.getPassword(),
@@ -86,7 +87,7 @@ public class LogisticsOperatorService {
     @PUT
     @Path("{username}")
     public Response updateLogisticsOperator(@PathParam("username") String username, LogisticsOperatorDTO logisticsOperatorDTO)
-            throws MyEntityNotFoundException, MyConstraintViolationException{
+            throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType {
         LogisticsOperator logistics = logisticsOperatorBean.findLogisticOperator(username);
 
         logistics = logisticsOperatorBean.update(

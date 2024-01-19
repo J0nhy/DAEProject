@@ -2,6 +2,8 @@ package pt.ipleiria.estg.dei.ei.dae.packages.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
 

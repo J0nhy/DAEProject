@@ -9,19 +9,27 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
 
 import java.util.List;
+
 @Stateless
 public class ProductBean {
     @PersistenceContext
     private EntityManager entityManager;
 
 
-    public Product create(String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, double productPrice, double productWeight) {
+    public Product create(String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, double productPrice, double productWeight) throws MyIncorrectDataType {
 
-        Product product = new Product(productName, productDescription, productCategory, productManufacturer, productBrand, productImage, productPrice, productWeight);
-        entityManager.persist(product);
-        return product;
+        try {
+
+            Product product = new Product(productName, productDescription, productCategory, productManufacturer, productBrand, productImage, productPrice, productWeight);
+            entityManager.persist(product);
+            return product;
+
+        } catch (ConstraintViolationException e) {
+            throw new MyIncorrectDataType("Data Type incorreto: " + e);
+        }
     }
 
     public List<Product> all() {
@@ -37,7 +45,7 @@ public class ProductBean {
         return entityManager.find(Product.class, id);
     }
 
-    public void update(long id, String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, double productPrice, double productWeight) throws Exception {
+    public void update(long id, String productName, String productDescription, String productCategory, String productManufacturer, String productBrand, String productImage, double productPrice, double productWeight) throws Exception, MyIncorrectDataType {
 
         Product product = find(id);
 
@@ -57,7 +65,7 @@ public class ProductBean {
             entityManager.merge(product);
 
         } catch (ConstraintViolationException e) {
-            throw new Exception(e);
+            throw new MyIncorrectDataType("Data Type incorreto: " + e);
         }
     }
 

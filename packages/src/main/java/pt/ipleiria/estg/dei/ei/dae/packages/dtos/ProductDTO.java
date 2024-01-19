@@ -104,17 +104,4 @@ public class ProductDTO implements Serializable {
         this.productWeight = productWeight;
     }
 
-    @Override
-public String toString() {
-        return "ProductDTO{" +
-                ", productName='" + productName + '\'' +
-                ", productDescription='" + productDescription + '\'' +
-                ", productCategory='" + productCategory + '\'' +
-                ", productManufacturer='" + productManufacturer + '\'' +
-                ", productBrand='" + productBrand + '\'' +
-                ", productImage='" + productImage + '\'' +
-                ", productPrice='" + productPrice + '\'' +
-                ", productWeight='" + productWeight + '\'' +
-                '}';
-    }
 }

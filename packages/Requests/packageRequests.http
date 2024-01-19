@@ -35,36 +35,28 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJDdXN0b21lcjEiLCJpYXQiOjE3M
 
 ###
 POST http://localhost:8080/packages/api/customers
+##### CREATE PACKAGE
+POST http://localhost:8080/packages/api/packages
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJDdXN0b21lcjEiLCJpYXQiOjE3MDUxNzI3OTgsImV4cCI6MTcwNTE3NjM5OH0.KdpGxCx6MN_KuQ-VNYUD4md4rrbOdIC7CLjqvo6NCJ7ET9V1tUMUSl0nDBcBYT8D
 Content-Type: application/json
 
 {
-  "username": "Customer5",
-  "password": "password",
-  "name": "John Doe",
-  "email": "customer2@mail.pt",
-  "address": "123 Main St"
+    "packageType": "Primary",
+    "packageMaterial": "MADEIRA"
 }
-###
-PUT http://localhost:8080/packages/api/customers/Customer5
+
+##### UPDATE PACKAGE
+PUT http://localhost:8080/packages/api/packages/1
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJDdXN0b21lcjEiLCJpYXQiOjE3MDUxNzI3OTgsImV4cCI6MTcwNTE3NjM5OH0.KdpGxCx6MN_KuQ-VNYUD4md4rrbOdIC7CLjqvo6NCJ7ET9V1tUMUSl0nDBcBYT8D
 Content-Type: application/json
 
 {
-  "name": "Bruno ads"
+  "packageMaterial": "VIDRO"
 }
-###
-DELETE http://localhost:8080/packages/api/customers/Customer5
+
+##### DELETE PACKAGE
+DELETE http://localhost:8080/packages/api/packages/21
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJDdXN0b21lcjEiLCJpYXQiOjE3MDUxNzI3OTgsImV4cCI6MTcwNTE3NjM5OH0.KdpGxCx6MN_KuQ-VNYUD4md4rrbOdIC7CLjqvo6NCJ7ET9V1tUMUSl0nDBcBYT8D
-
-##### Emails
-POST http://localhost:8080/packages/api/users/Customer1/email/send
-Content-Type: application/json
-
-{
-  "subject": "Email de teste para um cliente",
-  "message": "A sua subscrição foi renovada com sucesso"
-}

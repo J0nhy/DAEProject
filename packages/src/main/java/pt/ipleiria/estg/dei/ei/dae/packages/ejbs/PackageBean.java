@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import jakarta.validation.ConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
 
 import java.util.List;
 
@@ -28,40 +29,43 @@ public class PackageBean {
     @EJB
     private SensorBean sensorBean;
 
-    public Package create( PackageType packageType, PackageMaterials packageMaterial){
-            Package package_ = new Package(packageType, packageMaterial);
-            entityManager.persist(package_);
 
-            if (packageType == PackageType.Primary){
-                Sensor sensor = sensorBean.create(SensorType.LOCALIZACAO, "Armazem Lisboa","local");
-                package_.addSensor(sensor);
-                sensor.setPackageRef(package_);
+    public Package create(PackageType packageType, PackageMaterials packageMaterial) throws MyIncorrectDataType {
+        Package package_ = new Package(packageType, packageMaterial);
+        entityManager.persist(package_);
 
-            } else if (packageType == PackageType.Secondary){
-                Sensor sensor = sensorBean.create(SensorType.LOCALIZACAO, "Armazem Lisboa","local");
-                Sensor sensor2 =sensorBean.create(SensorType.TEMPERATURA, "10","ºC");
+        if (packageType == PackageType.Primary) {
+            Sensor sensor = sensorBean.create(SensorType.LOCALIZACAO, "Armazem Lisboa", "local");
+            package_.addSensor(sensor);
+            sensor.setPackageRef(package_);
 
-                package_.addSensor(sensor);
-                package_.addSensor(sensor2);
-                sensor.setPackageRef(package_);
-                sensor2.setPackageRef(package_);
+        } else if (packageType == PackageType.Secondary) {
+            Sensor sensor = sensorBean.create(SensorType.LOCALIZACAO, "Armazem Lisboa", "local");
+            Sensor sensor2 = sensorBean.create(SensorType.TEMPERATURA, "10", "ºC");
 
-            } else if (packageType == PackageType.Tertiary){
-                Sensor sensor = sensorBean.create(SensorType.LOCALIZACAO, "Armazem Lisboa","local");
-                Sensor sensor2 = sensorBean.create(SensorType.TEMPERATURA, "10","ºC");
-                Sensor sensor3 = sensorBean.create(SensorType.HUMIDADE, "15","%");
-                Sensor sensor4 = sensorBean.create(SensorType.ABERTO, "NO","YES/NO");
+            package_.addSensor(sensor);
+            package_.addSensor(sensor2);
+            sensor.setPackageRef(package_);
+            sensor2.setPackageRef(package_);
 
-                package_.addSensor(sensor);
-                package_.addSensor(sensor2);
-                package_.addSensor(sensor3);
-                package_.addSensor(sensor4);
-                sensor.setPackageRef(package_);
-                sensor2.setPackageRef(package_);
-                sensor3.setPackageRef(package_);
-                sensor4.setPackageRef(package_);
-            }
+        } else if (packageType == PackageType.Tertiary) {
+            Sensor sensor = sensorBean.create(SensorType.LOCALIZACAO, "Armazem Lisboa", "local");
+            Sensor sensor2 = sensorBean.create(SensorType.TEMPERATURA, "10", "ºC");
+            Sensor sensor3 = sensorBean.create(SensorType.HUMIDADE, "15", "%");
+            Sensor sensor4 = sensorBean.create(SensorType.ABERTO, "NO", "YES/NO");
+
+            package_.addSensor(sensor);
+            package_.addSensor(sensor2);
+            package_.addSensor(sensor3);
+            package_.addSensor(sensor4);
+            sensor.setPackageRef(package_);
+            sensor2.setPackageRef(package_);
+            sensor3.setPackageRef(package_);
+            sensor4.setPackageRef(package_);
+        }
+
             return package_;
+
     }
 
     public List<Package> all() {
@@ -79,14 +83,20 @@ public class PackageBean {
         return package_;
     }
 
-    public void update(long id, PackageType type, PackageMaterials material) throws Exception {
+    public void update(long id, PackageType type, PackageMaterials material) throws Exception, MyIncorrectDataType {
         Package package_ = find(id);
 
-        entityManager.lock(package_, LockModeType.OPTIMISTIC);
+        try {
+            entityManager.lock(package_, LockModeType.OPTIMISTIC);
 
-        // orderRef nao faz sentido passar, para isso cancela-se a encomenda e faz-se uma nova
-        package_.setPackageType(type);
-        package_.setPackageMaterial(material);
+            // orderRef nao faz sentido passar, para isso cancela-se a encomenda e faz-se uma nova
+            package_.setPackageType(type);
+            package_.setPackageMaterial(material);
+
+            entityManager.merge(package_);
+        } catch (ConstraintViolationException e) {
+            throw new MyIncorrectDataType("Data Type incorreto: " + e);
+        }
     }
 
     public void removePackage(long id) throws Exception {

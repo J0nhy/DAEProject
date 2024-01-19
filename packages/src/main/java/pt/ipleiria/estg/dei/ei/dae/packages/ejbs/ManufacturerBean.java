@@ -10,6 +10,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.Manufacturer;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Hasher;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class ManufacturerBean {
     private Hasher hasher = new Hasher();
 
     public void create (String username, String password, String name, String email, int nif, int phone, String  address)
-            throws MyEntityExistsException, MyConstraintViolationException {
+            throws MyEntityExistsException, MyConstraintViolationException, MyIncorrectDataType {
         Manufacturer manufacturer = entityManager.find(Manufacturer.class, username);
         if ( manufacturer != null){
             if (!manufacturer.isDeleted())
@@ -33,7 +34,7 @@ public class ManufacturerBean {
             manufacturer = new Manufacturer(username, hasher.hash(password), name, email, nif, phone, address);
             entityManager.persist(manufacturer);
         }catch (ConstraintViolationException e){
-            throw new MyConstraintViolationException(e);
+            throw new MyIncorrectDataType("Data Type incorreto: " + e);
         }
     }
 
@@ -50,19 +51,21 @@ public class ManufacturerBean {
     }
 
     public Manufacturer update(String username, String password, String name, String email, int nif, int phone, String address)
-            throws MyEntityNotFoundException, MyConstraintViolationException {
+            throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType {
 
         Manufacturer manufacturer = findManufacturer(username);
         try {
             entityManager.lock(manufacturer, LockModeType.OPTIMISTIC);
+
             manufacturer.setPassword(hasher.hash(password));
             manufacturer.setName(name);
             manufacturer.setEmail(email);
             manufacturer.setNif(nif);
             manufacturer.setPhone(phone);
             manufacturer.setAddress(address);
+
         } catch (ConstraintViolationException e) {
-            throw new MyConstraintViolationException(e);
+            throw new MyIncorrectDataType("Data Type incorreto: " + e);
         }
         return manufacturer;
     }

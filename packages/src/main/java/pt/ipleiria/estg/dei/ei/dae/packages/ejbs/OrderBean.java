@@ -10,6 +10,7 @@ import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class OrderBean {
 
 
     public Order create(StatusMessage status, Customer customer)
-        throws MyEntityNotFoundException{
+            throws MyEntityNotFoundException, MyIncorrectDataType {
         Order order = new Order(status, customer);
 
         Random rand = new Random();
@@ -77,7 +78,7 @@ public class OrderBean {
         return order;
     }
 
-    public void update(long id, StatusMessage status, Customer customer, LogisticsOperator logisticsOperator) throws Exception {
+    public void update(long id, StatusMessage status, Customer customer, LogisticsOperator logisticsOperator) throws Exception, MyIncorrectDataType {
         
         Order order = find(id);
 
@@ -92,24 +93,7 @@ public class OrderBean {
             entityManager.merge(order);
             
         } catch (ConstraintViolationException e) {
-            throw new Exception(e);
-        }
-    }
-
-    public void updateStatus(long id, StatusMessage status) throws Exception {
-
-        Order order = find(id);
-
-        try {
-            entityManager.lock(order, LockModeType.OPTIMISTIC);
-
-            order.setId(id);
-            order.setStatus(status);
-
-            entityManager.merge(order);
-
-        } catch (ConstraintViolationException e) {
-            throw new Exception(e);
+            throw new MyIncorrectDataType("Data Type incorreto: " + e);
         }
     }
 

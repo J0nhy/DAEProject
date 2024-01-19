@@ -28,7 +28,7 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxN
 Content-Type: application/json
 
 {
-  "username": "Customer6",
+  "username": "Customer100",
   "password": "123",
   "email": "Customer3@mail.pt",
   "name": "Customer1",
@@ -48,7 +48,7 @@ Content-Type: application/json
 }
 
 #####Delete Customer
-DELETE http://localhost:8080/packages/api/customers/Customer6
+DELETE http://localhost:8080/packages/api/customers/Customer100
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJNYW51ZmFjdHVyZXIxIiwiaWF0IjoxNzA1MjQyNzg2LCJleHAiOjE3MDUyNDYzODZ9.6F8fIifl_-x6-1qhAg9iiil8kxDX5DXkY1CNDAC5RLSNJeqm8lhbcvUSF71gq9xI
 
