@@ -8,16 +8,24 @@ import java.util.List;
 
 public class OrderDTO implements Serializable {
     private long id;
-    private String status;
+    private StatusMessage status;
     private String customerUsername;
     private String logisticsOperatorsUsername;
     private List<PackageDTO> packages;
     private List<ProductDTO> products;
 
-    public OrderDTO(long id, String status, String logisticsOperatorsUsername, List<PackageDTO> packages, List<ProductDTO> products, String customerUsername) {
+    public OrderDTO(long id, StatusMessage status, String logisticsOperatorsUsername, List<PackageDTO> packages, List<ProductDTO> products, String customerUsername) {
         this.id = id;
         this.status = status;
         this.logisticsOperatorsUsername = logisticsOperatorsUsername;
+        this.packages = packages;
+        this.products = products;
+        this.customerUsername = customerUsername;
+    }
+
+    public OrderDTO(long id, StatusMessage status, List<PackageDTO> packages, List<ProductDTO> products) { //construtor sem logistics operator
+        this.id = id;
+        this.status = status;
         this.packages = packages;
         this.products = products;
         this.customerUsername = customerUsername;
@@ -48,7 +56,7 @@ public class OrderDTO implements Serializable {
         this.products = products;
     }
 
-    public String getStatus() {
+    public StatusMessage getStatus() {
         return status;
     }
 
@@ -64,7 +72,7 @@ public class OrderDTO implements Serializable {
         return products;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusMessage status) {
         this.status = status;
     }
 

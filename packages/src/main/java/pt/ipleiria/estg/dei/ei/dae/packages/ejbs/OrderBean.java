@@ -31,7 +31,7 @@ public class OrderBean {
     @EJB LogisticsOperatorBean logisticsOperatorBean;
 
 
-    public Order create(String status, Customer customer)
+    public Order create(StatusMessage status, Customer customer)
         throws MyEntityNotFoundException{
         Order order = new Order(status, customer);
 
@@ -62,6 +62,7 @@ public class OrderBean {
         return entityManager
                 .createNamedQuery("getAllOrdersByLogisticsOperator", Order.class)
                 .setParameter("username", username)  // Assuming "logisticsOperatorId" is the parameter name in the named query
+                .setParameter("status", StatusMessage.PENDENTE)
                 .getResultList();
     }
 
@@ -76,7 +77,7 @@ public class OrderBean {
         return order;
     }
 
-    public void update(long id, String status, Customer customer, LogisticsOperator logisticsOperator) throws Exception {
+    public void update(long id, StatusMessage status, Customer customer, LogisticsOperator logisticsOperator) throws Exception {
         
         Order order = find(id);
 
@@ -95,7 +96,7 @@ public class OrderBean {
         }
     }
 
-    public void updateStatus(long id, String status) throws Exception {
+    public void updateStatus(long id, StatusMessage status) throws Exception {
 
         Order order = find(id);
 

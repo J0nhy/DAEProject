@@ -59,28 +59,28 @@ public class ConfigBean {
 
         //CREATE PACKAGES
         try {
-            packageBean.create(PackageType.Primary, "Wood");
-            packageBean.create(PackageType.Secondary, "Metal");
-            packageBean.create(PackageType.Tertiary, "Glass");
-            packageBean.create(PackageType.Primary, "Paper");
-            packageBean.create(PackageType.Secondary, "Fabric");
-            packageBean.create(PackageType.Tertiary, "Ceramic");
-            packageBean.create(PackageType.Primary, "Rubber");
-            packageBean.create(PackageType.Secondary, "Aluminum");
-            packageBean.create(PackageType.Tertiary, "Cardboard");
-            packageBean.create(PackageType.Primary, "Plastic");
-            packageBean.create(PackageType.Secondary, "Leather");
-            packageBean.create(PackageType.Tertiary, "Concrete");
-            packageBean.create(PackageType.Primary, "Foil");
-            packageBean.create(PackageType.Secondary, "Bamboo");
-            packageBean.create(PackageType.Tertiary, "Nylon");
+            packageBean.create(PackageType.Primary, PackageMaterials.MADEIRA);
+            packageBean.create(PackageType.Secondary, PackageMaterials.METAL);
+            packageBean.create(PackageType.Tertiary, PackageMaterials.VIDRO);
+            packageBean.create(PackageType.Primary, PackageMaterials.PAPEL);
+            packageBean.create(PackageType.Secondary, PackageMaterials.PLASTICO);
+            packageBean.create(PackageType.Tertiary, PackageMaterials.OBSIDIAN);
+            packageBean.create(PackageType.Primary, PackageMaterials.MADEIRA);
+            packageBean.create(PackageType.Secondary, PackageMaterials.METAL);
+            packageBean.create(PackageType.Tertiary, PackageMaterials.VIDRO);
+            packageBean.create(PackageType.Primary, PackageMaterials.PAPEL);
+            packageBean.create(PackageType.Secondary, PackageMaterials.PLASTICO);
+            packageBean.create(PackageType.Tertiary, PackageMaterials.OBSIDIAN);
+            packageBean.create(PackageType.Primary, PackageMaterials.MADEIRA);
+            packageBean.create(PackageType.Secondary, PackageMaterials.METAL);
+            packageBean.create(PackageType.Tertiary, PackageMaterials.VIDRO);
 
             //Packages não atribuidas a nenhum order
-            packageBean.create(PackageType.Primary, "Wood");
-            packageBean.create(PackageType.Secondary, "Metal");
-            packageBean.create(PackageType.Tertiary, "Glass");
-            packageBean.create(PackageType.Primary, "Paper");
-            packageBean.create(PackageType.Secondary, "Fabric");
+            packageBean.create(PackageType.Primary, PackageMaterials.MADEIRA);
+            packageBean.create(PackageType.Secondary, PackageMaterials.METAL);
+            packageBean.create(PackageType.Tertiary, PackageMaterials.VIDRO);
+            packageBean.create(PackageType.Primary, PackageMaterials.PAPEL);
+            packageBean.create(PackageType.Secondary, PackageMaterials.PLASTICO);
 
 
             System.out.println("Package Created");
@@ -175,11 +175,11 @@ public class ConfigBean {
             packages5.add(packageBean.find((long) 14));
             packages5.add(packageBean.find((long) 15));
 
-            Order order1 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"));
-            Order order2 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer2"));
-            Order order3 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer3"));
-            Order order4 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"));
-            Order order5 = orderBean.create("PENDENTE", customerBean.findCustomer("Customer1"));
+            Order order1 = orderBean.create(StatusMessage.ENVIADA, customerBean.findCustomer("Customer1"));
+            Order order2 = orderBean.create(StatusMessage.PENDENTE, customerBean.findCustomer("Customer2"));
+            Order order3 = orderBean.create(StatusMessage.PENDENTE, customerBean.findCustomer("Customer3"));
+            Order order4 = orderBean.create(StatusMessage.PENDENTE, customerBean.findCustomer("Customer1"));
+            Order order5 = orderBean.create(StatusMessage.PENDENTE, customerBean.findCustomer("Customer1"));
 
             orderBean.addPackageToOrder(order1.getId(), 1);
             orderBean.addPackageToOrder(order1.getId(), 2);

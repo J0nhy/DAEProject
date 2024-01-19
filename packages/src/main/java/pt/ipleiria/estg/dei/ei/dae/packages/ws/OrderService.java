@@ -114,6 +114,21 @@ public class OrderService {
         return packages.stream().map(this::toDTONoSensor).collect(Collectors.toList());
     }
 
+    private OrderDTO toDTONoListsNoLogisticsOperator(Order order) { // get sem as listas e sem operator
+        return new OrderDTO(
+                order.getId(),
+                order.getStatus(),
+                null,
+                null,
+                null,
+                order.getCustomerUsername()
+        );
+
+    }
+    public List<OrderDTO> toDTOsNoListsNoLogisticsOperator(List<Order> orders) { // conversao dos DTOs
+        return orders.stream().map(this::toDTONoListsNoLogisticsOperator).collect(Collectors.toList());
+    }
+
     private SensorDTO toDTO(Sensor sensor) {
         return new SensorDTO(
                 sensor.getId(),
@@ -177,7 +192,7 @@ public class OrderService {
     @GET
     @Path("/customer/{username}")
     public List<OrderDTO> getAllOrdersByCustomer(@PathParam("username") String customer) {
-        return toDTOsNoPackageandProducts(orderBean.allByCustomer(customer));
+        return toDTOsNoListsNoLogisticsOperator(orderBean.allByCustomer(customer));
     }
 
     @GET
