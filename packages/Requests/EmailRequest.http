@@ -1,0 +1,4 @@
+#####Send Email
+GET http://localhost:8080/packages/api/users/Customer1/email/send
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsb2dpc3RpY3MxIiwiaWF0IjoxNzA1Njk2NjcxLCJleHAiOjE3MDU3MDAyNzF9.K1i8ZwntV2Yjcxj-Ed4bcjgelDo0j7FGgXKUJ0sSXboeoW6a7MmKSpry1q0QyhRr

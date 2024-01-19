@@ -289,6 +289,9 @@ public class OrderService {
     public Response completeOrder(@PathParam("id") long id, OrderDTO orderDTO) throws Exception {
         try {
             Order order = orderBean.find(id);
+            if (!order.getStatus().equals(StatusMessage.PENDENTE)){
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Order has already been shipped").build();
+            }
             List<PackageDTO> packList = orderDTO.getPackages();
             int quantidade = -1;
             Package pack = null;
