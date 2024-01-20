@@ -162,7 +162,7 @@ public class OrderService {
                 sensor.getSensorType(),
                 sensor.getValue(),
                 sensor.getDataType(),
-                0
+                sensor.getPackageId()
         );
     }
 
@@ -243,8 +243,8 @@ public class OrderService {
     }
 
     @GET
-    @Path("{id}/packages")
-    public Response getAllPackagesByOrder(@PathParam("id") long id) throws Exception {
+    @Path("{id}/sensors")
+    public Response getAllSensorsByOrder(@PathParam("id") long id) throws Exception {
         Order order = orderBean.find(id);
         var principal = securityContext.getUserPrincipal();
 
