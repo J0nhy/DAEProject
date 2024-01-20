@@ -19,20 +19,16 @@
             <th style="text-align: center;">Sensor Type</th>
             <th style="text-align: center;">Sensor Value</th>
             <th style="text-align: center;">Data Type</th>
-            <th style="text-align: center;">Actions</th>
         </tr>
     </thead>
                 <tbody>
                     <tr v-for="sensor in packageGroup.sensors" :key="sensor.id">
                         <!-- ... your existing table row code ... -->
                         <td style="text-align: center;">{{ sensor.sensorType }}</td>
-            <td style="text-align: center;">
-                <input type="text" v-model="sensor.value">
-            </td>
+                        <td style="text-align: center;">{{ sensor.value }}</td>
+
             <td style="text-align: center;">{{ sensor.dataType }}</td>
-            <td style="text-align: center;">
-                <button @click.prevent="updateSensor(sensor.id, sensor.value)" class="btn btn-success">Atualizar</button>
-            </td>
+        
                     </tr>
                 </tbody>
             </table>
@@ -116,22 +112,6 @@ return sensors.value
 
 }
 
-const messages = ref([])
-
-const updateSensor = async (sensorId, sensorValue) => {
-  const response = await fetch(`${api}/sensors/${sensorId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token.value}`
-    },
-    body: JSON.stringify({
-      value: sensorValue
-    })
-  });
-
-  // Lógica adicional de tratamento de resposta, se necessário
-};
 
 const groupedSensors = computed(() => {
     const grouped = {};
