@@ -1,6 +1,5 @@
 <template>
-    <div v-if="error" class="alert alert-danger">There was an error {{ error.value }}</div>
-
+    <div v-if="errorr" class="alert alert-danger">There was an error {{ errorr.value }}</div>
     <div v-else>
         <div class="mb-4">
             <h2>Order Details</h2>
@@ -9,6 +8,7 @@
             <div class="row">
                 <div class="col-8">
                     <div class="table-responsive">
+                        <div v-if="order">
                         <table class="table table-bordered table-hover">
                             <tbody>
 
@@ -107,6 +107,7 @@
 
                             </tbody>
                         </table>
+                        </div>
                         <button @click.prevent="goBack" class="btn btn-secondary" style="margin-right: 5px;">Voltar</button>
                         <button @click.prevent="addPackageAndLogisticsOperators" class="btn btn-primary">Submeter</button>
 
@@ -130,9 +131,16 @@ const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore()
 
+const id = route.params.username
+
+const errorr = ref(null)
+
 const { token, user } = storeToRefs(authStore)
 
 const isLoading = ref(true);
+const order = ref(null);
+const logisticsOperators = ref(null);
+
 
 const config = useRuntimeConfig()
 const api = config.public.API_URL
@@ -154,32 +162,60 @@ onMounted(() => {
 
     if (user.value) {
         isLoading.value = false;
-
+        loadOrders()
+        loadLogistics()
     }
 
 })
 
+watch(user, () => {
+  if (user.value) {
+    isLoading.value = false;
+    
+    loadOrders()
+    loadLogistics()
+    //refresh()
 
+  }else{
+    router.push('/auth/login');
+  }
+
+
+}
+)
 
 //cenas
 const username = route.params.username
 
-const { data: order, error } = await
+const loadOrders = async () => {
+
+    token.value = localStorage.getItem('token')
+
+const { data: orderr, error } = await
     useFetch(`${api}/orders/${username}`, {
         headers: {
             'Authorization': `Bearer ${token.value}`
         },
     });
+    console.log(orderr)
+    order.value = orderr.value
+    return orderr
+}
 
-    if(order.logisticsOperators){
-        navigateTo('/orders/manufacturers')
-    }
-const { data: logisticsOperators } = await
-    useFetch(`${api}/logisticsoperators`, {
-        headers: {
-            'Authorization': `Bearer ${token.value}`
-        },
-    });
+const loadLogistics = async () => {
+
+token.value = localStorage.getItem('token')
+const { data: logisticsOperatorss } = await
+useFetch(`${api}/logisticsoperators`, {
+    headers: {
+        'Authorization': `Bearer ${token.value}`
+    },
+});
+logisticsOperators.value = logisticsOperatorss.value
+
+return logisticsOperators
+}
+
 
 const messages = ref([])
 let selectedCompany = ref([]);
@@ -202,7 +238,7 @@ selectedTerciaryType.value = 1;
 selectedTerciaryQuant.value = 0;
 
 
-if (error.value) messages.value.push(error.value)
+if (errorr.value) messages.value.push(errorr.value)
 
 const addPackageAndLogisticsOperators = async () => {
     if (selectedPrimaryType.value == 1) {
