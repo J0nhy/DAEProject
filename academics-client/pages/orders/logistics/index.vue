@@ -14,9 +14,9 @@
         </tr>
       </thead>
       <tbody>
-        
+
         <tr v-for="order in orders" :key="order.id">
-          
+
           <td>{{ order.id }}</td>
           <td>{{ order.status }}</td>
           <td>{{ order.customerUsername }}</td>
@@ -31,20 +31,21 @@
                   class="bi bi-check-lg"></i>Entregue</button>
             </nuxt-link>
             <nuxt-link @click.prevent="cancelOrder(order.id)">
-  <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA'" class="btn btn-danger">
-    <i class="bi bi-x"></i>Cancelar
-  </button>
-</nuxt-link>
+              <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA'" class="btn btn-danger">
+                <i class="bi bi-x"></i>Cancelar
+              </button>
+            </nuxt-link>
             <nuxt-link :to="`logistics/${order.id}`">
-              <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA'" class="btn btn-Dark"><i class="bi bi-search"></i></button>
+              <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA'" class="btn btn-Dark"><i
+                  class="bi bi-search"></i></button>
             </nuxt-link>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-    <button @click.prevent="goBack" class="btn btn-secondary" style="margin-right: 5px;">Voltar</button>
-    <button @click.prevent="refresh" class="btn btn-primary">Refresh Data</button>
+  <button @click.prevent="goBack" class="btn btn-secondary" style="margin-right: 5px;">Voltar</button>
+  <button @click.prevent="refresh" class="btn btn-primary">Refresh Data</button>
 </template>
 
 <script setup>
@@ -78,7 +79,7 @@ onMounted(() => {
 
   if (user.value) {
     isLoading.value = false;
-    
+
   }
 
 })
@@ -86,11 +87,11 @@ onMounted(() => {
 watch(user, () => {
   if (user.value) {
     isLoading.value = false;
-    
+
     loadOrders()
     //refresh()
 
-  }else{
+  } else {
     router.push('/auth/login');
   }
 
@@ -102,24 +103,24 @@ const orders = ref([]);
 
 //F5 e nao dar erro
 const loadOrders = async () => {
-    token.value = localStorage.getItem('token')
-    const { data: order, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`, {
-      headers: {
-    'Authorization': `Bearer ${token.value}`
-  }
-    });
-    orders.value = order._value;
-    return order._value  ;
-  }
+  token.value = localStorage.getItem('token')
+  const { data: order, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`, {
+    headers: {
+      'Authorization': `Bearer ${token.value}`
+    }
+  });
+  orders.value = order._value;
+  return order._value;
+}
 
 const refresh = async () => {
   const { data: order, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`, {
     headers: {
-    'Authorization': `Bearer ${token.value}`
-  }
+      'Authorization': `Bearer ${token.value}`
+    }
   });
   orders.value = order._value;
-  return order._value  ;
+  return order._value;
 }
 
 
@@ -127,7 +128,7 @@ const refresh = async () => {
 const cancelOrder = async (id) => {
   const apiUrl = `${api}/orders/${id}`;
   // Atualize a ordem no servidor usando o método PUT
-  const response = await useFetch(apiUrl, {
+const response = await useFetch(apiUrl, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
@@ -139,11 +140,12 @@ const cancelOrder = async (id) => {
     // Adicione qualquer outro cabeçalho ou configuração necessário para a sua API
   });
   refresh()
+  send("A sua encomenda foi cancelada com sucesso!")
 };
 const transportOrder = async (id) => {
   const apiUrl = `${api}/orders/${id}`;
   // Atualize a ordem no servidor usando o método PUT
-  const response = await useFetch(apiUrl, {
+    const response = await useFetch(apiUrl, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
@@ -157,10 +159,11 @@ const transportOrder = async (id) => {
   });
 
   refresh()
+  send("A sua encomenda está a ser transportada com sucesso!")
 };
 const deliverOrder = async (id) => {
   const apiUrl = `${api}/orders/${id}`;
-  // Atualize a ordem no servidor usando o método PUT
+// Atualize a ordem no servidor usando o método PUT
   const response = await useFetch(apiUrl, {
     method: 'PUT',
     headers: {
@@ -174,8 +177,36 @@ const deliverOrder = async (id) => {
     // Adicione qualquer outro cabeçalho ou configuração necessário para a sua API
   });
   refresh()
-
+  send("A sua encomenda foi entregue com sucesso!")
 };
+
+const getCustomerMail = async (cusUsername) => {
+  const { data: customerMail, error, refresh } = await useFetch(`${api}/customers/${cusUsername}/email`, {
+    headers: {
+      'Authorization': `Bearer ${token.value}`
+    }
+  });
+  console.log(customerMail)
+  return customerMail;
+}
+
+
+async function send(text, cuUsername) {
+
+  const cusUsername = "Customer1"
+  
+  const { error: sendError } = await useFetch(
+    `${api}/users/${cusUsername}/email/send`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
+      'Authorization': `Bearer ${token.value}`
+    },    })
+    
+
+}
+
+
 
 const calculateTotalWeightForOrder = (order) => {
   if (order && order.products) {
