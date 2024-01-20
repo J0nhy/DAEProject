@@ -4,14 +4,14 @@
       <p class="manage-resources">Manage your resources:</p>
       <div class="order-links">
         <template v-if="userRole === 'Manufacturer'">
-          <nuxt-link to="orders/manufacturers" class="order-link">Manufacturers Orders</nuxt-link><br>
+            <button class="btn btn-primary"><nuxt-link to="orders/manufacturers" class="order-link">Manufacturers Orders</nuxt-link></button>
         </template>
         <hr class="divider">
         <template v-if="userRole === 'Customer'">
-          <nuxt-link to="/orders/customers" class="order-link">Customer Orders</nuxt-link><br>
+            <button class="btn btn-primary"><nuxt-link to="/orders/customers" class="order-link">Customer Orders</nuxt-link></button>
         </template>
         <template v-if="userRole === 'LogisticsOperator'">
-          <nuxt-link to="orders/logistics" class="order-link">Logistic Orders</nuxt-link><br>
+            <button class="btn btn-primary"><nuxt-link to="orders/logistics" class="order-link">Logistic Orders</nuxt-link></button>
         </template>
       </div>
     </div>
@@ -64,13 +64,12 @@ onMounted(() => {
 }
 
 .order-links {
-  padding-left: 14px;
   margin-right: 800px;
 }
 
 .order-link {
   text-decoration: none;
-  color: #007bff;
+  color: #fff;
   font-weight: bold;
 }
 

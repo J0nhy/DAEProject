@@ -76,10 +76,15 @@ async function getUser() {
 </script>
 
 <style>
+
+
+
 .center-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  
+  
 }
 
 .login-container {
