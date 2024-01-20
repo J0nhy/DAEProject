@@ -288,10 +288,10 @@ public class OrderService {
         Customer customer = customerBean.findCustomer(order.getCustomerUsername());
         if (orderDTO.getCustomerUsername() != null)
             customer = customerBean.findCustomer(orderDTO.getCustomerUsername());
-        LogisticsOperator logisticsOperator = logisticsBean.findLogisticOperator(order.getLogisticsOperatorsUsername());
-        if (orderDTO.getLogisticsOperatorsUsername() != null)
+        LogisticsOperator logisticsOperator = null;
+        if (orderDTO.getLogisticsOperatorsUsername() != null){
             logisticsOperator = logisticsBean.findLogisticOperator(orderDTO.getLogisticsOperatorsUsername());
-
+        }
         orderBean.update(
                 id,
                 orderDTO.getStatus() != null ? orderDTO.getStatus() : order.getStatus(),

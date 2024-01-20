@@ -88,7 +88,8 @@ public class OrderBean {
             order.setId(id);
             order.setStatus(status);
             order.setCustomer(customer);
-            order.setLogisticsOperators(logisticsOperator);
+            if (logisticsOperator != null)
+                order.setLogisticsOperators(logisticsOperator);
 
             entityManager.merge(order);
             
