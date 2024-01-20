@@ -1,7 +1,7 @@
 <template>
   <div class="center-container">
     <div class="login-container">
-      <h1 class="form-group">Login Form</h1>
+      <h1 class="form-group">Login</h1>
       <div class="form-group">
         <input @keyup.enter="login" v-model="loginFormData.username" placeholder="Username" class="centered-input">
       </div>
@@ -9,15 +9,8 @@
         <input @keyup.enter="login" type="password" v-model="loginFormData.password" placeholder="Password" class="centered-input">
       </div>
       <button @click="login" class="centered-button">LOGIN</button>
-      <div v-if="token">
-        <div class="token-info">Token: {{ token }}</div>
-      </div>
-      <div v-if="messages.length > 0" class="messages-container">
-        <h2>Messages</h2>
-        <div v-for="message in messages" :key="message">
-          <pre>{{ message }}</pre>
-        </div>
-      </div>
+   
+  
     </div>
   </div>
 </template>
@@ -83,7 +76,6 @@ async function getUser() {
 </script>
 
 <style>
-/* LoginForm.css */
 .center-container {
   display: flex;
   justify-content: center;
@@ -100,6 +92,7 @@ async function getUser() {
 
 .form-group {
   margin-bottom: 15px;
+  text-align: center; /* Center text within form-group */
 }
 
 .centered-input {
