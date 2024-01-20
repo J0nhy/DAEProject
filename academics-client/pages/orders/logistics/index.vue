@@ -8,43 +8,42 @@
           <th>ID</th>
           <th>Status</th>
           <th>Customer Username</th>
-          <th>Weight</th>
           <th>Actions</th>
 
         </tr>
       </thead>
       <tbody>
-        
+
         <tr v-for="order in orders" :key="order.id">
-          
+
           <td>{{ order.id }}</td>
           <td>{{ order.status }}</td>
           <td>{{ order.customerUsername }}</td>
-          <td>{{ calculateTotalWeightForOrder(order.id) }} kg</td>
           <td class="d-flex gap-2">
-            <nuxt-link @click.prevent="transportOrder(order.id)">
+            <nuxt-link @click.prevent="transportOrder(order.id, order.customerUsername)">
               <button v-if="order.status === 'ENVIADA'" class="btn btn-primary"><i
                   class="bi bi-airplane-fill"></i>Transportar</button>
             </nuxt-link>
-            <nuxt-link @click.prevent="deliverOrder(order.id)">
+            <nuxt-link @click.prevent="deliverOrder(order.id, order.customerUsername)">
               <button v-if="order.status === 'EM_TRANSITO'" class="btn btn-success"><i
                   class="bi bi-check-lg"></i>Entregue</button>
             </nuxt-link>
-            <nuxt-link @click.prevent="cancelOrder(order.id)">
-  <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA'" class="btn btn-danger">
-    <i class="bi bi-x"></i>Cancelar
-  </button>
-</nuxt-link>
+            <nuxt-link @click.prevent="cancelOrder(order.id, order.customerUsername)">
+              <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA'" class="btn btn-danger">
+                <i class="bi bi-x"></i>Cancelar
+              </button>
+            </nuxt-link>
             <nuxt-link :to="`logistics/${order.id}`">
-              <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA'" class="btn btn-Dark"><i class="bi bi-search"></i></button>
+              <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA'" class="btn btn-Dark"><i
+                  class="bi bi-search"></i></button>
             </nuxt-link>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-    <button @click.prevent="goBack" class="btn btn-secondary" style="margin-right: 5px;">Voltar</button>
-    <button @click.prevent="refresh" class="btn btn-primary">Refresh Data</button>
+  <button @click.prevent="goBack" class="btn btn-secondary" style="margin-right: 5px;">Voltar</button>
+  <button @click.prevent="refresh" class="btn btn-primary">Refresh Data</button>
 </template>
 
 <script setup>
@@ -78,7 +77,7 @@ onMounted(() => {
 
   if (user.value) {
     isLoading.value = false;
-    
+
   }
 
 })
@@ -86,11 +85,11 @@ onMounted(() => {
 watch(user, () => {
   if (user.value) {
     isLoading.value = false;
-    
+
     loadOrders()
     //refresh()
 
-  }else{
+  } else {
     router.push('/auth/login');
   }
 
@@ -102,32 +101,32 @@ const orders = ref([]);
 
 //F5 e nao dar erro
 const loadOrders = async () => {
-    token.value = localStorage.getItem('token')
-    const { data: order, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`, {
-      headers: {
-    'Authorization': `Bearer ${token.value}`
-  }
-    });
-    orders.value = order._value;
-    return order._value  ;
-  }
+  token.value = localStorage.getItem('token')
+  const { data: order, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`, {
+    headers: {
+      'Authorization': `Bearer ${token.value}`
+    }
+  });
+  orders.value = order._value;
+  return order._value;
+}
 
 const refresh = async () => {
   const { data: order, error, refresh } = await useFetch(`${api}/orders/logistics-operator/${user.value.username}`, {
     headers: {
-    'Authorization': `Bearer ${token.value}`
-  }
+      'Authorization': `Bearer ${token.value}`
+    }
   });
   orders.value = order._value;
-  return order._value  ;
+  return order._value;
 }
 
 
 
-const cancelOrder = async (id) => {
+const cancelOrder = async (id, user) => {
   const apiUrl = `${api}/orders/${id}`;
   // Atualize a ordem no servidor usando o método PUT
-  const response = await useFetch(apiUrl, {
+const response = await useFetch(apiUrl, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
@@ -139,11 +138,12 @@ const cancelOrder = async (id) => {
     // Adicione qualquer outro cabeçalho ou configuração necessário para a sua API
   });
   refresh()
+  send("A sua encomenda foi cancelada com sucesso!", user)
 };
-const transportOrder = async (id) => {
+const transportOrder = async (id, user) => {
   const apiUrl = `${api}/orders/${id}`;
   // Atualize a ordem no servidor usando o método PUT
-  const response = await useFetch(apiUrl, {
+    const response = await useFetch(apiUrl, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
@@ -157,10 +157,11 @@ const transportOrder = async (id) => {
   });
 
   refresh()
+  send("A sua encomenda está a ser transportada com sucesso!", user)
 };
-const deliverOrder = async (id) => {
+const deliverOrder = async (id, user) => {
   const apiUrl = `${api}/orders/${id}`;
-  // Atualize a ordem no servidor usando o método PUT
+// Atualize a ordem no servidor usando o método PUT
   const response = await useFetch(apiUrl, {
     method: 'PUT',
     headers: {
@@ -174,19 +175,27 @@ const deliverOrder = async (id) => {
     // Adicione qualquer outro cabeçalho ou configuração necessário para a sua API
   });
   refresh()
-
+  send("A sua encomenda foi entregue com sucesso!", user)
 };
 
-const calculateTotalWeightForOrder = (order) => {
-  if (order && order.products) {
-    return order.products.reduce(
-      (totalWeight, product) => totalWeight + parseFloat(product.productWeight),
-      0
-    );
-  } else {
-    return 0;
-  }
-};
+async function send(text, cuUsername) {
+  
+  const { error: sendError } = await useFetch(
+    `${api}/users/${cuUsername}/email/send`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
+      'Authorization': `Bearer ${token.value}`
+    }, 
+    body: JSON.stringify({
+      subject: text,
+      message: "Order Status",
+    }),
+    })
+    
+
+}
+
 
 const goBack = () => {
   router.go(-1); // Isso voltará uma página na história do navegador

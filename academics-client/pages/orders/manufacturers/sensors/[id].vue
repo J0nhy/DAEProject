@@ -1,7 +1,6 @@
 <template>
-     {{ orderr }}
+    <!-- {{ order }} -->
     <!--{{ order.packages }}-->
-    {{ sensors }}
     
     <div v-if="error" class="alert alert-danger">Error: {{ error.message }}</div>
     <div v-else>
@@ -90,10 +89,8 @@ watch(user, () => {
 
 const config = useRuntimeConfig()
 const api = config.public.API_URL
-
-
 const { data: orderr, error: orderErr } = await
-useFetch(`${api}/orders/${id}`, {
+useFetch(`${api}/orders/logistics-operator/${id}`, {
   headers: {
     'Authorization': `Bearer ${token.value}`
   }

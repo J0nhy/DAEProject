@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-8">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-bordered">
                             <tbody>
 
                                 <tr>
@@ -25,9 +25,9 @@
                                     <td style="text-align: center;" v-if="order.logisticsOperators">{{
                                         order.logisticsOperators.company }}</td>
                                     <td style="text-align: center;" v-if="!order.logisticsOperators">
-                                        <select style="text-align: center;" v-model="selectedCompany" class="form-select">
+                                        <select disabled style="text-align: center;" v-model="selectedCompany" class="form-select">
                                             <option disabled value="0" selected>Please select one</option>
-                                            <option v-for="operator in logisticsOperators" :key="logisticsOperators.id"
+                                            <option  v-for="operator in logisticsOperators" :key="logisticsOperators.id"
                                                 :value="operator.username">
                                                 {{ operator.company }}
                                             </option>
@@ -36,12 +36,12 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">Package Primary</th>
-                                    <td style="text-align: center;"><strong>Material:</strong><select
+                                    <td style="text-align: center;"><strong>Material:</strong><select disabled
                                             style="text-align: center;" v-model="selectedPrimaryType" class="form-select">
                                             <option disabled value="1" selected>None</option>
                                         </select>
                                         <strong>Quant:</strong>
-                                        <select style="text-align: center;" v-model="selectedPrimaryQuant" class="form-select">
+                                        <select disabled style="text-align: center;" v-model="selectedPrimaryQuant" class="form-select">
                                             <option value="0">0</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
@@ -51,12 +51,12 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">Package Secundary</th>
-                                    <td style="text-align: center;"><strong>Material:</strong><select
+                                    <td style="text-align: center;"><strong>Material:</strong><select disabled
                                             style="text-align: center;" v-model="selectedSecundaryType" class="form-select">
                                             <option disabled value="1" selected>None</option>
                                         </select>
                                         <strong>Quant:</strong>
-                                        <select style="text-align: center;" v-model="selectedSecundaryQuant" class="form-select">
+                                        <select disabled style="text-align: center;" v-model="selectedSecundaryQuant" class="form-select">
                                             <option value="0">0</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
@@ -65,12 +65,12 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">Package Terciary</th>
-                                    <td style="text-align: center;"><strong>Material:</strong><select
+                                    <td style="text-align: center;"><strong>Material:</strong><select disabled
                                             style="text-align: center;" v-model="selectedTerciaryType" class="form-select">
                                             <option value="1" selected>None</option>
                                         </select>
                                         <strong>Quant:</strong>
-                                        <select style="text-align: center;" v-model="selectedTerciaryQuant" class="form-select">
+                                        <select disabled style="text-align: center;" v-model="selectedTerciaryQuant" class="form-select">
                                             <option value="0" selected>0</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
