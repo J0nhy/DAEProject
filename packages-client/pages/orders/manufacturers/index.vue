@@ -132,6 +132,8 @@ const cancelOrder = async (id, cusUsername) => {
     
   });
   send("A sua encomenda foi cancelada!", cusUsername)
+  alert("Foi enviado para o Customer um email com a informação que a sua encomenda foi cancelada!")
+
 
   loadOrders()
 }
@@ -150,6 +152,8 @@ async function send(text, cuUsername) {
       message: "Order Status",
     }),
     })
+
+
     
 
 }

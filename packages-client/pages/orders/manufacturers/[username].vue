@@ -293,7 +293,7 @@ const addPackageAndLogisticsOperators = async (cusUsername) => {
     const responseData = await response.json()
     console.log(responseData)
     if (response.ok) {
-        alert("Order updated successfully")
+        alert("Encomenda atualizada com sucesso \n Foi enviado um email ao cliente com a informação que a sua encomenda foi enviada!")
         send("A sua encomenda foi enviada com sucesso!", cusUsername)
         navigateTo('/orders/manufacturers')
 

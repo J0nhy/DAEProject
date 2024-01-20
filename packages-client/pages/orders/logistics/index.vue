@@ -139,6 +139,8 @@ const response = await useFetch(apiUrl, {
   });
   refresh()
   send("A sua encomenda foi cancelada!", user)
+  alert("Foi enviado para o Customer um email com a informação que a sua encomenda foi cancelada!")
+
 };
 const transportOrder = async (id, user) => {
   const apiUrl = `${api}/orders/${id}`;
@@ -158,6 +160,7 @@ const transportOrder = async (id, user) => {
 
   refresh()
   send("A sua encomenda está a ser transportada com sucesso!", user)
+  alert("Foi enviado para o Customer um email com a informação que a sua encomenda está a ser transportada com sucesso!")
 };
 const deliverOrder = async (id, user) => {
   const apiUrl = `${api}/orders/${id}`;
@@ -176,6 +179,7 @@ const deliverOrder = async (id, user) => {
   });
   refresh()
   send("A sua encomenda foi entregue com sucesso!", user)
+  alert("Foi enviado para o Customer um email com a informação que a sua encomenda foi entregue com sucesso!")
 };
 
 async function send(text, cuUsername) {
