@@ -8,7 +8,6 @@
           <th>ID</th>
           <th>Status</th>
           <th>Customer Username</th>
-          <th>Weight</th>
           <th>Actions</th>
 
         </tr>
@@ -20,17 +19,16 @@
           <td>{{ order.id }}</td>
           <td>{{ order.status }}</td>
           <td>{{ order.customerUsername }}</td>
-          <td>{{ calculateTotalWeightForOrder(order.id) }} kg</td>
           <td class="d-flex gap-2">
-            <nuxt-link @click.prevent="transportOrder(order.id)">
+            <nuxt-link @click.prevent="transportOrder(order.id, order.customerUsername)">
               <button v-if="order.status === 'ENVIADA'" class="btn btn-primary"><i
                   class="bi bi-airplane-fill"></i>Transportar</button>
             </nuxt-link>
-            <nuxt-link @click.prevent="deliverOrder(order.id)">
+            <nuxt-link @click.prevent="deliverOrder(order.id, order.customerUsername)">
               <button v-if="order.status === 'EM_TRANSITO'" class="btn btn-success"><i
                   class="bi bi-check-lg"></i>Entregue</button>
             </nuxt-link>
-            <nuxt-link @click.prevent="cancelOrder(order.id)">
+            <nuxt-link @click.prevent="cancelOrder(order.id, order.customerUsername)">
               <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA'" class="btn btn-danger">
                 <i class="bi bi-x"></i>Cancelar
               </button>
@@ -125,7 +123,7 @@ const refresh = async () => {
 
 
 
-const cancelOrder = async (id) => {
+const cancelOrder = async (id, user) => {
   const apiUrl = `${api}/orders/${id}`;
   // Atualize a ordem no servidor usando o método PUT
 const response = await useFetch(apiUrl, {
@@ -140,9 +138,9 @@ const response = await useFetch(apiUrl, {
     // Adicione qualquer outro cabeçalho ou configuração necessário para a sua API
   });
   refresh()
-  send("A sua encomenda foi cancelada com sucesso!")
+  send("A sua encomenda foi cancelada com sucesso!", user)
 };
-const transportOrder = async (id) => {
+const transportOrder = async (id, user) => {
   const apiUrl = `${api}/orders/${id}`;
   // Atualize a ordem no servidor usando o método PUT
     const response = await useFetch(apiUrl, {
@@ -159,9 +157,9 @@ const transportOrder = async (id) => {
   });
 
   refresh()
-  send("A sua encomenda está a ser transportada com sucesso!")
+  send("A sua encomenda está a ser transportada com sucesso!", user)
 };
-const deliverOrder = async (id) => {
+const deliverOrder = async (id, user) => {
   const apiUrl = `${api}/orders/${id}`;
 // Atualize a ordem no servidor usando o método PUT
   const response = await useFetch(apiUrl, {
@@ -177,47 +175,27 @@ const deliverOrder = async (id) => {
     // Adicione qualquer outro cabeçalho ou configuração necessário para a sua API
   });
   refresh()
-  send("A sua encomenda foi entregue com sucesso!")
+  send("A sua encomenda foi entregue com sucesso!", user)
 };
 
-const getCustomerMail = async (cusUsername) => {
-  const { data: customerMail, error, refresh } = await useFetch(`${api}/customers/${cusUsername}/email`, {
-    headers: {
-      'Authorization': `Bearer ${token.value}`
-    }
-  });
-  console.log(customerMail)
-  return customerMail;
-}
-
-
 async function send(text, cuUsername) {
-
-  const cusUsername = "Customer1"
   
   const { error: sendError } = await useFetch(
-    `${api}/users/${cusUsername}/email/send`, {
+    `${api}/users/${cuUsername}/email/send`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json', // Indica que você está enviando dados no formato JSON
       'Authorization': `Bearer ${token.value}`
-    },    })
+    }, 
+    body: JSON.stringify({
+      subject: text,
+      message: "Order Status",
+    }),
+    })
     
 
 }
 
-
-
-const calculateTotalWeightForOrder = (order) => {
-  if (order && order.products) {
-    return order.products.reduce(
-      (totalWeight, product) => totalWeight + parseFloat(product.productWeight),
-      0
-    );
-  } else {
-    return 0;
-  }
-};
 
 const goBack = () => {
   router.go(-1); // Isso voltará uma página na história do navegador
