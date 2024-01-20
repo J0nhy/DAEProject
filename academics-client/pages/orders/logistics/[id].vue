@@ -1,7 +1,6 @@
 <template>
-     {{ orderr }}
-    <!--{{ order.packages }}-->
-    {{ sensors }}
+     
+    <!--{{ sensors }}-->
     
     <div v-if="error" class="alert alert-danger">Error: {{ error.message }}</div>
     <div v-else>
@@ -22,7 +21,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr v-for="sensor in sensors.sensors" :key="sensor.id">
+        <tr v-for="sensor in sensors" :key="sensor.id">
             <td style="text-align: center;">{{ sensor.sensorType }}</td>
             <td style="text-align: center;">
                 <input type="text" v-model="sensor.value">
@@ -57,6 +56,8 @@ const router = useRouter();
 const route = useRoute()
 const id = route.params.id
 
+const sensors = ref([])
+
 const authStore = useAuthStore()
 const selectedValue = ref(null)
 
@@ -77,12 +78,15 @@ onMounted(() => {
     navigateTo('/auth/login')
   }
   //console.log(user.value)
+  loadSensors()
   
 
 })
 watch(user, () => {
   if (!user.value) {
     router.push('/auth/login');
+  }else{
+    loadSensors()
   }
 }
 )
@@ -91,25 +95,24 @@ watch(user, () => {
 const config = useRuntimeConfig()
 const api = config.public.API_URL
 
+const loadSensors = async () => {
+token.value = localStorage.getItem('token')
 
-const { data: orderr, error: orderErr } = await
-useFetch(`${api}/orders/${id}`, {
+
+const { data: sensorss, error: sensorsErr } = await
+useFetch(`${api}/orders/${id}/packages`, {
   headers: {
     'Authorization': `Bearer ${token.value}`
   }
 })
 
+sensors.value = sensorss.value
 
+return sensors.value
 
-const { data: sensors, error: sensorsErr } = await
-useFetch(`${api}/packages/${id}/`, {
-  headers: {
-    'Authorization': `Bearer ${token.value}`
-  }
-})
+}
 
 const messages = ref([])
-if (orderErr.value) messages.value.push(orderErr.value)
 
 const updateSensor = async (sensorId, sensorValue) => {
   const response = await fetch(`${api}/sensors/${sensorId}`, {
