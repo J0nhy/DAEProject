@@ -27,7 +27,7 @@
           </td>
           <td class="d-flex gap-2">
             <nuxt-link :to="`customers/${order.id}`">
-              <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA'" class="btn btn-Dark"><i
+              <button v-if="order.status !== 'ENTREGUE' && order.status !== 'CANCELADA' && order.status !== 'PENDENTE'" class="btn btn-Dark"><i
                   class="bi bi-search"></i></button>
             </nuxt-link>
 
