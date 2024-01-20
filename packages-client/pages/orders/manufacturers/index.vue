@@ -101,6 +101,9 @@ watch(user, () => {
   }else{
     router.push('/auth/login');
   }
+  if (user.value.role !== 'Manufacturer') {
+    router.push('/');
+  }
 
 
 }

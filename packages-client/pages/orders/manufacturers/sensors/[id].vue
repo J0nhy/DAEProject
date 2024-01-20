@@ -92,6 +92,9 @@ if (!user.value) {
 }else{
   loadSensors()
 }
+if (user.value.role !== 'Manufacturer') {
+    router.push('/');
+  }
 }
 )
 

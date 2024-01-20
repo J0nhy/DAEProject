@@ -88,6 +88,9 @@ watch(user, () => {
   }else{
     loadSensors()
   }
+  if (user.value.role !== 'Customer') {
+    router.push('/');
+  }
 }
 )
 

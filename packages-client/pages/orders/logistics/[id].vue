@@ -92,6 +92,9 @@ watch(user, () => {
   }else{
     loadSensors()
   }
+  if(user.value.role !== 'LogisticsOperator'){
+    router.push('/');
+  }
 }
 )
 
