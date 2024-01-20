@@ -178,4 +178,15 @@ public class OrderBean {
         order.setStatus(StatusMessage.ENVIADA);
         entityManager.merge(order);
     }
+
+    public List<Sensor> getOrdersSensors(long id) {
+
+        Order order = entityManager.find(Order.class, id);
+        List<Sensor> sensors = new ArrayList<>();
+        List<Package> packages = order.getPackages();
+        for (Package p : packages) {
+            sensors.addAll(p.getSensors());
+        }
+        return sensors;
+    }
 }

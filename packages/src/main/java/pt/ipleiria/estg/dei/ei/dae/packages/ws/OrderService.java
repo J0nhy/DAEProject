@@ -242,6 +242,22 @@ public class OrderService {
         return toDTOsNoPackageandProducts(orderBean.allByLogisticsOperator(logisticsOperator));
     }
 
+    @GET
+    @Path("{id}/packages")
+    public Response getAllPackagesByOrder(@PathParam("id") long id) throws Exception {
+        Order order = orderBean.find(id);
+        var principal = securityContext.getUserPrincipal();
+
+        if(principal.getName().equals(order.getLogisticsOperatorsUsername()) || principal.getName().equals(order.getCustomerUsername())) {
+            return Response.status(Response.Status.OK).entity(toDTOsSensors(orderBean.getOrdersSensors(id))).build();
+        }
+
+        if (userBean.isManufacturer(principal.getName())){
+            return Response.status(Response.Status.OK).entity(toDTOsSensors(orderBean.getOrdersSensors(id))).build();
+        }
+        return Response.status(Response.Status.FORBIDDEN).build();
+    }
+
     @POST
     @Path("/")
     @RolesAllowed({"Manufacturer"})

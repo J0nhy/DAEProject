@@ -3,6 +3,7 @@ package pt.ipleiria.estg.dei.ei.dae.packages.ejbs;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Manufacturer;
@@ -33,9 +34,13 @@ public class UserBean {
     }
 
     public boolean isManufacturer(String username) {
-        Manufacturer user = em.createNamedQuery("isUserManufacturer", Manufacturer.class)
-                .setParameter("username", username)  // Assuming "customer" is the parameter name in the named query
-                 .getSingleResult();
-        return user != null;
+        try {
+            Manufacturer user = em.createNamedQuery("isUserManufacturer", Manufacturer.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+            return user != null;
+        } catch (NoResultException e) {
+            return false; // No matching result, so the user is not a manufacturer
+        }
     }
 }
