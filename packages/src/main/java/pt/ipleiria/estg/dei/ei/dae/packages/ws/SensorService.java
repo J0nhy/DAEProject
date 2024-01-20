@@ -69,7 +69,7 @@ public class SensorService {
 
     @PUT
     @Path("{id}")
-    @RolesAllowed({"LogisticsOperator"})
+    @RolesAllowed({"LogisticsOperator","Manufacturer"} )
     public Response updateSensor(@PathParam("id") long id, SensorDTO sensorDTO) throws Exception {
         Sensor sensor = sensorBean.find(id);
 

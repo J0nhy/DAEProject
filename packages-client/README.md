@@ -1,57 +1,75 @@
-# [Vue Light Bootstrap Dashboard](http://vuejs.creative-tim.com/vue-light-bootstrap-dashboard) [![version][version-badge]][changelog] [![license][license-badge]][license]
+# Nuxt 3 Minimal Starter
 
-> Admin dashboard based on light bootstrap dashboard UI template + vue-router
+Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-This project is a vue version of [Light bootstrap dashboard](https://www.creative-tim.com/product/light-bootstrap-dashboard)
-designed for vue js. The dashboard includes Bootstrap 4, vue-router, chartist, google-maps and several other plugins/components.
+## Setup
 
-Check the [Live Demo here](http://vuejs.creative-tim.com/vue-light-bootstrap-dashboard).
+Make sure to install the dependencies:
 
-![](public/Dashboard.PNG)
+```bash
+# npm
+npm install
 
-## :rocket: Getting started
+# pnpm
+pnpm install
 
-Vue Light Bootstrap Dashboard is built on top of Bootstrap 4, Vuejs and Vue-router. To get started do the following steps:
+# yarn
+yarn install
 
-1. Download the project
-2. Make sure you have node.js (https://nodejs.org/en/) installed
-3. Type `npm install` in the source folder where `package.json` is located
-4. Type `npm run dev` to start the development server
+# bun
+bun install
+```
 
-The repo uses [vue-cli](https://github.com/vuejs/vue-cli) scaffolding which takes care of the development setup with webpack and all the necessary modern tools to make web development faster and easier.
+## Development Server
 
-## [Documentation](https://demos.creative-tim.com/vue-light-bootstrap-dashboard/documentation/#/buttons)
+Start the development server on `http://localhost:3000`:
 
-## :cloud: Build Setup
+```bash
+# npm
+npm run dev
 
-### install dependencies
+# pnpm
+pnpm run dev
 
-`npm install`
+# yarn
+yarn dev
 
-### serve with hot reload at localhost:8000
+# bun
+bun run dev
+```
 
-`npm run dev`
+## Production
 
-### build for production with minification
+Build the application for production:
 
-`npm run build`
+```bash
+# npm
+npm run build
 
-### run unit tests
+# pnpm
+pnpm run build
 
-`npm run unit`
+# yarn
+yarn build
 
-### run and watch unit tests
+# bun
+bun run build
+```
 
-`npm run unit:watch`
+Locally preview production build:
 
-## :clipboard: Contribution guide
+```bash
+# npm
+npm run preview
 
-- `npm install` or `yarn install`
-- Please don't use jQuery or jQuery based plugins since there are many pure Vue alternatives
+# pnpm
+pnpm run preview
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+# yarn
+yarn preview
 
-[changelog]: ./CHANGELOG.md
-[license]: ./LICENSE.md
-[version-badge]: https://img.shields.io/badge/version-2.1.0-blue.svg
-[license-badge]: https://img.shields.io/badge/license-MIT-blue.svg
+# bun
+bun run preview
+```
+
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
