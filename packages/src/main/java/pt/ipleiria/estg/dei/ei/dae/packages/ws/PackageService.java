@@ -21,6 +21,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyQueryException;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 @Path("/packages")
@@ -83,21 +84,21 @@ public class PackageService {
     @GET
     @Path("/")
     @RolesAllowed({"Manufacturer"})
-    public List<PackageDTO> getAllPackages() {
+    public List<PackageDTO> getAllPackages() throws MyEntityNotFoundException, MyQueryException {
         return toDTOsNoSensors(packageBean.all());
     }
 
     @GET
     @Path("/packagesWithOrders")
     @RolesAllowed({"Manufacturer"})
-    public List<PackageDTO> getAllPackagesWithOrders() {
+    public List<PackageDTO> getAllPackagesWithOrders() throws MyEntityNotFoundException, MyQueryException {
         return toDTOsNoSensors(packageBean.packagesWithOrders());
     }
 
     @GET
     @Path("/packagesWithoutOrders")
     @RolesAllowed({"Manufacturer"})
-    public List<PackageDTO> getAllPackagesWithoutOrders() {
+    public List<PackageDTO> getAllPackagesWithoutOrders() throws MyEntityNotFoundException, MyQueryException {
         return toDTOsNoSensors(packageBean.packagesWithoutOrders());
     }
 

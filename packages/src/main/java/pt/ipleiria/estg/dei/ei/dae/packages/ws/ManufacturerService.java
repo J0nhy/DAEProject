@@ -13,10 +13,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.CustomerBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.ManufacturerBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Customer;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Manufacturer;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 import java.util.List;
@@ -52,14 +49,14 @@ public class ManufacturerService {
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/") // means: the relative url path is “/api/students/”
-    public List<ManufacturerDTO> getAllManufacturers() {
+    public List<ManufacturerDTO> getAllManufacturers() throws MyEntityNotFoundException, MyQueryException {
         return toDTOs(manufacturerBean.getAll());
     }
 
 
     @GET
     @Path("{username}")
-    public Response getManufacturerDetails(@PathParam("username") String username) throws MyEntityNotFoundException{
+    public Response getManufacturerDetails(@PathParam("username") String username) throws MyEntityNotFoundException, MyQueryException {
         /*
         var principal = securityContext.getUserPrincipal();
 
@@ -72,7 +69,7 @@ public class ManufacturerService {
 
     @POST
     @Path("/")
-    public Response createNewManufacturer(ManufacturerDTO manufacturerDTO) throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException, MyIncorrectDataType {
+    public Response createNewManufacturer(ManufacturerDTO manufacturerDTO) throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException, MyIncorrectDataType, MyQueryException {
         manufacturerBean.create(manufacturerDTO.getUsername(),
                 manufacturerDTO.getPassword(),
                 manufacturerDTO.getName(),
@@ -88,7 +85,7 @@ public class ManufacturerService {
     @PUT
     @Path("{username}")
     public Response updateManufacturer(@PathParam("username") String username, ManufacturerDTO manufacturerDTO)
-            throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType {
+            throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType, MyQueryException {
         Manufacturer manufacturer = manufacturerBean.findManufacturer(username);
 
         manufacturer = manufacturerBean.update(
@@ -105,7 +102,7 @@ public class ManufacturerService {
 
     @DELETE
     @Path("{username}")
-    public Response deleteManufacturer(@PathParam("username") String username)throws MyEntityNotFoundException{
+    public Response deleteManufacturer(@PathParam("username") String username) throws MyEntityNotFoundException, MyQueryException {
         manufacturerBean.removeManufacturer(username);
         return Response.status(Response.Status.OK).build();
     }

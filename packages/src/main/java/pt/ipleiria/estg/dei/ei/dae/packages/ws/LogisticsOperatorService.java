@@ -16,10 +16,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.ManufacturerBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Customer;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.LogisticsOperator;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Manufacturer;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 import java.util.List;
@@ -54,7 +51,7 @@ public class LogisticsOperatorService {
     @Path("/")
     @Authenticated
     @RolesAllowed({"Manufacturer"})
-    public List<LogisticsOperatorDTO> getAllLogisticsOperators() {
+    public List<LogisticsOperatorDTO> getAllLogisticsOperators() throws MyEntityNotFoundException, MyQueryException {
         return toDTOs(logisticsOperatorBean.getAll());
     }
 
@@ -62,7 +59,7 @@ public class LogisticsOperatorService {
     @Path("{username}")
     @Authenticated
     @RolesAllowed({"Manufacturer", "LogisticsOperator"})
-    public Response getLogisticsOperatorDetails(@PathParam("username") String username) throws MyEntityNotFoundException{
+    public Response getLogisticsOperatorDetails(@PathParam("username") String username) throws MyEntityNotFoundException, MyQueryException {
         /*var principal = securityContext.getUserPrincipal();
 
         if(!principal.getName().equals(username)) {
@@ -75,7 +72,7 @@ public class LogisticsOperatorService {
     @POST
     @Path("/")
     public Response createNewLogisticsOperator(LogisticsOperatorDTO logisticsOperatorDTO)
-            throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException, MyIncorrectDataType {
+            throws MyEntityExistsException, MyConstraintViolationException, MyEntityNotFoundException, MyIncorrectDataType, MyQueryException {
             logisticsOperatorBean.create(
                     logisticsOperatorDTO.getUsername(),
                     logisticsOperatorDTO.getPassword(),
@@ -92,7 +89,7 @@ public class LogisticsOperatorService {
     @Authenticated
     @RolesAllowed({"LogisticsOperator"})
     public Response updateLogisticsOperator(@PathParam("username") String username, LogisticsOperatorDTO logisticsOperatorDTO)
-            throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType {
+            throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType, MyQueryException {
         LogisticsOperator logistics = logisticsOperatorBean.findLogisticOperator(username);
 
         logistics = logisticsOperatorBean.update(
@@ -109,7 +106,7 @@ public class LogisticsOperatorService {
     @Path("{username}")
     @Authenticated
     @RolesAllowed({"LogisticsOperator", "Manufacturer"})
-    public Response deleteLogisticsOperator(@PathParam("username") String username)throws MyEntityNotFoundException{
+    public Response deleteLogisticsOperator(@PathParam("username") String username) throws MyEntityNotFoundException, MyQueryException {
         logisticsOperatorBean.removeLogisticsOperator(username);
         return Response.status(Response.Status.OK).build();
     }

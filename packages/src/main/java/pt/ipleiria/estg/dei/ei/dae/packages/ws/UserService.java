@@ -11,6 +11,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.EmailBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.UserBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.User;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyQueryException;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 @Path("users")
@@ -29,7 +30,7 @@ public class UserService {
     @Path("/{username}/email/send")
     @RolesAllowed({"Manufacturer", "Customer", "LogisticsOperator"})
     public Response sendEmail(@PathParam("username") String username, EmailDTO email)
-            throws MyEntityNotFoundException, MessagingException {
+            throws MyEntityNotFoundException, MessagingException, MyQueryException {
         User user = userBean.find(username);
         if (user == null) {
             throw new MyEntityNotFoundException("Student with username '" + username

@@ -14,10 +14,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.dtos.ProductDTO;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.CustomerBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Customer;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Order;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyConstraintViolationException;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityExistsException;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
-import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 import java.util.List;
@@ -89,7 +86,7 @@ public class CustomerService {
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/") // means: the relative url path is “/api/students/”
     @RolesAllowed({"Manufacturer"})
-    public List<CustomerDTO> getAllCustomers() {
+    public List<CustomerDTO> getAllCustomers() throws MyEntityNotFoundException, MyQueryException {
         return toDTOsWithoutOrders(customerBean.getAll());
     }
 
@@ -97,7 +94,7 @@ public class CustomerService {
     @GET
     @Path("{username}")
     @RolesAllowed({"Customer"})
-    public Response getCustomerDetails(@PathParam("username") String username) throws MyEntityNotFoundException{
+    public Response getCustomerDetails(@PathParam("username") String username) throws MyEntityNotFoundException, MyQueryException{
         return Response.status(Response.Status.OK).entity(toDTO(customerBean.findCustomer(username))).build();
     }
 
@@ -123,7 +120,7 @@ public class CustomerService {
     @Path("{username}")
     @RolesAllowed({"Customer"})
     public Response updateCustomer(@PathParam("username") String username, CustomerDTO customerDTO)
-            throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType {
+            throws MyEntityNotFoundException, MyConstraintViolationException, MyIncorrectDataType, MyQueryException {
         Customer customer = customerBean.findCustomer(username);
 
         customer = customerBean.update(
@@ -141,7 +138,7 @@ public class CustomerService {
     @DELETE
     @Path("{username}")
     @RolesAllowed({"Customer", "Manufacturer"})
-    public Response deleteCustomer(@PathParam("username") String username) throws MyEntityNotFoundException{
+    public Response deleteCustomer(@PathParam("username") String username) throws MyEntityNotFoundException, MyQueryException {
         customerBean.delete(username);
         return Response.status(Response.Status.OK).build();
     }

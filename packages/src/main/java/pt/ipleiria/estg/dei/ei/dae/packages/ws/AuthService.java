@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.SecurityContext;
 import pt.ipleiria.estg.dei.ei.dae.packages.dtos.AuthDTO;
 import pt.ipleiria.estg.dei.ei.dae.packages.dtos.UserDTO;
 import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.UserBean;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyQueryException;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.TokenIssuer;
 
@@ -28,7 +29,7 @@ public class AuthService {
 
     @POST
     @Path("/login")
-    public Response authenticate(@Valid AuthDTO auth) {
+    public Response authenticate(@Valid AuthDTO auth) throws MyQueryException {
         if (userBean.canLogin(auth.getUsername(), auth.getPassword())) {
             String token = issuer.issue(auth.getUsername());
             return Response.ok(token).build();
@@ -39,7 +40,7 @@ public class AuthService {
     @GET
     @Authenticated
     @Path("/user")
-    public Response getAuthenticatedUser() {
+    public Response getAuthenticatedUser() throws MyQueryException {
         var username = securityContext.getUserPrincipal().getName();
         var user = userBean.findOrFail(username);
         return Response.ok(UserDTO.from(user)).build();

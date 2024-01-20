@@ -11,6 +11,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyQueryException;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -29,11 +30,12 @@ public class OrderBean {
     @EJB
     private ProductBean productBean;
 
-    @EJB LogisticsOperatorBean logisticsOperatorBean;
+    @EJB
+    LogisticsOperatorBean logisticsOperatorBean;
 
 
     public Order create(StatusMessage status, Customer customer)
-            throws MyEntityNotFoundException, MyIncorrectDataType {
+            throws MyEntityNotFoundException, MyQueryException {
         Order order = new Order(status, customer);
 
         Random rand = new Random();
@@ -47,137 +49,212 @@ public class OrderBean {
         return order;
     }
 
-    public List<Order> all() {
-        return entityManager.createNamedQuery("getAllOrders", Order.class).getResultList();
-    }
+    public List<Order> all() throws MyEntityNotFoundException, MyQueryException {
+        try {
+            List<Order> resultList = entityManager.createNamedQuery("getAllOrders", Order.class).getResultList();
 
+            if (resultList.isEmpty()) {
+                throw new MyEntityNotFoundException("No Orders found");
+            }
 
-    public List<Order> allByCustomer(String username) {
-        return entityManager
-                .createNamedQuery("getAllOrdersByCustomer", Order.class)
-                .setParameter("username", username)  // Assuming "customer" is the parameter name in the named query
-                .getResultList();
-    }
+            return resultList;
 
-    public List<Order> allByLogisticsOperator(String username) {
-        return entityManager
-                .createNamedQuery("getAllOrdersByLogisticsOperator", Order.class)
-                .setParameter("username", username)  // Assuming "logisticsOperatorId" is the parameter name in the named query
-                .setParameter("status", StatusMessage.PENDENTE)
-                .getResultList();
-    }
-
-    public Order find(long id) throws MyEntityNotFoundException {
-
-        Order order = entityManager.find(Order.class, id);
-        if (order == null) {
-            throw new MyEntityNotFoundException("Order '" + id + "' not found");
+        } catch (ConstraintViolationException e) {
+            throw new MyQueryException("Error fetching data in query " + "all(): " + e);
         }
-        Hibernate.initialize(order.getProducts());
-        Hibernate.initialize(order.getPackages());
-        return order;
     }
 
-    public void update(long id, StatusMessage status, Customer customer, LogisticsOperator logisticsOperator) throws Exception, MyIncorrectDataType {
-        
-        Order order = find(id);
+
+    public List<Order> allByCustomer(String username) throws MyEntityNotFoundException, MyQueryException {
 
         try {
-            entityManager.lock(order, LockModeType.OPTIMISTIC);
+            List<Order> resultList = entityManager
+                    .createNamedQuery("getAllOrdersByCustomer", Order.class)
+                    .setParameter("username", username)  // Assuming "customer" is the parameter name in the named query
+                    .getResultList();
 
-            order.setId(id);
-            order.setStatus(status);
-            order.setCustomer(customer);
-            if (logisticsOperator != null)
-                order.setLogisticsOperators(logisticsOperator);
+            if (resultList.isEmpty()) {
+                throw new MyEntityNotFoundException("No Orders found");
+            }
 
-            entityManager.merge(order);
-            
+            return resultList;
+
+
         } catch (ConstraintViolationException e) {
-            throw new MyIncorrectDataType("Data Type incorreto: " + e);
+            throw new MyQueryException("Error fetching data in query " + "allByCustomer(): " + e);
         }
     }
 
-    //Temos de validar se está atribuida a outra encomenda
-    public void addPackageToOrder(long id, long packageId) throws Exception {
-        Order order = find(id);
+    public List<Order> allByLogisticsOperator(String username) throws MyEntityNotFoundException, MyQueryException {
 
-        Package package_ = packageBean.find(packageId);
+        try {
+            List<Order> resultList = entityManager
+                    .createNamedQuery("getAllOrdersByLogisticsOperator", Order.class)
+                    .setParameter("username", username)  // Assuming "logisticsOperatorId" is the parameter name in the named query
+                    .setParameter("status", StatusMessage.PENDENTE)
+                    .getResultList();
 
-        if (package_ == null) {
-            throw new Exception("Package '" + packageId + "' not found");
+            if (resultList.isEmpty()) {
+                throw new MyEntityNotFoundException("No Orders found");
+            }
+
+            return resultList;
+
+        } catch (ConstraintViolationException e) {
+            throw new MyQueryException("Error fetching data in query " + "allByLogisticsOperator(): " + e);
         }
-
-        order.addPackage(package_);
-        package_.setOrder(order);
-        entityManager.merge(order);
     }
 
-    public void addProductToOrder(long id, long productId) throws Exception {
-        Order order = find(id);
+    public Order find(long id) throws MyEntityNotFoundException, MyQueryException {
+        try {
 
-        Product product = productBean.find(productId);
-
-        if (product == null) {
-            throw new Exception("Product '" + productId + "' not found");
+            Order order = entityManager.find(Order.class, id);
+            if (order == null) {
+                throw new MyEntityNotFoundException("Order '" + id + "' not found");
+            }
+            Hibernate.initialize(order.getProducts());
+            Hibernate.initialize(order.getPackages());
+            return order;
+        } catch (ConstraintViolationException e) {
+            throw new MyQueryException("Error fetching data in query " + "find(): " + e);
         }
-
-        order.addProduct(product);
-        entityManager.merge(order);
     }
 
-    public void removePackageFromOrder(long id, long packageId) throws Exception {
-        Order order = find(id);
+    public void update(long id, StatusMessage status, Customer customer, LogisticsOperator logisticsOperator) throws MyIncorrectDataType, MyQueryException, MyEntityNotFoundException {
 
-        Package package_ = packageBean.find(packageId);
+        try {
+            Order order = find(id);
 
-        if (package_ == null) {
-            throw new Exception("Package '" + packageId + "' not found");
+            try {
+                entityManager.lock(order, LockModeType.OPTIMISTIC);
+
+                order.setId(id);
+                order.setStatus(status);
+                order.setCustomer(customer);
+
+                if (logisticsOperator != null)
+                    order.setLogisticsOperators(logisticsOperator);
+
+                entityManager.merge(order);
+
+            } catch (ConstraintViolationException e) {
+                throw new MyIncorrectDataType("Data Type incorreto: " + e);
+            }
+        } catch (ConstraintViolationException e) {
+            throw new MyQueryException("Error fetching data in query " + "update(): " + e);
         }
-
-        order.removePackage(package_);
-        package_.removeOrder(order);
-        entityManager.merge(order);
     }
 
-    public void removeProductFromOrder(long id, long productId) throws Exception {
-        Order order = find(id);
+    public void addPackageToOrder(long id, long packageId) throws MyQueryException, MyEntityNotFoundException {
+        try {
+            Order order = find(id);
 
-        Product product = productBean.find(productId);
+            Package package_ = packageBean.find(packageId);
 
-        if (product == null) {
-            throw new Exception("Product '" + productId + "' not found");
+            if (package_ == null) {
+                throw new MyEntityNotFoundException("Package '" + packageId + "' not found");
+            }
+
+            order.addPackage(package_);
+            package_.setOrder(order);
+            entityManager.merge(order);
+        } catch (ConstraintViolationException e) {
+            throw new MyQueryException("Error fetching data in query " + "addPackageToOrder(): " + e);
         }
-
-        order.removeProduct(product);
-        entityManager.merge(order);
     }
 
-    public void remove(long id) throws Exception {
-        Order order = find(id);
+    public void addProductToOrder(long id, long productId) throws MyQueryException, MyEntityNotFoundException {
+        try {
+            Order order = find(id);
 
-        if (order != null) {
+            Product product = productBean.find(productId);
+
+            if (product == null) {
+                throw new MyEntityNotFoundException("Product '" + productId + "' not found");
+            }
+
+            order.addProduct(product);
+            entityManager.merge(order);
+        } catch (ConstraintViolationException e) {
+            throw new MyQueryException("Error fetching data in query " + "addProductToOrder(): " + e);
+        }
+    }
+
+    public void removePackageFromOrder(long id, long packageId) throws MyEntityNotFoundException, MyQueryException {
+        try {
+
+            Order order = find(id);
+
+            Package package_ = packageBean.find(packageId);
+
+            if (package_ == null) {
+                throw new MyEntityNotFoundException("Package '" + packageId + "' not found");
+            }
+
+            order.removePackage(package_);
+            package_.removeOrder(order);
+            entityManager.merge(order);
+        } catch (ConstraintViolationException e) {
+            throw new MyQueryException("Error fetching data in query " + "removePackageFromOrder(): " + e);
+        }
+    }
+
+    public void removeProductFromOrder(long id, long productId) throws MyEntityNotFoundException, MyQueryException {
+        try {
+
+            Order order = find(id);
+
+            Product product = productBean.find(productId);
+
+            if (product == null) {
+                throw new MyEntityNotFoundException("Product '" + productId + "' not found");
+            }
+
+            order.removeProduct(product);
+            entityManager.merge(order);
+        } catch (ConstraintViolationException e) {
+            throw new MyQueryException("Error fetching data in query " + "removeProductFromOrder(): " + e);
+        }
+    }
+
+    public void remove(long id) throws MyEntityNotFoundException, MyQueryException {
+        try {
+            Order order = find(id);
+
+            if (order == null) {
+                throw new MyEntityNotFoundException("Order '" + id + "' not found");
+            }
             entityManager.remove(order);
+        } catch (ConstraintViolationException e) {
+            throw new MyQueryException("Error fetching data in query " + "remove(): " + e);
         }
     }
 
-    public void setLogisticsOperator(long id, String logisticsOperatorId) throws Exception {
-        Order order = find(id);
+    public void setLogisticsOperator(long id, String logisticsOperatorId) throws MyEntityNotFoundException, MyQueryException {
+        try {
+            Order order = find(id);
 
-        LogisticsOperator logisticsOperator = logisticsOperatorBean.findLogisticOperator(logisticsOperatorId);
+            LogisticsOperator logisticsOperator = logisticsOperatorBean.findLogisticOperator(logisticsOperatorId);
 
-        if (logisticsOperator == null) {
-            throw new Exception("LogisticsOperator '" + logisticsOperatorId + "' not found");
+            if (logisticsOperator == null) {
+                throw new MyEntityNotFoundException("LogisticsOperator '" + logisticsOperatorId + "' not found");
+            }
+
+            order.setLogisticsOperators(logisticsOperator);
+            entityManager.persist(order);
+        } catch (ConstraintViolationException e) {
+            throw new MyQueryException("Error fetching data in query " + "setLogisticsOperator(): " + e);
         }
-
-        order.setLogisticsOperators(logisticsOperator);
-        entityManager.persist(order);
     }
 
-    public void setStatusEnviado(long id) {
-        Order order = entityManager.find(Order.class, id);
-        order.setStatus(StatusMessage.ENVIADA);
-        entityManager.merge(order);
+    public void setStatusEnviado(long id) throws MyQueryException {
+        try {
+            Order order = entityManager.find(Order.class, id);
+            order.setStatus(StatusMessage.ENVIADA);
+            entityManager.merge(order);
+        } catch (ConstraintViolationException e) {
+            throw new MyQueryException("Error fetching data in query " + "setStatusEnviado(): " + e);
+        }
     }
 
     public List<Sensor> getOrdersSensors(long id) {

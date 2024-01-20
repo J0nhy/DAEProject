@@ -14,6 +14,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.ejbs.SensorBean;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyQueryException;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 import java.util.List;
@@ -51,13 +52,13 @@ public class SensorService {
     @GET
     @Path("/")
     @RolesAllowed({ "Manufacturer"})
-    public List<SensorDTO> getAllSensors() {
+    public List<SensorDTO> getAllSensors() throws MyQueryException {
         return toDTOs(sensorBean.all());
     }
 
     @GET
     @Path("/package/{id}")
-    public List<SensorDTO> getAllSensorsByPackage(@PathParam("id") long id) {
+    public List<SensorDTO> getAllSensorsByPackage(@PathParam("id") long id) throws MyEntityNotFoundException, MyQueryException {
         return toDTOs(sensorBean.allByPackage(id));
     }
 

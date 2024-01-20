@@ -16,6 +16,7 @@ import pt.ipleiria.estg.dei.ei.dae.packages.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.packages.entities.Package;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyEntityNotFoundException;
 import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyIncorrectDataType;
+import pt.ipleiria.estg.dei.ei.dae.packages.exceptions.MyQueryException;
 import pt.ipleiria.estg.dei.ei.dae.packages.security.Authenticated;
 
 import java.lang.reflect.Array;
@@ -207,7 +208,7 @@ public class OrderService {
     @GET
     @Path("/")
     @RolesAllowed({"Manufacturer"})
-    public List<OrderDTO> getAllOrders() {
+    public List<OrderDTO> getAllOrders() throws MyEntityNotFoundException, MyQueryException {
         return toDTOsCreateOrder(orderBean.all());
     }
 
@@ -231,14 +232,14 @@ public class OrderService {
     @GET
     @Path("/customer/{username}")
     @RolesAllowed({"Customer", "Manufacturer"})
-    public List<OrderDTO> getAllOrdersByCustomer(@PathParam("username") String customer) {
+    public List<OrderDTO> getAllOrdersByCustomer(@PathParam("username") String customer) throws MyEntityNotFoundException, MyQueryException {
         return toDTOsCreateOrder(orderBean.allByCustomer(customer));
     }
 
     @GET
     @Path("/logistics-operator/{username}")
     @RolesAllowed({"LogisticsOperator", "Manufacturer"})
-    public List<OrderDTO> getAllOrdersByLogisticsOperator(@PathParam("username") String logisticsOperator) {
+    public List<OrderDTO> getAllOrdersByLogisticsOperator(@PathParam("username") String logisticsOperator) throws MyEntityNotFoundException, MyQueryException {
         return toDTOsNoPackageandProducts(orderBean.allByLogisticsOperator(logisticsOperator));
     }
 
@@ -261,7 +262,7 @@ public class OrderService {
     @POST
     @Path("/")
     @RolesAllowed({"Manufacturer"})
-    public Response createNewOrder(OrderDTO orderDTO) throws MyEntityNotFoundException {
+    public Response createNewOrder(OrderDTO orderDTO) throws MyEntityNotFoundException, MyQueryException {
         try {
             Customer customer = customerBean.findCustomer(orderDTO.getCustomerUsername());
             Order order = orderBean.create(
@@ -270,7 +271,7 @@ public class OrderService {
             );
 
             return Response.status(Response.Status.CREATED).entity(toDTOCreateOrder(order)).build();
-        }catch (MyEntityNotFoundException | MyIncorrectDataType e){
+        }catch (MyEntityNotFoundException e){
 
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR_FINDING_PRODUCT").build();
         }
