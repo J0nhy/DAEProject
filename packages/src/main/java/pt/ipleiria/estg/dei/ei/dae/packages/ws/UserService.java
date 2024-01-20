@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.packages.ws;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.mail.MessagingException;
 import jakarta.ws.rs.*;
@@ -26,6 +27,7 @@ public class UserService {
 
     @POST
     @Path("/{username}/email/send")
+    @RolesAllowed({"Manufacturer", "Customer", "LogisticsOperator"})
     public Response sendEmail(@PathParam("username") String username, EmailDTO email)
             throws MyEntityNotFoundException, MessagingException {
         User user = userBean.find(username);
