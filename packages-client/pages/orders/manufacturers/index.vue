@@ -29,7 +29,7 @@
 
           </td>
           <td class="d-flex gap-2">
-            <nuxt-link v-if="!order.logisticsOperatorsUsername" :to="`manufacturers/${order.id}`">
+            <nuxt-link v-if="!order.logisticsOperatorsUsername && order.status !='CANCELADA'" :to="`manufacturers/${order.id}`">
               <button class="btn btn-success"><i class="bi bi-check"></i>Completar</button>
             </nuxt-link>
 
